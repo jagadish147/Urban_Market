@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_store">
+
+    <fragment android:id="@+id/navigation_location"
+        android:name="com.jagadish.freshmart.view.main.ui.location.LocationRequestFragment"
+        android:label="@string/no_location_detected"
+        tools:layout="@layout/location_request_fragment">
+
+        <action
+            android:id="@+id/action_navigation_location_to_navigation_store"
+            app:destination="@id/navigation_store"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_store"
+        android:name="com.jagadish.freshmart.view.main.ui.store.StoreFragment"
+        android:label="@string/title_store"
+        tools:layout="@layout/fragment_home" >
+
+
+        <action
+            android:id="@+id/action_navigation_store_to_navigation_location"
+            app:destination="@id/navigation_location"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.jagadish.freshmart.view.main.ui.cart.CartFragment"
+        android:label="@string/title_cart"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_orders"
+        android:name="com.jagadish.freshmart.view.main.ui.orders.OrdersFragment"
+        android:label="@string/title_orders"
+        tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.jagadish.freshmart.view.main.ui.orders.OrdersFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>

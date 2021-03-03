@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/banner_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusableInTouchMode="true">
+
+    <com.asksira.loopingviewpager.LoopingViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:isInfinite="false"
+        app:autoScroll="false"
+        app:scrollInterval="5000"
+        android:clipToPadding="false"
+        app:viewpagerAspectRatio="1.78"
+        app:itemAspectRatio="1.33"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/space_10x"
+        android:layout_marginEnd="@dimen/space_10x"/>
+
+    <com.asksira.loopingviewpager.indicator.CustomShapePagerIndicator
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/viewpager"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp"
+        app:indicator_spacing="4dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
