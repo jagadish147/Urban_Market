@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.data
 
+import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.remote.RemoteData
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,12 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
     override suspend fun requestRecipes(): Flow<Resource<Shop>> {
         return flow {
             emit(remoteRepository.requestRecipes())
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestProducts(): Flow<Resource<Products>> {
+        return flow {
+            emit(remoteRepository.requestProducts())
         }.flowOn(ioDispatcher)
     }
 

@@ -1,6 +1,7 @@
 package com.jagadish.freshmart.data.remote
 
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.data.error.NETWORK_ERROR
@@ -20,6 +21,18 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
         return when (val response = processCall(recipesService::fetchRecipes)) {
             is Shop -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestProducts(): Resource<Products> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall(recipesService::fetchProducts)) {
+            is Products -> {
                 Resource.Success(data = response )
             }
             else -> {

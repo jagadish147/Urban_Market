@@ -1,63 +1,70 @@
-package com.jagadish.freshmart.view.main.ui.store
+package com.jagadish.freshmart.view.products
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
+import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.products.Products
+import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentHomeBinding
+import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.main.MainActivity
+import com.jagadish.freshmart.view.main.ui.store.StoreViewModel
 import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
-import com.jagadish.freshmart.view.main.ui.store.adapter.StoreAdapter
 import com.jagadish.freshmart.view.main.ui.store.model.HomeModel
-import com.jagadish.freshmart.view.products.ProductsListActivity
+import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 
+/**
+ * A simple [Fragment] subclass as the default destination in the navigation.
+ */
 @AndroidEntryPoint
-class StoreFragment : BaseFragment() {
-    private lateinit var binding: FragmentHomeBinding
-    private val recipesListViewModel: StoreViewModel by viewModels()
-    private lateinit var recipesAdapter: HomeAdapter
+class ProductsFragment : BaseFragment() {
+
+    private lateinit var binding: FragmentProductsBinding
+    private val recipesListViewModel: ProductsFragmentViewModel by viewModels()
+    private lateinit var recipesAdapter: ProductsAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+    ): View? {
+        binding = FragmentProductsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        view.findViewById<Button>(R.id.button_first).setOnClickListener {
+//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+//        }
+
         observeViewModel()
         val layoutManager = LinearLayoutManager(context)
-        binding.storeRecyclerView.layoutManager = layoutManager
-        binding.storeRecyclerView.setHasFixedSize(true)
+        binding.productsRecyclerView.layoutManager = layoutManager
+        binding.productsRecyclerView.setHasFixedSize(true)
         recipesListViewModel.getRecipes()
     }
-    //https://jsonblob.com/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
-    //https://jsonblob.com/api/jsonBlob/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
+
 
     private fun observeViewModel() {
-        (activity as MainActivity).currentAddress.observe(viewLifecycleOwner, Observer {
-            featureName.text = it.featureName
-            address_txt.text = it.getAddressLine(0)
-        })
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
@@ -75,28 +82,17 @@ class StoreFragment : BaseFragment() {
     }
 
 
-    private fun bindListData(recipes: Shop) {
-        if (!(recipes.shopList.isNullOrEmpty())) {
-            val list = ArrayList<HomeModel>()
-            for (i in 1..2) {
-                when (i) {
-                    1 -> list.add(HomeModel(recipes.banners as ArrayList<ShopItem>,recipes.shopList as ArrayList<ShopItem>))
-                    2 -> list.add(
-                        HomeModel(
-                            recipes.banners as ArrayList<ShopItem>,recipes.shopList as ArrayList<ShopItem>
-                        )
-                    )
-                }
-            }
-            recipesAdapter = HomeAdapter(requireActivity(),list ,recipesListViewModel)
-            binding.storeRecyclerView.adapter = recipesAdapter
+    private fun bindListData(recipes: Products) {
+        if (!(recipes.products.isNullOrEmpty())) {
+            recipesAdapter = ProductsAdapter(recipesListViewModel,recipes.products )
+            binding.productsRecyclerView.adapter = recipesAdapter
             showDataView(true)
         } else {
             showDataView(false)
         }
     }
 
-    private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ShopItem>) {
+    private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ProductsItem>) {
         navigateEvent.getContentIfNotHandled()?.let {
             val nextScreenIntent = Intent(requireActivity(), ProductsListActivity::class.java).apply {
                 putExtra(CATEGORY_KEY, it)
@@ -119,18 +115,18 @@ class StoreFragment : BaseFragment() {
 
     private fun showDataView(show: Boolean) {
         binding.tvNoData.visibility = if (show) View.GONE else View.VISIBLE
-        binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
+        binding.productsRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
         binding.pbLoading.toGone()
     }
 
     private fun showLoadingView() {
         binding.pbLoading.toVisible()
         binding.tvNoData.toGone()
-        binding.storeRecyclerView.toGone()
+        binding.productsRecyclerView.toGone()
     }
 
 
-    private fun showSearchResult(recipesItem: ShopItem) {
+    private fun showSearchResult(recipesItem: ProductsItem) {
         recipesListViewModel.openRecipeDetails(recipesItem)
         binding.pbLoading.toGone()
     }
@@ -140,7 +136,7 @@ class StoreFragment : BaseFragment() {
         binding.pbLoading.toGone()
     }
 
-    private fun handleRecipesList(status: Resource<Shop>) {
+    private fun handleRecipesList(status: Resource<Products>) {
         when (status) {
             is Resource.Loading -> showLoadingView()
             is Resource.Success -> status.data?.let { bindListData(recipes = it) }
@@ -150,5 +146,4 @@ class StoreFragment : BaseFragment() {
             }
         }
     }
-
 }
