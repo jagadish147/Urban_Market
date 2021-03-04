@@ -23,6 +23,31 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
         override fun onItemSelected(recipe: ProductsItem) {
             recipesListViewModel.openRecipeDetails(recipe)
         }
+
+        override fun onItemAddCart(productsItem: ProductsItem) {
+            recipes[recipes.indexOf(productsItem)].isAddCart = true
+          recipes[recipes.indexOf(productsItem)].quantity = 1
+            notifyItemChanged(recipes.indexOf(productsItem))
+        }
+
+        override fun onItemRemoveCart(productsItem: ProductsItem) {
+            recipes[recipes.indexOf(productsItem)].isAddCart = false
+            recipes[recipes.indexOf(productsItem)].quantity = 0
+            notifyItemChanged(recipes.indexOf(productsItem))
+        }
+
+        override fun onItemQuantityIncrease(productsItem: ProductsItem) {
+            recipes[recipes.indexOf(productsItem)].quantity++
+            notifyItemChanged(recipes.indexOf(productsItem))
+        }
+
+        override fun onItemQuantityDecrease(productsItem: ProductsItem) {
+            recipes[recipes.indexOf(productsItem)].quantity--
+            if(recipes[recipes.indexOf(productsItem)].quantity == 0){
+                onItemRemoveCart(productsItem)
+            }
+            notifyItemChanged(recipes.indexOf(productsItem))
+        }
     }
     //https://jsonblob.com/add55310-7c87-11eb-981f-b9bef68ee992
     //https://jsonblob.com/api/add55310-7c87-11eb-981f-b9bef68ee992
@@ -37,6 +62,10 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
 
     override fun getItemCount(): Int {
         return recipes.size
+    }
+
+    fun getSelectedItems() : List<ProductsItem>{
+        return recipes
     }
 }
 

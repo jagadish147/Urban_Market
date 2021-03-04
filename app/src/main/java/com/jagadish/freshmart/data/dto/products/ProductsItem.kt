@@ -17,5 +17,7 @@ data class ProductsItem (
     @Json(name = "price")
     val price : Double = 0.0,
     @Json(name = "discount")
-    val discount : Int = 0
+    val discount : Int = 0,
+    var quantity : Int = 0,
+    var isAddCart : Boolean = false
 ): Parcelable

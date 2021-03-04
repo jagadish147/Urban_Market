@@ -42,5 +42,50 @@
         app:layout_constraintStart_toStartOf="@+id/product_name"
         tools:text="recipes title ........... this is a sample text " />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/add_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/button_selector"
+        android:text="Add"
+        android:drawableEnd="@drawable/ic_add_white"
+        android:drawablePadding="@dimen/space_24x"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_18x"
+        android:layout_marginEnd="@dimen/space_16x"
+        android:padding="@dimen/space_5x"
+        android:visibility="visible"/>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/quantity_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/space_10x"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/quantity_minus_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_minus"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/quantity_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="@dimen/font_18x"
+            android:textColor="@color/black"
+            android:layout_marginStart="@dimen/space_16x"
+            android:layout_marginEnd="@dimen/space_16x"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/quantity_add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_add"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
