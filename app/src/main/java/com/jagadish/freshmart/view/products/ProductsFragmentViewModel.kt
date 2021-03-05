@@ -49,6 +49,13 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
     val openRecipeDetails: LiveData<SingleEvent<ProductsItem>> get() = openRecipeDetailsPrivate
 
     /**
+     * UI actions as event, user action is single one time event, Shouldn't be multiple time consumption
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val checkItemsInCartPrivate = MutableLiveData<SingleEvent<ProductsItem>>()
+    val openCartView: LiveData<SingleEvent<ProductsItem>> get() = checkItemsInCartPrivate
+
+    /**
      * Error handling as UI
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -80,5 +87,8 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
+    fun checkCartItems(recipe: ProductsItem){
+        checkItemsInCartPrivate.value = SingleEvent(recipe)
+    }
 
 }

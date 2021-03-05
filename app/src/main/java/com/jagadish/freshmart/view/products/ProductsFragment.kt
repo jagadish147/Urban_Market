@@ -69,6 +69,7 @@ class ProductsFragment : BaseFragment() {
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
+        observeEvent(recipesListViewModel.openCartView, ::showCartView )
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
 
@@ -144,6 +145,12 @@ class ProductsFragment : BaseFragment() {
                 showDataView(false)
                 status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
             }
+        }
+    }
+
+    private fun showCartView(navigateEvent: SingleEvent<ProductsItem>) {
+        navigateEvent.getContentIfNotHandled()?.let {
+            binding.viewCartLayout.toVisible()
         }
     }
 }
