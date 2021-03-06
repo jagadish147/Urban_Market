@@ -6,3 +6,5 @@ package com.jagadish.freshmart
 const val BASE_URL = "https://jsonblob.com/api/jsonBlob/"
 
 const val CATEGORY_KEY = "category_key"
+
+const val RESULT_ACTIVITY_IS_VIEW_CART = "navigate_cart"

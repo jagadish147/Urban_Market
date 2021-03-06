@@ -58,4 +58,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="label_order_amount">Order Amount :</string>
+    <string name="label_delivery_charge">Delivery Charges : </string>
+    <string name="label_total_amount">Total Amount : </string>
+    <string name="label_confirm_order">Confirm Order</string>
 </resources>

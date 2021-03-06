@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.data
 
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import kotlinx.coroutines.flow.Flow
@@ -11,5 +12,7 @@ interface DataRepositorySource {
     suspend fun requestRecipes(): Flow<Resource<Shop>>
 
     suspend fun requestProducts(): Flow<Resource<Products>>
+
+    suspend fun requestCart(): Flow<Resource<Cart>>
 
 }

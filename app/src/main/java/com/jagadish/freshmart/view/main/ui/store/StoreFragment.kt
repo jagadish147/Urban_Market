@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
+import com.jagadish.freshmart.R
+import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.shop.Shop
@@ -21,7 +24,6 @@ import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.main.MainActivity
 import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
-import com.jagadish.freshmart.view.main.ui.store.adapter.StoreAdapter
 import com.jagadish.freshmart.view.main.ui.store.model.HomeModel
 import com.jagadish.freshmart.view.products.ProductsListActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,7 @@ class StoreFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
     private val recipesListViewModel: StoreViewModel by viewModels()
     private lateinit var recipesAdapter: HomeAdapter
+    private val REQUEST_CATEGORY_VIEW_CART = 214
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,15 +83,21 @@ class StoreFragment : BaseFragment() {
             val list = ArrayList<HomeModel>()
             for (i in 1..2) {
                 when (i) {
-                    1 -> list.add(HomeModel(recipes.banners as ArrayList<ShopItem>,recipes.shopList as ArrayList<ShopItem>))
+                    1 -> list.add(
+                        HomeModel(
+                            recipes.banners as ArrayList<ShopItem>,
+                            recipes.shopList as ArrayList<ShopItem>
+                        )
+                    )
                     2 -> list.add(
                         HomeModel(
-                            recipes.banners as ArrayList<ShopItem>,recipes.shopList as ArrayList<ShopItem>
+                            recipes.banners as ArrayList<ShopItem>,
+                            recipes.shopList as ArrayList<ShopItem>
                         )
                     )
                 }
             }
-            recipesAdapter = HomeAdapter(requireActivity(),list ,recipesListViewModel)
+            recipesAdapter = HomeAdapter(requireActivity(), list, recipesListViewModel)
             binding.storeRecyclerView.adapter = recipesAdapter
             showDataView(true)
         } else {
@@ -98,10 +107,11 @@ class StoreFragment : BaseFragment() {
 
     private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ShopItem>) {
         navigateEvent.getContentIfNotHandled()?.let {
-            val nextScreenIntent = Intent(requireActivity(), ProductsListActivity::class.java).apply {
-                putExtra(CATEGORY_KEY, it)
-            }
-            startActivity(nextScreenIntent)
+            val nextScreenIntent =
+                Intent(requireActivity(), ProductsListActivity::class.java).apply {
+                    putExtra(CATEGORY_KEY, it)
+                }
+            startActivityForResult(nextScreenIntent, REQUEST_CATEGORY_VIEW_CART)
         }
     }
 
@@ -151,4 +161,14 @@ class StoreFragment : BaseFragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CATEGORY_VIEW_CART) {
+            if (resultCode == AppCompatActivity.RESULT_OK && data!!.getBooleanExtra(
+                    RESULT_ACTIVITY_IS_VIEW_CART, false
+                )
+            )
+                findNavController().navigate(R.id.action_navigation_store_to_navigation_cart)
+        }
+    }
 }

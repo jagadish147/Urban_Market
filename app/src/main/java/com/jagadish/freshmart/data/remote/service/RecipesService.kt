@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.data.remote.service
 
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
@@ -16,4 +17,7 @@ interface RecipesService {
 
     @GET("fdf740f5-7c8b-11eb-981f-f1174c66c577")
     suspend fun fetchProducts(): Response<Products>
+
+    @GET("b5d3b6ff-7dac-11eb-b747-ef47dab590f4")
+    suspend fun fetchCart(): Response<Cart>
 }

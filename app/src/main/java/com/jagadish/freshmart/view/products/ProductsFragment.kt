@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.view.products
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
 import com.jagadish.freshmart.R
+import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.products.Products
@@ -61,6 +63,11 @@ class ProductsFragment : BaseFragment() {
         binding.productsRecyclerView.layoutManager = layoutManager
         binding.productsRecyclerView.setHasFixedSize(true)
         recipesListViewModel.getRecipes()
+        binding.viewCart.setOnClickListener { val data = Intent().apply {
+            putExtra(RESULT_ACTIVITY_IS_VIEW_CART, true)
+        }
+            requireActivity().setResult(RESULT_OK, data)
+            requireActivity(). finish() }
     }
 
 

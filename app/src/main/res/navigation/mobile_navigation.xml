@@ -29,13 +29,18 @@
             app:destination="@id/navigation_location"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_store_to_navigation_cart"
+            app:destination="@id/navigation_cart"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_cart"
         android:name="com.jagadish.freshmart.view.main.ui.cart.CartFragment"
         android:label="@string/title_cart"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_cart" />
 
     <fragment
         android:id="@+id/navigation_orders"

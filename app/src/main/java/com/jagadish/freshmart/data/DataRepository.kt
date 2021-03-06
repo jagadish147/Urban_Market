@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.data
 
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.remote.RemoteData
@@ -23,6 +24,12 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
     override suspend fun requestProducts(): Flow<Resource<Products>> {
         return flow {
             emit(remoteRepository.requestProducts())
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestCart(): Flow<Resource<Cart>> {
+        return flow {
+            emit(remoteRepository.requestCart())
         }.flowOn(ioDispatcher)
     }
 

@@ -13,7 +13,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
@@ -34,8 +33,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     private val LOCATION_SETTINGS_REQUEST = 199
-    private val REQUEST_CHECK_SETTINGS = 214
     private val REQUEST_ENABLE_GPS = 516
+
     /**
      * Provides the entry point to the Fused Location Provider API.
      */
@@ -44,7 +43,7 @@ class MainActivity : BaseActivity() {
     /**
      * Represents a geographical location.
      */
-    private var address  = MutableLiveData<Address>()
+    private var address = MutableLiveData<Address>()
     private var mLastLocation: Location? = null
 
     val currentAddress: LiveData<Address> = address
@@ -87,7 +86,11 @@ class MainActivity : BaseActivity() {
                     if (mLastLocation!!.latitude != 0.0 && mLastLocation!!.longitude != 0.0) {
                         val gCoder = Geocoder(this)
                         val addresses: ArrayList<Address>? =
-                            gCoder.getFromLocation(mLastLocation!!.latitude , mLastLocation!!.longitude, 1) as ArrayList<Address>?
+                            gCoder.getFromLocation(
+                                mLastLocation!!.latitude,
+                                mLastLocation!!.longitude,
+                                1
+                            ) as ArrayList<Address>?
                         if (addresses != null && addresses.size > 0) {
                             address.value = addresses[0]
                         }
@@ -108,7 +111,6 @@ class MainActivity : BaseActivity() {
         )
         return permissionState == PackageManager.PERMISSION_GRANTED
     }
-
 
 
     override fun onStart() {
