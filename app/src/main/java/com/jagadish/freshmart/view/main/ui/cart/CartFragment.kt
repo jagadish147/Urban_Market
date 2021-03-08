@@ -25,6 +25,8 @@ import com.jagadish.freshmart.databinding.FragmentCartBinding
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
+import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
+import com.jagadish.freshmart.view.orderinfo.OrderinfoFragment
 import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
 import com.jagadish.freshmart.view.products.ProductsListActivity
 import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
@@ -60,6 +62,12 @@ class CartFragment : BaseFragment() {
         binding.cartItemsRecyclerView.setHasFixedSize(true)
         recipesListViewModel.getRecipes()
 
+        binding.orderConfirmBtn.setOnClickListener {
+            val nextScreenIntent = Intent(requireActivity(), OrderInfoActivity::class.java).apply {
+//                putExtra(CATEGORY_KEY, it)
+            }
+            startActivity(nextScreenIntent)
+        }
     }
 
 
@@ -96,7 +104,7 @@ class CartFragment : BaseFragment() {
 
     private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ProductsItem>) {
         navigateEvent.getContentIfNotHandled()?.let {
-            val nextScreenIntent = Intent(requireActivity(), ProductsListActivity::class.java).apply {
+            val nextScreenIntent = Intent(requireActivity(), OrderInfoActivity::class.java).apply {
                 putExtra(CATEGORY_KEY, it)
             }
             startActivity(nextScreenIntent)

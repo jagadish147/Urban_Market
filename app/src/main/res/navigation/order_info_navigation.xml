@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/order_info_navigation"
+    app:startDestination="@id/order_info">
+
+    <fragment
+        android:id="@+id/order_info"
+        android:name="com.jagadish.freshmart.view.orderinfo.OrderinfoFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_order_info" >
+
+        <action
+            android:id="@+id/action_FirstFragment_to_Second2Fragment"
+            app:destination="@id/Second2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/Second2Fragment"
+        android:name="com.jagadish.freshmart.view.orderinfo.AddressFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_address" >
+
+        <action
+            android:id="@+id/action_Second2Fragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+</navigation>

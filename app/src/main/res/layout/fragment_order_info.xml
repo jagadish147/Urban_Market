@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="order"
+            type="com.jagadish.freshmart.data.dto.cart.Cart" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.main.ui.cart.CartFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cart_items_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <FrameLayout
+            android:id="@+id/pb_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="@dimen/font_32x"
+            android:textStyle="italic|bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/address_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_16x"
+            android:layout_marginEnd="@dimen/space_16x"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/cart_items_recycler_view">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/address_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/label_address_details"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/address_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/address_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/space_10x"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/change_address_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/address_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/action_change_address"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/order_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_16x"
+            android:layout_marginEnd="@dimen/space_16x"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/address_layout">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_payment_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/label_payment_details"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_order_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/label_payment_"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/label_order_amount"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/value_order_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/label_order_amount"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{`₹`+String.valueOf(order.order_price)}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"
+                tools:text="$ 100"
+                android:layout_marginTop="@dimen/space_10x"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_delivery_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/label_order_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/label_delivery_charge"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/value_delivery_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/value_order_amount"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{`₹`+String.valueOf(order.delivery_charge)}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"
+                tools:text="$ 10"
+                android:layout_marginTop="@dimen/space_10x"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/label_delivery_charge"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/label_total_amount"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/value_delivery_charge"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{`₹`+String.valueOf(order.total_price)}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16x"
+                tools:text="$ 10"
+                android:layout_marginTop="@dimen/space_10x"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/order_confirm_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_selector"
+                android:text="@string/label_place_order"
+                android:textSize="@dimen/font_18x"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:padding="@dimen/space_10x"
+                android:layout_marginTop="@dimen/space_16x"
+                app:layout_constraintTop_toBottomOf="@+id/label_total_amount" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

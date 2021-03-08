@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fresh Mart</string>
+    <string name="app_name">Urban Market</string>
     <string name="text_intro1">Travel Everywhere</string>
     <string name="text_intro2">Best Room Rates</string>
     <string name="text_intro3">Exotic Destinations</string>
@@ -25,6 +25,7 @@
     <string name="action_next">Next</string>
     <string name="action_allow">Allow</string>
     <string name="welcome">"Welcome !"</string>
+    <string name="action_change_address">Change Address</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -62,4 +63,8 @@
     <string name="label_delivery_charge">Delivery Charges : </string>
     <string name="label_total_amount">Total Amount : </string>
     <string name="label_confirm_order">Confirm Order</string>
+    <string name="title_activity_order_info">Order Details</string>
+    <string name="label_payment_details">Payment Details</string>
+    <string name="label_address_details">Address Details</string>
+    <string name="label_place_order">Place Order</string>
 </resources>

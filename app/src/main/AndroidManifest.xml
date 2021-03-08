@@ -17,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Freshmart" >
         <activity
+            android:name=".view.orderinfo.OrderInfoActivity"
+            android:label="@string/title_activity_order_info"
+            android:theme="@style/Theme.Freshmart.NoActionBar" >
+        </activity>
+        <activity
             android:name=".view.products.ProductsListActivity"
             android:label="@string/title_activity_products_list"
             android:theme="@style/Theme.Freshmart.NoActionBar" >
