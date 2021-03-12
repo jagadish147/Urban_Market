@@ -7,16 +7,18 @@ import com.jagadish.freshmart.data.dto.shop.ShopItem
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Created by Jagadeesh on 01-03-2021.
  */
 interface RecipesService {
-    @GET("eccd16e6-7a2e-11eb-becc-a3dfce0ac389")
-    suspend fun fetchRecipes(): Response<Shop>
+    @GET("home?")
+    suspend fun fetchRecipes(@Query(  "pincode") pinCode: String): Response<Shop>
 
-    @GET("fdf740f5-7c8b-11eb-981f-f1174c66c577")
-    suspend fun fetchProducts(): Response<Products>
+    @GET("products?")
+    suspend fun fetchProducts(@Query("category_id") categoryId: Int): Response<Products>
 
     @GET("b5d3b6ff-7dac-11eb-b747-ef47dab590f4")
     suspend fun fetchCart(): Response<Cart>

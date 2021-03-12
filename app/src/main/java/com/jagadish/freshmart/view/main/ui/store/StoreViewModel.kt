@@ -58,11 +58,11 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
 
-    fun getRecipes() {
+    fun getRecipes(pinCode:String) {
         viewModelScope.launch {
             recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
-                dataRepositoryRepository.requestRecipes().collect {
+                dataRepositoryRepository.requestRecipes(pinCode).collect {
                     recipesLiveDataPrivate.value = it
                 }
             }

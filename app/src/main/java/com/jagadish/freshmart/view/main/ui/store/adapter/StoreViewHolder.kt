@@ -15,7 +15,7 @@ class StoreViewHolder(private val itemBinding: ShopItemBinding) : RecyclerView.V
 
     fun bind(recipesItem: ShopItem, recyclerItemListener: RecyclerItemListener) {
         itemBinding.tvName.text = recipesItem.name
-        Picasso.get().load(recipesItem.image).into(itemBinding.categoryImage)
+        Picasso.get().load(recipesItem.image.url).into(itemBinding.categoryImage)
         itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }
     }
 }

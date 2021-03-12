@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
  * Created by Jagadeesh on 01-03-2021.
  */
 interface DataRepositorySource {
-    suspend fun requestRecipes(): Flow<Resource<Shop>>
+    suspend fun requestRecipes(pinCode:String): Flow<Resource<Shop>>
 
-    suspend fun requestProducts(): Flow<Resource<Products>>
+    suspend fun requestProducts(categoryId: Int): Flow<Resource<Products>>
 
     suspend fun requestCart(): Flow<Resource<Cart>>
 

@@ -14,5 +14,5 @@ data class Products (
     @Json(name = "message")
     val message: String = "",
     @Json(name = "products")
-    val products: List<ProductsItem>,
+    val products: List<ProductsItem> = ArrayList(),
 ): Parcelable

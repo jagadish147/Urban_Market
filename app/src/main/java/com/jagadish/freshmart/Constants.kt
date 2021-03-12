@@ -3,7 +3,7 @@ package com.jagadish.freshmart
 /**
  * Created by Jagadeesh on 01-03-2021.
  */
-const val BASE_URL = "https://jsonblob.com/api/jsonBlob/"
+const val BASE_URL = "https://urbanmarket.herokuapp.com/api/v1/"
 
 const val CATEGORY_KEY = "category_key"
 

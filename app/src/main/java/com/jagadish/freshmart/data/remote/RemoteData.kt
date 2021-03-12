@@ -18,9 +18,9 @@ import javax.inject.Inject
  */
 class RemoteData @Inject
 constructor(private val serviceGenerator: ServiceGenerator, private val networkConnectivity: NetworkConnectivity) : RemoteDataSource {
-    override suspend fun requestRecipes(): Resource<Shop> {
+    override suspend fun requestRecipes(pinCode:String): Resource<Shop> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall(recipesService::fetchRecipes)) {
+        return when (val response = processCall({ recipesService.fetchRecipes(pinCode) })) {
             is Shop -> {
                 Resource.Success(data = response )
             }
@@ -30,9 +30,9 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         }
     }
 
-    override suspend fun requestProducts(): Resource<Products> {
+    override suspend fun requestProducts(categoryId: Int): Resource<Products> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall(recipesService::fetchProducts)) {
+        return when (val response = processCall({recipesService.fetchProducts(categoryId)})) {
             is Products -> {
                 Resource.Success(data = response )
             }

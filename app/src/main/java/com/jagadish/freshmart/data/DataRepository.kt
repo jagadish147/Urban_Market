@@ -15,15 +15,15 @@ import kotlin.coroutines.CoroutineContext
  */
 class DataRepository @Inject constructor(private val remoteRepository: RemoteData, private val ioDispatcher: CoroutineContext) : DataRepositorySource {
 
-    override suspend fun requestRecipes(): Flow<Resource<Shop>> {
+    override suspend fun requestRecipes(pinCode:String): Flow<Resource<Shop>> {
         return flow {
-            emit(remoteRepository.requestRecipes())
+            emit(remoteRepository.requestRecipes(pinCode))
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun requestProducts(): Flow<Resource<Products>> {
+    override suspend fun requestProducts(categoryId: Int): Flow<Resource<Products>> {
         return flow {
-            emit(remoteRepository.requestProducts())
+            emit(remoteRepository.requestProducts(categoryId))
         }.flowOn(ioDispatcher)
     }
 

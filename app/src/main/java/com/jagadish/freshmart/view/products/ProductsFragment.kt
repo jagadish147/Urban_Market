@@ -62,7 +62,8 @@ class ProductsFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.productsRecyclerView.layoutManager = layoutManager
         binding.productsRecyclerView.setHasFixedSize(true)
-        recipesListViewModel.getRecipes()
+        val category = requireActivity().intent.getParcelableExtra<ShopItem>(CATEGORY_KEY)
+        recipesListViewModel.getRecipes(category!!.id)
         binding.viewCart.setOnClickListener { val data = Intent().apply {
             putExtra(RESULT_ACTIVITY_IS_VIEW_CART, true)
         }

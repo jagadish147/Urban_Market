@@ -51,7 +51,7 @@ class StoreFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.storeRecyclerView.layoutManager = layoutManager
         binding.storeRecyclerView.setHasFixedSize(true)
-        recipesListViewModel.getRecipes()
+
     }
     //https://jsonblob.com/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
     //https://jsonblob.com/api/jsonBlob/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
@@ -60,6 +60,7 @@ class StoreFragment : BaseFragment() {
         (activity as MainActivity).currentAddress.observe(viewLifecycleOwner, Observer {
             featureName.text = it.featureName
             address_txt.text = it.getAddressLine(0)
+            recipesListViewModel.getRecipes(it.postalCode)
         })
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
