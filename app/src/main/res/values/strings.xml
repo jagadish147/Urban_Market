@@ -67,4 +67,13 @@
     <string name="label_payment_details">Payment Details</string>
     <string name="label_address_details">Address Details</string>
     <string name="label_place_order">Place Order</string>
+    <string name="title_activity_address">AddressActivity</string>
+    <string name="title_address_line_1">Address *</string>
+    <string name="title_address_line_2">Land Mark *</string>
+    <string name="title_address_city">City *</string>
+    <string name="title_address_state">State *</string>
+    <string name="title_address_zip">Pincode *</string>
+    <string name="action_save">Save</string>
+    <string name="action_add_address">Add Address</string>
+
 </resources>

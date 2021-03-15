@@ -17,6 +17,16 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_navigation_login_to_navigation_mobile_verification"
+            app:destination="@id/navigation_mobile_verification"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+        <argument
+            android:name="requestOtpRes"
+            app:argType="com.jagadish.freshmart.data.dto.login.RequestOtpRes" />
     </fragment>
 
     <fragment
@@ -30,12 +40,26 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit" />
+        <argument
+            android:name="requestOtpRes"
+            app:argType="com.jagadish.freshmart.data.dto.login.RequestOtpRes" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_mobile_verification"
         android:name="com.jagadish.freshmart.view.login.ui.verification.MobileVerificationFragment"
-        tools:layout="@layout/fragment_mobile_verification" />
+        tools:layout="@layout/fragment_mobile_verification" >
+        <argument
+            android:name="requestOtpRes"
+            app:argType="com.jagadish.freshmart.data.dto.login.RequestOtpRes" />
+        <action
+            android:id="@+id/action_navigation_mobile_verification_to_navigation_login_details"
+            app:destination="@id/navigation_login_details"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
 
 
 </navigation>

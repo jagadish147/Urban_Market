@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/address_navigation"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_address_list">
+    <fragment
+        android:id="@+id/navigation_address_list"
+        android:name="com.jagadish.freshmart.view.address.AddressListFragment"
+        tools:layout="@layout/fragment_address_list" >
+
+
+        <action
+            android:id="@+id/action_navigation_address_list_to_navigation_address_add"
+            app:destination="@id/navigation_address_add"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_address_add"
+        android:name="com.jagadish.freshmart.view.address.AddAddressFragment"
+        tools:layout="@layout/fragment_add_address" >
+
+
+        <action
+            android:id="@+id/action_navigation_address_add_to_navigation_address_list"
+            app:destination="@id/navigation_address_list"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+</navigation>

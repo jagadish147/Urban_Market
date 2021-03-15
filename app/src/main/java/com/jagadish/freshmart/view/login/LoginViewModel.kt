@@ -1,30 +1,29 @@
 package com.jagadish.freshmart.view.login
 
 import android.util.Patterns
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jagadish.freshmart.base.BaseViewModel
+import com.jagadish.freshmart.data.DataRepositorySource
+import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.cart.CreateCareReq
+import com.jagadish.freshmart.data.dto.cart.CreateCartRes
+import com.jagadish.freshmart.data.dto.login.RequestOtpReq
+import com.jagadish.freshmart.data.dto.login.RequestOtpRes
+import com.jagadish.freshmart.data.dto.products.ProductsItem
+import com.jagadish.freshmart.utils.SingleEvent
+import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class LoginViewModel @Inject
+constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseViewModel() {
 
 
-class LoginViewModel() : ViewModel() {
-
-
-    fun login(username: String) {
-        // can be launched in a separate asynchronous job
-
-
-    }
-
-
-    // A placeholder username validation check
-    private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains('@')) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
-    }
-
-    // A placeholder password validation check
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
-    }
 }

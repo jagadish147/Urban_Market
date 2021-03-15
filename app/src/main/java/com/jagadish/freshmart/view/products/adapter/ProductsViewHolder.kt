@@ -20,7 +20,7 @@ class ProductsViewHolder(private val itemBinding: ViewProductItemBinding) : Recy
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Picasso.get().load(recipesItem.image).into(itemBinding.productImage)
+        Picasso.get().load(recipesItem.image.tumb.url).into(itemBinding.productImage)
         if(recipesItem.isAddCart){
             itemBinding.quantityLayout.visibility = View.VISIBLE
             itemBinding.addBtn.visibility = View.GONE

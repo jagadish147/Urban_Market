@@ -64,11 +64,11 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
 
-    fun getRecipes() {
+    fun getRecipes(cartId : Int) {
         viewModelScope.launch {
             recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
-                dataRepositoryRepository.requestCart().collect {
+                dataRepositoryRepository.requestCart(cartId).collect {
                     recipesLiveDataPrivate.value = it
                 }
             }

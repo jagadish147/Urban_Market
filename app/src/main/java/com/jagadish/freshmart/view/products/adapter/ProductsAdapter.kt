@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.base.listeners.RecyclerItemListener
+import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.databinding.ShopItemBinding
@@ -28,13 +30,14 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
             recipes[recipes.indexOf(productsItem)].isAddCart = true
           recipes[recipes.indexOf(productsItem)].quantity = 1
             notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.checkCartItems(productsItem)
+            recipesListViewModel.addCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemRemoveCart(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].isAddCart = false
             recipes[recipes.indexOf(productsItem)].quantity = 0
             notifyItemChanged(recipes.indexOf(productsItem))
+            recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityIncrease(productsItem: ProductsItem) {

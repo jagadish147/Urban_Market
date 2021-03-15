@@ -29,7 +29,7 @@ class OrderinfoAdapter(private val recipesListViewModel: CartViewModel, private 
             recipes[recipes.indexOf(productsItem)].isAddCart = true
           recipes[recipes.indexOf(productsItem)].quantity = 1
             notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.checkCartItems(productsItem)
+//            recipesListViewModel.checkCartItems(productsItem)
         }
 
         override fun onItemRemoveCart(productsItem: ProductsItem) {

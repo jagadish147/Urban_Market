@@ -16,6 +16,9 @@ public class SharedPreferencesUtils {
     public static final String PREF_USER_MOBILE = "user_mobile";
     public static final String PREF_USER_DATA = "user_date";
     public static final String PREF_APP_FIRST_TIME = "app_first_time";
+    public static final String PREF_APP_FCM_TOKEN = "app_fcm_token";
+    public static final String PREF_DEVICE_CART = "device_cart";
+    public static final String PREF_DEVICE_CART_ID= "device_cart_id";
 
     public SharedPreferencesUtils() {
     }
@@ -71,7 +74,7 @@ public class SharedPreferencesUtils {
     }
 
     public static String getAppStringPreference(final String key) {
-        return getAppSharedPref().getString(key, null);
+        return getAppSharedPref().getString(key, "");
     }
 
     public static String getStringPreference(final String key, String defaultValue) {

@@ -18,6 +18,7 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
@@ -154,7 +155,7 @@ class OrderinfoFragment : BaseFragment() {
         }
     }
 
-    private fun showCartView(navigateEvent: SingleEvent<ProductsItem>) {
+    private fun showCartView(navigateEvent: SingleEvent<AddItemRes>) {
         navigateEvent.getContentIfNotHandled()?.let {
 
         }

@@ -17,6 +17,7 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
@@ -24,6 +25,7 @@ import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentCartBinding
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
+import com.jagadish.freshmart.view.address.AddressActivity
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
 import com.jagadish.freshmart.view.orderinfo.OrderinfoFragment
@@ -64,6 +66,13 @@ class CartFragment : BaseFragment() {
 
         binding.orderConfirmBtn.setOnClickListener {
             val nextScreenIntent = Intent(requireActivity(), OrderInfoActivity::class.java).apply {
+//                putExtra(CATEGORY_KEY, it)
+            }
+            startActivity(nextScreenIntent)
+        }
+
+        binding.addAddressBtn.setOnClickListener {
+            val nextScreenIntent = Intent(requireActivity(), AddressActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
             }
             startActivity(nextScreenIntent)
@@ -157,9 +166,13 @@ class CartFragment : BaseFragment() {
         }
     }
 
-    private fun showCartView(navigateEvent: SingleEvent<ProductsItem>) {
+    private fun showCartView(navigateEvent: SingleEvent<AddItemRes>) {
         navigateEvent.getContentIfNotHandled()?.let {
-
+            val cart = binding.cart
+            cart!!.order_price = it.total_price
+            cart!!.total_price = it.total_price
+            binding.cart = cart
+            binding.orderInfoLayout.toVisible()
         }
     }
 }

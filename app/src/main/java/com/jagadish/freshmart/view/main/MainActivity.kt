@@ -25,7 +25,13 @@ import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseActivity
+import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.view.intro.IntroSliderActivity
+import com.jagadish.freshmart.view.login.LoginActivity
+import com.jagadish.freshmart.view.main.ui.cart.CartFragment
 import com.jagadish.freshmart.view.main.ui.location.LocationRequestFragment
+import com.jagadish.freshmart.view.main.ui.store.StoreFragment
+import com.jagadish.freshmart.view.orderinfo.OrderinfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -63,6 +69,43 @@ class MainActivity : BaseActivity() {
 
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             getLastLocation()
+
+            navView.setOnNavigationItemSelectedListener { item ->
+             var isNavigate= false
+                when (item.itemId) {
+                    R.id.navigation_store -> {
+                        isNavigate = true
+                        val navController = findNavController(R.id.nav_host_fragment)
+                        navController.navigate(R.id.navigation_store)
+                    }
+                    R.id.navigation_cart -> {
+                        isNavigate = true
+                        val navController = findNavController(R.id.nav_host_fragment)
+                        navController.navigate(R.id.navigation_cart)
+                    }
+                    R.id.navigation_orders -> {
+                        if(!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+                            isNavigate = false
+                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                        }else {
+                            isNavigate = true
+                            val navController = findNavController(R.id.nav_host_fragment)
+                            navController.navigate(R.id.navigation_orders)
+                        }
+                    }
+                    R.id.navigation_profile -> {
+                        if(!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+                            isNavigate = false
+                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                        }else {
+                            isNavigate = true
+                            val navController = findNavController(R.id.nav_host_fragment)
+                            navController.navigate(R.id.navigation_profile)
+                        }
+                    }
+                }
+                isNavigate
+            }
         }
 
     }

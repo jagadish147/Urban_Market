@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.cart.AddItemReq
+import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
@@ -50,8 +53,8 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
      * UI actions as event, user action is single one time event, Shouldn't be multiple time consumption
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    private val checkItemsInCartPrivate = MutableLiveData<SingleEvent<ProductsItem>>()
-    val openCartView: LiveData<SingleEvent<ProductsItem>> get() = checkItemsInCartPrivate
+    private val checkItemsInCartPrivate = MutableLiveData<SingleEvent<AddItemRes>>()
+    val openCartView: LiveData<SingleEvent<AddItemRes>> get() = checkItemsInCartPrivate
 
     /**
      * Error handling as UI
@@ -69,7 +72,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         viewModelScope.launch {
             recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
-                dataRepositoryRepository.requestCart().collect {
+                dataRepositoryRepository.requestCart(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID)).collect {
                     recipesLiveDataPrivate.value = it
                 }
             }
@@ -85,8 +88,32 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
-    fun checkCartItems(recipe: ProductsItem){
+    fun checkCartItems(recipe: AddItemRes){
         checkItemsInCartPrivate.value = SingleEvent(recipe)
+    }
+
+    fun addCartItem(categoryId: AddItemReq) {
+        viewModelScope.launch {
+//            recipesLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestAddItem(categoryId).collect {
+                    showToastPrivate.value = SingleEvent(it.data!!.message)
+                    checkCartItems(it.data)
+                }
+            }
+        }
+    }
+
+    fun removeCartItem(categoryId: AddItemReq) {
+        viewModelScope.launch {
+//            recipesLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestRemoveItem(categoryId).collect {
+                    showToastPrivate.value = SingleEvent(it.data!!.message)
+                    checkCartItems(it.data)
+                }
+            }
+        }
     }
 
 }

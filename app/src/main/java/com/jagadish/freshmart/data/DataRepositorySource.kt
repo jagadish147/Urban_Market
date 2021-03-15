@@ -1,6 +1,14 @@
 package com.jagadish.freshmart.data
 
-import com.jagadish.freshmart.data.dto.cart.Cart
+import com.jagadish.freshmart.data.dto.address.AddAddressReq
+import com.jagadish.freshmart.data.dto.address.AddAddressRes
+import com.jagadish.freshmart.data.dto.address.AddressRes
+import com.jagadish.freshmart.data.dto.address.GetAddressReq
+import com.jagadish.freshmart.data.dto.cart.*
+import com.jagadish.freshmart.data.dto.login.CustomersRequest
+import com.jagadish.freshmart.data.dto.login.CustomersRes
+import com.jagadish.freshmart.data.dto.login.RequestOtpReq
+import com.jagadish.freshmart.data.dto.login.RequestOtpRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import kotlinx.coroutines.flow.Flow
@@ -9,10 +17,25 @@ import kotlinx.coroutines.flow.Flow
  * Created by Jagadeesh on 01-03-2021.
  */
 interface DataRepositorySource {
+    suspend fun requestCreateCart(fcm_token : CreateCareReq): Flow<Resource<CreateCartRes>>
+
     suspend fun requestRecipes(pinCode:String): Flow<Resource<Shop>>
 
     suspend fun requestProducts(categoryId: Int): Flow<Resource<Products>>
 
-    suspend fun requestCart(): Flow<Resource<Cart>>
+    suspend fun requestCart(cartId: Int): Flow<Resource<Cart>>
 
+    suspend fun requestAddItem(addItemReq: AddItemReq):Flow<Resource<AddItemRes>>
+
+    suspend fun requestRemoveItem(addItemReq: AddItemReq):Flow<Resource<AddItemRes>>
+
+    suspend fun requestOTP(addItemReq: RequestOtpReq): Flow<Resource<RequestOtpRes>>
+
+    suspend fun createCustomers(customersRes: CustomersRequest): Flow<Resource<CustomersRes>>
+
+    suspend fun requestCustomerLogin(customersRes: RequestOtpReq): Flow<Resource<CustomersRes>>
+
+    suspend fun requestAddAddress(customerId: Int,addAddressReq: AddAddressReq): Flow<Resource<AddAddressRes>>
+
+    suspend fun requestAddress(customerId: Int,requestAddress : GetAddressReq): Flow<Resource<AddressRes>>
 }

@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.jagadish.freshmart.view.main.ui.orders.OrdersFragment"
+        android:name="com.jagadish.freshmart.view.main.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

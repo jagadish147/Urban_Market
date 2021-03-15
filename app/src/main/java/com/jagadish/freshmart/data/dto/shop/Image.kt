@@ -11,5 +11,5 @@ class Image (
     @Json(name = "url")
     val url: String = "",
     @Json(name = "thumb")
-    val name: Tumb ,
+    val tumb: Tumb = Tumb(""),
 ): Parcelable

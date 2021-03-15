@@ -12,18 +12,18 @@ import kotlinx.android.parcel.Parcelize
 @JsonClass(generateAdapter = false)
 @Parcelize
 data class Cart (
-    @Json(name = "status")
+    @Json(name = "success")
     val status: Boolean = false,
     @Json(name = "message")
     val message: String = "",
-    @Json(name = "cartItems")
-    val products: List<ProductsItem>,
-    @Json(name = "order_price")
-    val order_price: Double = 0.0,
+    @Json(name = "items")
+    val products: List<ProductsItem> = ArrayList(),
+    @Json(name = "total")
+    var order_price: Double = 0.0,
     @Json(name = "delivery_charge")
     val delivery_charge: Double = 0.0,
-    @Json(name = "total_price")
-    val total_price: Double = 0.0,
-
+    @Json(name = "count")
+    val count : Int = 0,
+    var total_price: Double = order_price,
 
 ): Parcelable
