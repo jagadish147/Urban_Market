@@ -85,9 +85,18 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun requestAddress(customerId: Int,requestAddress : GetAddressReq): Flow<Resource<AddressRes>> {
+    override suspend fun requestRemoveAddress(
+        customerId: Int,
+        addAddressReq: AddAddressReq
+    ): Flow<Resource<AddAddressRes>> {
         return flow {
-            emit(remoteRepository.requestAddress(customerId,requestAddress))
+            emit(remoteRepository.requestRemoveAddress(customerId,addAddressReq))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestAddress(customerId: Int,phoneNumber : String): Flow<Resource<AddressRes>> {
+        return flow {
+            emit(remoteRepository.requestAddress(customerId,phoneNumber))
         }.flowOn(ioDispatcher)
     }
 

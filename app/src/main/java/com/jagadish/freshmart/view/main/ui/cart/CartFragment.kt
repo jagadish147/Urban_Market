@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
@@ -17,6 +18,7 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
@@ -26,6 +28,7 @@ import com.jagadish.freshmart.databinding.FragmentCartBinding
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.AddressActivity
+import com.jagadish.freshmart.view.address.adapter.AddressAdapter
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
 import com.jagadish.freshmart.view.orderinfo.OrderinfoFragment
@@ -63,6 +66,7 @@ class CartFragment : BaseFragment() {
         binding.cartItemsRecyclerView.layoutManager = layoutManager
         binding.cartItemsRecyclerView.setHasFixedSize(true)
         recipesListViewModel.getRecipes()
+        recipesListViewModel.fetchAddress()
 
         binding.orderConfirmBtn.setOnClickListener {
             val nextScreenIntent = Intent(requireActivity(), OrderInfoActivity::class.java).apply {
@@ -88,7 +92,7 @@ class CartFragment : BaseFragment() {
         observeEvent(recipesListViewModel.openCartView, ::showCartView )
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
-
+        observe(recipesListViewModel.addressLiveData, ::handleAddressList)
     }
 
 
@@ -173,6 +177,33 @@ class CartFragment : BaseFragment() {
             cart!!.total_price = it.total_price
             binding.cart = cart
             binding.orderInfoLayout.toVisible()
+        }
+    }
+
+    private fun handleAddressList(status: Resource<AddressRes>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { bindAddressListData(recipes = it) }
+            is Resource.DataError -> {
+                showDataView(false)
+                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun bindAddressListData(recipes: AddressRes) {
+        if (!(recipes.addresses.isNullOrEmpty())) {
+            for(item in recipes.addresses){
+                if(item.default){
+                    binding.addAddressBtn.text = "Change Address"
+                    binding.defaultAddress.text = item.address_line1 +","+ item.address_line2 +","+item.city
+                    break
+                }
+            }
+            showDataView(true)
+        } else {
+            showDataView(false)
+            binding.addAddressBtn.text = "Add Address"
         }
     }
 }

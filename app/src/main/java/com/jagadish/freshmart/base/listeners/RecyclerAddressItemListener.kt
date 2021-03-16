@@ -10,5 +10,7 @@ import com.jagadish.freshmart.data.dto.shop.ShopItem
  */
 
 interface RecyclerAddressItemListener {
-    fun onItemSelected(recipe : AddAddressReq)
+    fun onItemSelected(recipe : AddAddressReq,position : Int)
+
+    fun onItemRemoveAddress(addressReq: AddAddressReq,position: Int)
 }

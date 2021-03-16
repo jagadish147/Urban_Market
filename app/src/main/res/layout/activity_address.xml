@@ -25,7 +25,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_address"/>
+    <include layout="@layout/content_address"
+        android:id="@+id/layout"/>
 
 
 

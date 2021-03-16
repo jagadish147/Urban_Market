@@ -52,5 +52,13 @@
         android:id="@+id/navigation_profile"
         android:name="com.jagadish.freshmart.view.main.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_orders"
+            app:destination="@id/navigation_orders"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
 </navigation>

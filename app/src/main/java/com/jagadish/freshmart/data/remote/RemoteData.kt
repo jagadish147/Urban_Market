@@ -151,9 +151,24 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         }
     }
 
-    override suspend fun requestAddress(customerId: Int,requestAddress : GetAddressReq): Resource<AddressRes> {
+    override suspend fun requestRemoveAddress(
+        customerId: Int,
+        addAddressReq: AddAddressReq
+    ): Resource<AddAddressRes> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall({recipesService.requestAddress(customerId,requestAddress)})) {
+        return when (val response = processCall({recipesService.requestRemoveAddress(customerId,addAddressReq)})) {
+            is AddAddressRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestAddress(customerId: Int,phoneNumber : String): Resource<AddressRes> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestAddress(customerId,phoneNumber)})) {
             is AddressRes -> {
                 Resource.Success(data = response )
             }

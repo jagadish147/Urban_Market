@@ -10,6 +10,7 @@ import android.widget.Button
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
 import com.jagadish.freshmart.R
@@ -49,7 +50,13 @@ class AddressListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
+        val layoutManager = LinearLayoutManager(context)
+        binding.addressRecyclerView.layoutManager = layoutManager
+        binding.addressRecyclerView.setHasFixedSize(true)
         addessViewModel.fetchAddress()
+        binding.addNewAddress.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_address_list_to_navigation_address_add)
+        }
     }
 
     private fun observeViewModel() {

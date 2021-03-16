@@ -9,6 +9,7 @@ import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
@@ -111,6 +112,23 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                 dataRepositoryRepository.requestRemoveItem(categoryId).collect {
                     showToastPrivate.value = SingleEvent(it.data!!.message)
                     checkCartItems(it.data)
+                }
+            }
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val addressLiveDataPrivate = MutableLiveData<Resource<AddressRes>>()
+    val addressLiveData: LiveData<Resource<AddressRes>> get() = addressLiveDataPrivate
+
+    fun fetchAddress() {
+        viewModelScope.launch {
+            recipesLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestAddress(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),
+                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE)
+                ).collect {
+                    addressLiveDataPrivate.value = it
                 }
             }
         }

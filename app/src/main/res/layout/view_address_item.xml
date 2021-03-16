@@ -7,6 +7,13 @@
     android:layout_marginTop="@dimen/space_10x">
 
 
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/radio_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/address_label_2"
+        app:layout_constraintStart_toStartOf="parent"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/address_label_1"
         android:layout_width="wrap_content"
@@ -16,9 +23,8 @@
         android:textSize="@dimen/font_16x"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/space_5x"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/radio_btn"
         tools:text="recipes title ........... this is a sample text " />
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/address_label_2"
@@ -30,10 +36,27 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/address_label_1"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/address_label_1"
         tools:text="recipes title ........... this is a sample text " />
 
 
-
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/remove_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/address_label_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Remove"
+        android:textStyle="normal"
+        android:textColor="@color/main_color"
+        android:textSize="18sp"
+        android:layout_marginEnd="@dimen/space_10x"
+        android:layout_marginTop="@dimen/space_10x"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/space_10x"
+        app:layout_constraintTop_toBottomOf="@+id/remove_address"
+        android:background="@color/light_gray"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

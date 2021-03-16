@@ -5,18 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
-import com.jagadish.freshmart.base.listeners.RecyclerAddressItemListener
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
-import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.CreateCartRes
-import com.jagadish.freshmart.data.dto.login.RequestOtpReq
-import com.jagadish.freshmart.data.dto.login.RequestOtpRes
-import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
@@ -91,9 +86,22 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
             recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 dataRepositoryRepository.requestAddress(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),
-                    GetAddressReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID), SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE))
+                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE)
                 ).collect {
                     addressLiveDataPrivate.value = it
+                }
+            }
+        }
+    }
+
+    fun removeAddress(addressReq: AddAddressReq) {
+        viewModelScope.launch {
+            recipesLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestRemoveAddress(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),
+                    addressReq
+                ).collect {
+                    showToastPrivate.value = SingleEvent(it.data!!.message)
                 }
             }
         }

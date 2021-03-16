@@ -45,7 +45,7 @@
         android:textSize="@dimen/font_32x"
         android:textStyle="italic|bold"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/order_info_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +57,8 @@
         android:layout_marginStart="@dimen/space_16x"
         android:layout_marginEnd="@dimen/space_16x"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/cart_items_recycler_view">
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_address_details"
@@ -70,6 +71,12 @@
             android:textSize="@dimen/font_16x"
             android:layout_marginTop="@dimen/space_10x" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/default_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/label_address_details"
+            app:layout_constraintStart_toStartOf="@+id/label_address_details"/>
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/add_address_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,13 +84,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/action_add_address"
             android:textColor="@color/main_color"
-            android:textSize="@dimen/font_16x"/>
+            android:textSize="@dimen/font_16x"
+            android:visibility="gone"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_payment_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/label_address_details"
+            app:layout_constraintTop_toBottomOf="@+id/default_address"
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/label_payment_details"
             android:textColor="@color/main_color"

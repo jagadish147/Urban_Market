@@ -37,5 +37,7 @@ interface DataRepositorySource {
 
     suspend fun requestAddAddress(customerId: Int,addAddressReq: AddAddressReq): Flow<Resource<AddAddressRes>>
 
-    suspend fun requestAddress(customerId: Int,requestAddress : GetAddressReq): Flow<Resource<AddressRes>>
+    suspend fun requestRemoveAddress(customerId: Int,addAddressReq: AddAddressReq): Flow<Resource<AddAddressRes>>
+
+    suspend fun requestAddress(customerId: Int,phoneNumber : String): Flow<Resource<AddressRes>>
 }
