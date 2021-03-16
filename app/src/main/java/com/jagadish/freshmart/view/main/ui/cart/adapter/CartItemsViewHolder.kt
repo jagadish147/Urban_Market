@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.view.main.ui.cart.adapter
 
+import android.graphics.Paint
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.jagadish.freshmart.R
@@ -21,6 +22,13 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
         Picasso.get().load(recipesItem.image.tumb.url).into(itemBinding.productImage)
+        itemBinding.unit.text = recipesItem.unit
+        itemBinding.description.text = recipesItem.description
+        if(recipesItem.discount_price != 0.00) {
+            itemBinding.discountPrice.text = recipesItem.discount_price.toString()
+            itemBinding.discountPrice.paintFlags =
+                (itemBinding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG)
+        }
             itemBinding.quantityLayout.visibility = View.VISIBLE
             itemBinding.addBtn.visibility = View.GONE
             itemBinding.quantityTxt.text = recipesItem.quantity.toString()
