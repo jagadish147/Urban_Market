@@ -16,6 +16,7 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.cart.CreateCareReq
 import com.jagadish.freshmart.data.dto.cart.CreateCartRes
 import com.jagadish.freshmart.data.dto.products.Products
@@ -49,7 +50,7 @@ class SplashActivity : BaseActivity() {
             ).isNullOrEmpty()) {
             binding.pbLoading.toGone()
             Handler().postDelayed({
-                navigateHome()
+                recipesListViewModel. getCartItems()
             }, 2000)
         }else{
             Handler().postDelayed({
@@ -79,7 +80,7 @@ class SplashActivity : BaseActivity() {
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
-
+        observe(recipesListViewModel.cartLiveDataPrivate, ::handleCartList)
     }
 
 
@@ -139,7 +140,19 @@ class SplashActivity : BaseActivity() {
             }
         }
     }
+    private fun handleCartList(status: Resource<Cart>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { storeCartItems(recipes = it) }
+            is Resource.DataError -> {
+                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+    }
 
+    private fun storeCartItems(recipes: Cart){
+
+    }
     private fun navigateHome(){
         if (!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_APP_FIRST_TIME)) {
             startActivity(Intent(this@SplashActivity, IntroSliderActivity::class.java))

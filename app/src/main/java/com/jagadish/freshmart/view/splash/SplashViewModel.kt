@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.cart.CreateCareReq
 import com.jagadish.freshmart.data.dto.cart.CreateCartRes
 import com.jagadish.freshmart.data.dto.products.Products
@@ -89,4 +91,21 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         checkItemsInCartPrivate.value = SingleEvent(recipe)
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val cartLiveDataPrivate = MutableLiveData<Resource<Cart>>()
+    val cartLiveData: LiveData<Resource<Cart>> get() = cartLiveDataPrivate
+
+
+    fun getCartItems() {
+        viewModelScope.launch {
+            cartLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestCart(
+                    SharedPreferencesUtils.getIntPreference(
+                        SharedPreferencesUtils.PREF_DEVICE_CART_ID)).collect {
+                    cartLiveDataPrivate.value = it
+                }
+            }
+        }
+    }
 }
