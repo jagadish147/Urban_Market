@@ -49,13 +49,9 @@ class SplashActivity : BaseActivity() {
                 SharedPreferencesUtils.PREF_DEVICE_CART
             ).isNullOrEmpty()) {
             binding.pbLoading.toGone()
-            Handler().postDelayed({
-                recipesListViewModel. getCartItems()
-            }, 2000)
+            recipesListViewModel. getCartItems()
         }else{
-            Handler().postDelayed({
-                checkFCM()
-            }, 2000)
+            checkFCM()
         }
     }
 
@@ -151,7 +147,8 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun storeCartItems(recipes: Cart){
-
+        Singleton.getInstance().cart = recipes
+        navigateHome()
     }
     private fun navigateHome(){
         if (!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_APP_FIRST_TIME)) {

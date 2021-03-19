@@ -11,13 +11,13 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/curve_layout"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="200dp"
             android:background="@drawable/curve_shape"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title_header"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -48,36 +48,43 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/profile_mobile"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Mobile : "
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="normal"
             app:layout_constraintTop_toBottomOf="@+id/profile_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"/>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/profile_email"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="@dimen/space_16x"
             android:text="Email :"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textStyle="normal"
-            app:layout_constraintTop_toBottomOf="@+id/profile_mobile"
+            app:layout_constraintTop_toTopOf="@+id/profile_mobile"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/guideline" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -98,8 +105,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/address_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_address"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -113,14 +120,14 @@
                     android:text="Address"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/address_icon"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_right_arrow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -145,8 +152,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/share_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_share"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -159,14 +166,14 @@
                     android:text="Refer to Friends"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/share_icon"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_right_arrow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -190,8 +197,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/logout_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_logout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -204,14 +211,14 @@
                     android:text="Logout"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/logout_icon"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_right_arrow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

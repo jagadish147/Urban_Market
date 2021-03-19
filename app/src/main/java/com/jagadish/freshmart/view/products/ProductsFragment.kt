@@ -74,11 +74,11 @@ class ProductsFragment : BaseFragment() {
 
 
     private fun observeViewModel() {
+        observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
+        observeEvent(recipesListViewModel.openCartView, ::showCartView )
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
-        observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
-        observeEvent(recipesListViewModel.openCartView, ::showCartView )
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
 
@@ -94,6 +94,17 @@ class ProductsFragment : BaseFragment() {
 
     private fun bindListData(recipes: Products) {
         if (!(recipes.products.isNullOrEmpty())) {
+            if(Singleton.getInstance().cart.products.isNotEmpty()){
+                for(item in Singleton.getInstance().cart.products){
+                    for(product in recipes.products)
+                    if(item.id == product.id){
+                        product.quantity = item.quantity
+                        product.isAddCart = true
+                    }
+                }
+                recipesListViewModel.checkCartItems(AddItemRes(true,"",Singleton.getInstance().cart.count,Singleton.getInstance().cart.total_price,ArrayList()))
+            }
+
             recipesAdapter = ProductsAdapter(recipesListViewModel,recipes.products )
             binding.productsRecyclerView.adapter = recipesAdapter
             showDataView(true)

@@ -43,6 +43,7 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
         override fun onItemQuantityIncrease(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].quantity++
             notifyItemChanged(recipes.indexOf(productsItem))
+            recipesListViewModel.addCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityDecrease(productsItem: ProductsItem) {
@@ -51,6 +52,7 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
                 onItemRemoveCart(productsItem)
             }
             notifyItemChanged(recipes.indexOf(productsItem))
+            recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
     }
     //https://jsonblob.com/add55310-7c87-11eb-981f-b9bef68ee992

@@ -39,7 +39,7 @@ class ProfileFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.profileName.text = SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_NAME)
-        binding.profileEmail.text = SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL)
+        binding.profileEmail.text = "| "+SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL)
         binding.profileMobile.text = SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE)
 
         binding.addressText.setOnClickListener {

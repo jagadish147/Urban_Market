@@ -85,7 +85,7 @@
             android:text="@string/action_add_address"
             android:textColor="@color/main_color"
             android:textSize="@dimen/font_16x"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_payment_details"
@@ -117,8 +117,7 @@
             android:text="@{`₹`+String.valueOf(cart.order_price)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            tools:text="$ 100"
-            android:layout_marginTop="@dimen/space_10x"/>
+            tools:text="$ 100"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_delivery_charge"
@@ -140,8 +139,7 @@
             android:text="@{cart.delivery_charge == 0? `Free`:`₹`+String.valueOf(cart.delivery_charge)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            tools:text="$ 10"
-            android:layout_marginTop="@dimen/space_10x"/>
+            tools:text="$ 10"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_total_amount"
@@ -162,8 +160,7 @@
             android:text="@{`₹`+String.valueOf(cart.total_price)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            tools:text="$ 10"
-            android:layout_marginTop="@dimen/space_10x"/>
+            tools:text="$ 10"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/order_confirm_btn"
