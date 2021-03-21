@@ -116,4 +116,24 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
+    fun updateAddressNavigate(addressReq: AddAddressReq){
+        openRecipeDetailsPrivate.value = SingleEvent(addressReq)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val updateAddressPrivate: MutableLiveData<Resource<AddAddressRes>> = MutableLiveData()
+    val updateAddress: LiveData<Resource<AddAddressRes>> get() = updateAddressPrivate
+    fun updateAddress(addressReq: AddAddressReq) {
+        viewModelScope.launch {
+            updateAddressPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestUpdateAddress(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),
+                    addressReq
+                ).collect {
+                    showToastPrivate.value = SingleEvent(it.data!!.message)
+                    updateAddressPrivate.value = it
+                }
+            }
+        }
+    }
 }

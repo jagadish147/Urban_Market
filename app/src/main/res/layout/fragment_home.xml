@@ -40,11 +40,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/featureName" />
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/search_home"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Search"
+        android:layout_marginTop="@dimen/space_10x"
+        android:paddingStart="@dimen/space_10x"
+        android:paddingEnd="@dimen/space_10x"
+        android:background="@drawable/bg_rect_shape"
+        android:layout_marginStart="@dimen/space_10x"
+        android:layout_marginEnd="@dimen/space_10x"
+        app:layout_constraintTop_toBottomOf="@+id/address_txt"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/search_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/font_16x"
+        app:layout_constraintTop_toTopOf="@+id/search_home"
+        app:layout_constraintBottom_toBottomOf="@+id/search_home"
+        app:layout_constraintEnd_toEndOf="@+id/search_home"
+        android:layout_marginEnd="@dimen/space_10x"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/search_home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/space_10x"
+        android:layout_marginBottom="40dp"
+        android:layout_marginStart="@dimen/space_10x"
+        android:layout_marginEnd="@dimen/space_10x"
+        android:visibility="gone"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/store_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/address_txt"
+        app:layout_constraintTop_toBottomOf="@+id/search_home"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

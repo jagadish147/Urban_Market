@@ -26,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.utils.Singleton
 import com.jagadish.freshmart.view.intro.IntroSliderActivity
 import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.ui.cart.CartFragment
@@ -69,7 +70,10 @@ class MainActivity : BaseActivity() {
 
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             getLastLocation()
-
+            if(Singleton.getInstance().cart != null && Singleton.getInstance().cart?.count != 0) {
+                navView.getOrCreateBadge(R.id.navigation_cart).number =
+                    Singleton.getInstance().cart.count
+            }
             navView.setOnNavigationItemSelectedListener { item ->
              var isNavigate= false
                 when (item.itemId) {

@@ -17,6 +17,10 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit" />
+
+        <argument
+            android:name="requestAddress"
+            app:argType="com.jagadish.freshmart.data.dto.address.AddAddressReq" />
     </fragment>
 
     <fragment
@@ -32,5 +36,8 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit" />
+        <argument
+            android:name="requestAddress"
+            app:argType="com.jagadish.freshmart.data.dto.address.AddAddressReq" />
     </fragment>
 </navigation>

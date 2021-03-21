@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
@@ -18,19 +17,18 @@ import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddressRes
-import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentAddressListBinding
-import com.jagadish.freshmart.databinding.FragmentLoginBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.adapter.AddressAdapter
+import com.jagadish.freshmart.view.login.ui.login.LoginFragmentDirections
 import com.jagadish.freshmart.view.products.ProductsListActivity
 import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * A simple [Fragment] subclass as the defaultAddress destination in the navigation.
  */
 @AndroidEntryPoint
 class AddressListFragment : BaseFragment() {
@@ -62,11 +60,16 @@ class AddressListFragment : BaseFragment() {
     private fun observeViewModel() {
         observe(addessViewModel.addressLiveData, ::handleRecipesList)
         observe(addessViewModel.noSearchFound, ::noSearchResult)
+        observe(addessViewModel.openRecipeDetails, ::updateAddress)
         observeSnackBarMessages(addessViewModel.showSnackBar)
         observeToast(addessViewModel.showToast)
 
     }
 
+    private fun updateAddress(addressReq: SingleEvent<AddAddressReq>){
+        val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(addressReq.peekContent())
+        findNavController().navigate(bundle)
+    }
 
     private fun handleSearch(query: String) {
         if (query.isNotEmpty()) {

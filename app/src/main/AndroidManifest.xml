@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jagadish.freshmart" >
+    package="com.jagadish.freshmart">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -15,29 +15,27 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Freshmart" >
+        android:theme="@style/Theme.Freshmart">
+        <activity android:name=".view.payment.status.OrderStatusActivity"></activity>
         <activity
             android:name=".view.address.AddressActivity"
             android:label="@string/title_activity_address"
-            android:theme="@style/Theme.Freshmart.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.Freshmart.NoActionBar"></activity>
         <activity
             android:name=".view.orderinfo.OrderInfoActivity"
             android:label="@string/title_activity_order_info"
-            android:theme="@style/Theme.Freshmart.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.Freshmart.NoActionBar"></activity>
         <activity
             android:name=".view.products.ProductsListActivity"
             android:label="@string/title_activity_products_list"
-            android:theme="@style/Theme.Freshmart.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme_Freshmart_Dark_NoActionBar"></activity>
         <activity
             android:name=".view.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".view.main.MainActivity"
             android:label="@string/title_activity_main" />
-        <activity android:name=".view.splash.SplashActivity" >
+        <activity android:name=".view.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,7 +47,7 @@
 
         <service
             android:name=".utils.FirebaseInstanse"
-            android:stopWithTask="false" >
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

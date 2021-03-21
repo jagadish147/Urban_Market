@@ -22,8 +22,9 @@ data class AddAddressReq (
     val state : String = "",
     @Json(name = "zip")
     val zip : String = "",
-    @Json(name = "address_type")
-    val address_type : String = "default",
     @Json(name = "default")
-    var default : Boolean = false,
+    var defaultAddress : Boolean = false,
+    @Json(name = "address_type")
+    val address_type : String = "other",// defalut, reside,home
+
 ) : Parcelable

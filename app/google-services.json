@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "103491697405",
+    "project_id": "freshmart-90e87",
+    "storage_bucket": "freshmart-90e87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103491697405:android:dcc9d2ed384bb1739bdc94",
+        "android_client_info": {
+          "package_name": "com.jagadish.freshmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103491697405-n677cs5engod3eod9125d03q6h96l666.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQECrcMzYliG-wD8-K6I_J5-9f6CuAOBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103491697405-n677cs5engod3eod9125d03q6h96l666.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "103491697405-fvplrbt89irv9u12fjdkpsr1k35bsa10.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dt"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

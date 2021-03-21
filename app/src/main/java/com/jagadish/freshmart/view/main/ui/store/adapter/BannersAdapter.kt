@@ -42,7 +42,7 @@ class BannersAdapter(
         listPosition: Int,
         viewType: Int
     ) {
-        Glide.with(context).load(itemList?.get(listPosition)?.image?.tumb?.url).into(
+        Glide.with(context).load(itemList?.get(listPosition)?.image?.url).into(
             convertView.findViewById(
                 R.id.image
             )

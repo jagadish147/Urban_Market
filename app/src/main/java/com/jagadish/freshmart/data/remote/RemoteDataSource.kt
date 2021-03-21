@@ -39,5 +39,7 @@ internal interface RemoteDataSource {
 
     suspend fun requestRemoveAddress(customerId: Int,addAddressReq: AddAddressReq): Resource<AddAddressRes>
 
+    suspend fun requestUpdateAddress(customerId: Int,addAddressReq: AddAddressReq): Resource<AddAddressRes>
+
     suspend fun requestAddress(customerId: Int,phoneNumber : String): Resource<AddressRes>
 }

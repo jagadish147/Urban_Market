@@ -166,6 +166,21 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         }
     }
 
+    override suspend fun requestUpdateAddress(
+        customerId: Int,
+        addAddressReq: AddAddressReq
+    ): Resource<AddAddressRes> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestUpdateAddress(addAddressReq)})) {
+            is AddAddressRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
     override suspend fun requestAddress(customerId: Int,phoneNumber : String): Resource<AddressRes> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
         return when (val response = processCall({recipesService.requestAddress(customerId,phoneNumber)})) {

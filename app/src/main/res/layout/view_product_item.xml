@@ -14,21 +14,33 @@
         android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="@dimen/space_10x"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:gravity="center"
+        android:ellipsize="end"
+        android:gravity="start"
         android:textSize="@dimen/font_16x"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/space_5x"
+        android:layout_marginStart="@dimen/space_10x"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/product_image"
         tools:text="recipes title ........... this is a sample text " />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_10x"
+        app:layout_constraintTop_toBottomOf="@+id/product_name"
+        app:layout_constraintStart_toStartOf="@+id/product_name"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
@@ -38,36 +50,35 @@
         android:textSize="@dimen/font_16x"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/product_name"
-        app:layout_constraintStart_toStartOf="@+id/product_name"
+        android:layout_marginStart="@dimen/space_16x"
+        app:layout_constraintTop_toTopOf="@+id/discount_price"
+        app:layout_constraintStart_toEndOf="@+id/discount_price"
         tools:text="recipes title ........... this is a sample text " />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/discount_price"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="@dimen/space_16x"
-        app:layout_constraintTop_toTopOf="@+id/product_price"
-        app:layout_constraintStart_toEndOf="@+id/product_price"/>
+        app:layout_constraintTop_toTopOf="@+id/unit"
+        app:layout_constraintStart_toEndOf="@+id/unit"/>
+
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/product_price"
-        app:layout_constraintStart_toStartOf="@+id/product_price"/>
-    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/unit"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/unit"
-        android:textColor="@color/black"/>
+        android:textColor="@color/grey"
+        android:maxLines="2"
+        android:ellipsize="end"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/add_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/button_selector"
@@ -75,7 +86,8 @@
         android:drawableEnd="@drawable/ic_add_white"
         android:drawablePadding="@dimen/space_24x"
         android:textColor="@color/white"
-        android:textSize="@dimen/font_18x"
+        android:textSize="@dimen/font_16x"
+        android:layout_marginTop="@dimen/space_5x"
         android:layout_marginEnd="@dimen/space_16x"
         android:padding="@dimen/space_5x"
         android:visibility="visible"/>
@@ -84,6 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="@dimen/space_10x"

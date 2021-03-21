@@ -94,6 +94,15 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun requestUpdateAddress(
+        customerId: Int,
+        addAddressReq: AddAddressReq
+    ): Flow<Resource<AddAddressRes>> {
+        return flow {
+            emit(remoteRepository.requestUpdateAddress(customerId,addAddressReq))
+        }.flowOn(ioDispatcher)
+    }
+
     override suspend fun requestAddress(customerId: Int,phoneNumber : String): Flow<Resource<AddressRes>> {
         return flow {
             emit(remoteRepository.requestAddress(customerId,phoneNumber))

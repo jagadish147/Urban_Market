@@ -196,7 +196,7 @@ class MyKotlinJsonAdapterFactory : JsonAdapter.Factory {
             if (Modifier.isTransient(property.javaField?.modifiers ?: 0)) {
                 if (parameter != null && !parameter.isOptional) {
                     throw IllegalArgumentException(
-                        "No default value for transient constructor $parameter")
+                        "No defaultAddress value for transient constructor $parameter")
                 }
                 continue
             }

@@ -35,7 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * A simple [Fragment] subclass as the defaultAddress destination in the navigation.
  */
 @AndroidEntryPoint
 class ProductsFragment : BaseFragment() {

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class StoreViewModel @Inject
@@ -32,8 +33,8 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
 
     //TODO check to make them as one Resource
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val recipeSearchFoundPrivate: MutableLiveData<ShopItem> = MutableLiveData()
-    val recipeSearchFound: LiveData<ShopItem> get() = recipeSearchFoundPrivate
+    val recipeSearchFoundPrivate: MutableLiveData<List<ShopItem>> = MutableLiveData()
+    val recipeSearchFound: LiveData<List<ShopItem>> get() = recipeSearchFoundPrivate
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val noSearchFoundPrivate: MutableLiveData<Unit> = MutableLiveData()
@@ -78,5 +79,20 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
+    fun searchProducts(searchQuarry : String){
+        if(searchQuarry.isNotEmpty()) {
+            var searchList = ArrayList<ShopItem>()
+            if (recipesLiveData.value?.data?.shopList?.size!! > 0) {
+                for (item in recipesLiveData.value?.data?.shopList!!) {
+                    if (item.name.contains(searchQuarry)) {
+                        searchList.add(item)
+                    }
+                }
+                recipeSearchFoundPrivate.value = searchList
+            }
+        }else{
+            noSearchFoundPrivate.value = Unit
+        }
+    }
 
 }

@@ -51,6 +51,9 @@ interface RecipesService {
     @POST("customers/{Id}/remove_address")
     suspend fun requestRemoveAddress(@Path("Id") customerId : Int,@Body customerReq : AddAddressReq): Response<AddAddressRes>
 
+    @POST("customers/update_address")
+    suspend fun requestUpdateAddress(@Body customerReq : AddAddressReq): Response<AddAddressRes>
+
 
     @GET("customers/id/get_address")
     suspend fun requestAddress(@Query("customer_id") categoryId: Int, @Query("phone_number") phoneNumber : String): Response<AddressRes>
