@@ -4,6 +4,9 @@
         <variable
             name="cart"
             type="com.jagadish.freshmart.data.dto.cart.Cart" />
+        <variable
+            name="address"
+            type="com.jagadish.freshmart.data.dto.address.AddAddressReq" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

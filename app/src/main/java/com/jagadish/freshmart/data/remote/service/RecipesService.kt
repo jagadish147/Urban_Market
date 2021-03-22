@@ -9,6 +9,10 @@ import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
 import com.jagadish.freshmart.data.dto.login.RequestOtpRes
+import com.jagadish.freshmart.data.dto.order.OrderReq
+import com.jagadish.freshmart.data.dto.order.OrderRes
+import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
+import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import retrofit2.Response
@@ -57,4 +61,10 @@ interface RecipesService {
 
     @GET("customers/id/get_address")
     suspend fun requestAddress(@Query("customer_id") categoryId: Int, @Query("phone_number") phoneNumber : String): Response<AddressRes>
+
+    @POST("orders")
+    suspend fun requestOrderId(@Body orderReq : OrderReq): Response<OrderRes>
+
+    @POST("orders/update_payment_status")
+    suspend fun requestPaymentStatus(@Body paymentStatusReq : PaymentStatusReq): Response<PaymentStatusRes>
 }

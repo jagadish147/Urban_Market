@@ -10,6 +10,10 @@ import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
 import com.jagadish.freshmart.data.dto.login.RequestOtpRes
+import com.jagadish.freshmart.data.dto.order.OrderReq
+import com.jagadish.freshmart.data.dto.order.OrderRes
+import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
+import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
@@ -185,6 +189,30 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
         return when (val response = processCall({recipesService.requestAddress(customerId,phoneNumber)})) {
             is AddressRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestOrderId(orderReq: OrderReq): Resource<OrderRes> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestOrderId(orderReq)})) {
+            is OrderRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestPaymentStatus(paymentStausReq: PaymentStatusReq): Resource<PaymentStatusRes> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestPaymentStatus(paymentStausReq)})) {
+            is PaymentStatusRes -> {
                 Resource.Success(data = response )
             }
             else -> {

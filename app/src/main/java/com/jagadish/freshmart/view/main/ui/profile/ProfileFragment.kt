@@ -56,7 +56,7 @@ class ProfileFragment : BaseFragment() {
                 .startChooser();
         }
         binding.logoutText.setOnClickListener { SharedPreferencesUtils.clearAllPreferences()
-            findNavController().navigate(R.id.action_navigation_profile_to_navigation_orders)
+            findNavController().navigate(R.id.action_navigation_profile_to_navigation_store)
         }
 
     }

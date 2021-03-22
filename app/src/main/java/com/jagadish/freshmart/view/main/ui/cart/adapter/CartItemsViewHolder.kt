@@ -3,6 +3,8 @@ package com.jagadish.freshmart.view.main.ui.cart.adapter
 import android.graphics.Paint
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.base.listeners.RecyclerItemListener
@@ -21,7 +23,8 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Picasso.get().load(recipesItem.image.tumb.url).into(itemBinding.productImage)
+        Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).diskCacheStrategy(
+            DiskCacheStrategy.DATA).into(itemBinding.productImage)
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description
         if(recipesItem.discount_price != 0.00) {

@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.asksira.loopingviewpager.LoopingPagerAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.databinding.ItemStoreBannerBinding
+import com.jagadish.freshmart.utils.shimmer.Shimmer
+import com.jagadish.freshmart.utils.shimmer.ShimmerDrawable
 import com.jagadish.freshmart.view.main.ui.store.StoreClickListener
 
 /**
@@ -42,7 +45,16 @@ class BannersAdapter(
         listPosition: Int,
         viewType: Int
     ) {
-        Glide.with(context).load(itemList?.get(listPosition)?.image?.url).into(
+        val shimmer = Shimmer.AlphaHighlightBuilder()
+            .setDuration(1800)
+            .setBaseAlpha(0.9f)
+            .setHighlightAlpha(0.8f)
+            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+            .setAutoStart(true)
+            .build()
+        val shimmerDrawable = ShimmerDrawable().apply { setShimmer(shimmer) }
+        Glide.with(context).load(itemList?.get(listPosition)?.image?.url).diskCacheStrategy(
+            DiskCacheStrategy.DATA).placeholder(shimmerDrawable).into(
             convertView.findViewById(
                 R.id.image
             )

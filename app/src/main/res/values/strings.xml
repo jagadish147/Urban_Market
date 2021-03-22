@@ -7,6 +7,7 @@
     <string name="desc_intro2">Book your favorite hotel room with hassle-free and reasonable rates</string>
     <string name="desc_intro3">Enjoy your beautiful moments to exotic places around the world</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_dashboard">Dashboard</string>
     <string name="title_store">Store</string>
     <string name="title_cart">Cart</string>
     <string name="title_orders">Orders</string>
@@ -75,5 +76,6 @@
     <string name="title_address_zip">Pincode *</string>
     <string name="action_save">Save</string>
     <string name="action_add_address">Add Address</string>
+    <string name="title_activity_delivery_boy_main">MainActivity</string>
 
 </resources>

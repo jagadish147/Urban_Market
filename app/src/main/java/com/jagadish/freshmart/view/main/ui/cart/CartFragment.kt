@@ -16,6 +16,9 @@ import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
+import com.jagadish.freshmart.data.dto.order.OrderRes
+import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
+import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentCartBinding
@@ -24,6 +27,7 @@ import com.jagadish.freshmart.view.address.AddressActivity
 import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
+import com.jagadish.freshmart.view.payment.status.OrderStatusActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,11 +64,7 @@ class CartFragment : BaseFragment() {
 
         binding.orderConfirmBtn.setOnClickListener {
             if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
-                val nextScreenIntent =
-                    Intent(requireActivity(), OrderInfoActivity::class.java).apply {
-//                putExtra(CATEGORY_KEY, it)
-                    }
-                startActivity(nextScreenIntent)
+                recipesListViewModel.createOrderId(binding.address.id)
             }else{
                 val nextScreenIntent =
                     Intent(requireActivity(), LoginActivity::class.java).apply {
@@ -101,6 +101,8 @@ class CartFragment : BaseFragment() {
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
         observe(recipesListViewModel.addressLiveData, ::handleAddressList)
+        observe(recipesListViewModel.orderIdLiveData, ::handleOrderId)
+        observe(recipesListViewModel.paymentStatusLiveData, ::handlePaymentStatus)
     }
 
 
@@ -205,6 +207,7 @@ class CartFragment : BaseFragment() {
                 if(item.defaultAddress){
                     binding.addAddressBtn.text = "Change Address"
                     binding.defaultAddress.text = item.address_line1 +","+ item.address_line2 +","+item.city
+                    binding.address = item
                     break
                 }
             }
@@ -214,4 +217,39 @@ class CartFragment : BaseFragment() {
             binding.addAddressBtn.text = "Add Address"
         }
     }
+
+    private fun handleOrderId(status: Resource<OrderRes>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { bindOrderId(orderRes = it) }
+            is Resource.DataError -> {
+                showDataView(false)
+                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun bindOrderId(orderRes: OrderRes){
+        val paymentstatusReq = PaymentStatusReq(orderRes.order_id,"Card","123456")
+        recipesListViewModel.checkPaymentStatus(paymentstatusReq)
+    }
+
+    private fun handlePaymentStatus(status: Resource<PaymentStatusRes>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { bindPaymentStatus(paymentStatusRes = it) }
+            is Resource.DataError -> {
+                showDataView(false)
+                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun bindPaymentStatus(paymentStatusRes: PaymentStatusRes){
+            if(paymentStatusRes.success && paymentStatusRes.status == 200){
+                startActivity(Intent(requireActivity(),OrderStatusActivity::class.java))
+            }
+    }
+
+
 }

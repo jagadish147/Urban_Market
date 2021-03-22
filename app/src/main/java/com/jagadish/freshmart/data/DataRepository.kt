@@ -9,6 +9,10 @@ import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
 import com.jagadish.freshmart.data.dto.login.RequestOtpRes
+import com.jagadish.freshmart.data.dto.order.OrderReq
+import com.jagadish.freshmart.data.dto.order.OrderRes
+import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
+import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.remote.RemoteData
@@ -106,6 +110,18 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
     override suspend fun requestAddress(customerId: Int,phoneNumber : String): Flow<Resource<AddressRes>> {
         return flow {
             emit(remoteRepository.requestAddress(customerId,phoneNumber))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestOrderId(orderReq: OrderReq): Flow<Resource<OrderRes>> {
+        return flow {
+            emit(remoteRepository.requestOrderId(orderReq))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestPaymentStatus(paymentStatusReq: PaymentStatusReq): Flow<Resource<PaymentStatusRes>> {
+        return flow {
+            emit(remoteRepository.requestPaymentStatus(paymentStatusReq))
         }.flowOn(ioDispatcher)
     }
 
