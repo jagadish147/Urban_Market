@@ -52,6 +52,17 @@
         android:textSize="18sp"
         android:layout_marginEnd="@dimen/space_10x"
         android:layout_marginTop="@dimen/space_10x"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/edit_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/remove_address"
+        app:layout_constraintEnd_toStartOf="@+id/remove_address"
+        android:text="Edit"
+        android:textStyle="normal"
+        android:textColor="@color/main_color"
+        android:textSize="18sp"
+        android:layout_marginEnd="@dimen/space_10x"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

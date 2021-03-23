@@ -1,40 +1,33 @@
 package com.jagadish.freshmart.view.main.ui.cart
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
-import com.jagadish.freshmart.R
-import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
-import com.jagadish.freshmart.data.dto.products.Products
+import com.jagadish.freshmart.data.dto.order.OrderRes
+import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
+import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentCartBinding
-import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.AddressActivity
-import com.jagadish.freshmart.view.address.adapter.AddressAdapter
+import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
-import com.jagadish.freshmart.view.orderinfo.OrderinfoFragment
-import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
-import com.jagadish.freshmart.view.products.ProductsListActivity
-import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
+import com.jagadish.freshmart.view.payment.status.OrderStatusActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,20 +59,35 @@ class CartFragment : BaseFragment() {
         binding.cartItemsRecyclerView.layoutManager = layoutManager
         binding.cartItemsRecyclerView.setHasFixedSize(true)
         recipesListViewModel.getRecipes()
-        recipesListViewModel.fetchAddress()
+        if(SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN))
+            recipesListViewModel.fetchAddress()
 
         binding.orderConfirmBtn.setOnClickListener {
-            val nextScreenIntent = Intent(requireActivity(), OrderInfoActivity::class.java).apply {
+            if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+                recipesListViewModel.createOrderId(binding.address.id)
+            }else{
+                val nextScreenIntent =
+                    Intent(requireActivity(), LoginActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
+                    }
+                startActivity(nextScreenIntent)
             }
-            startActivity(nextScreenIntent)
         }
 
         binding.addAddressBtn.setOnClickListener {
-            val nextScreenIntent = Intent(requireActivity(), AddressActivity::class.java).apply {
+            if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+                val nextScreenIntent =
+                    Intent(requireActivity(), AddressActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
+                    }
+                startActivity(nextScreenIntent)
+            }else{
+                val nextScreenIntent =
+                    Intent(requireActivity(), LoginActivity::class.java).apply {
+//                putExtra(CATEGORY_KEY, it)
+                    }
+                startActivity(nextScreenIntent)
             }
-            startActivity(nextScreenIntent)
         }
     }
 
@@ -93,6 +101,8 @@ class CartFragment : BaseFragment() {
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
         observe(recipesListViewModel.addressLiveData, ::handleAddressList)
+        observe(recipesListViewModel.orderIdLiveData, ::handleOrderId)
+        observe(recipesListViewModel.paymentStatusLiveData, ::handlePaymentStatus)
     }
 
 
@@ -194,9 +204,10 @@ class CartFragment : BaseFragment() {
     private fun bindAddressListData(recipes: AddressRes) {
         if (!(recipes.addresses.isNullOrEmpty())) {
             for(item in recipes.addresses){
-                if(item.default){
+                if(item.defaultAddress){
                     binding.addAddressBtn.text = "Change Address"
                     binding.defaultAddress.text = item.address_line1 +","+ item.address_line2 +","+item.city
+                    binding.address = item
                     break
                 }
             }
@@ -206,4 +217,39 @@ class CartFragment : BaseFragment() {
             binding.addAddressBtn.text = "Add Address"
         }
     }
+
+    private fun handleOrderId(status: Resource<OrderRes>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { bindOrderId(orderRes = it) }
+            is Resource.DataError -> {
+                showDataView(false)
+                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun bindOrderId(orderRes: OrderRes){
+        val paymentstatusReq = PaymentStatusReq(orderRes.order_id,"Card","123456")
+        recipesListViewModel.checkPaymentStatus(paymentstatusReq)
+    }
+
+    private fun handlePaymentStatus(status: Resource<PaymentStatusRes>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { bindPaymentStatus(paymentStatusRes = it) }
+            is Resource.DataError -> {
+                showDataView(false)
+                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun bindPaymentStatus(paymentStatusRes: PaymentStatusRes){
+            if(paymentStatusRes.success && paymentStatusRes.status == 200){
+                startActivity(Intent(requireActivity(),OrderStatusActivity::class.java))
+            }
+    }
+
+
 }

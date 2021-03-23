@@ -16,9 +16,11 @@
         android:layout_height="wrap_content"
         android:text="+Add New Address"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/space_10x"
-        android:layout_marginStart="@dimen/space_10x"/>
+        android:textSize="@dimen/font_16x"
+        android:textColor="@color/main_color"
+        android:layout_marginEnd="@dimen/space_10x"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/address_recycler_view"
         android:layout_width="match_parent"

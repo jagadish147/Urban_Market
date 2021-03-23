@@ -35,7 +35,7 @@ import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * A simple [Fragment] subclass as the defaultAddress destination in the navigation.
  */
 @AndroidEntryPoint
 class OrderinfoFragment : BaseFragment() {

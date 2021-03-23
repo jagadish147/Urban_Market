@@ -1,6 +1,5 @@
 package com.jagadish.freshmart.data.remote
 
-import com.jagadish.freshmart.BASE_URL
 import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.data.remote.moshiFactories.MyKotlinJsonAdapterFactory
 import com.jagadish.freshmart.data.remote.moshiFactories.MyStandardJsonAdapters
@@ -54,7 +53,7 @@ class ServiceGenerator @Inject constructor() {
         okHttpBuilder.readTimeout(timeoutRead.toLong(), TimeUnit.SECONDS)
         val client = okHttpBuilder.build()
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL).client(client)
+            .baseUrl(BuildConfig.BASE_URL).client(client)
             .addConverterFactory(MoshiConverterFactory.create(getMoshi()))
             .build()
     }

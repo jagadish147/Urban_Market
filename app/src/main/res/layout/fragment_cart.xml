@@ -4,6 +4,9 @@
         <variable
             name="cart"
             type="com.jagadish.freshmart.data.dto.cart.Cart" />
+        <variable
+            name="address"
+            type="com.jagadish.freshmart.data.dto.address.AddAddressReq" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,13 +15,28 @@
     android:layout_height="match_parent"
     tools:context=".view.main.ui.cart.CartFragment">
 
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cart"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_18x"
+        android:textStyle="normal"
+        android:padding="@dimen/space_10x"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/main_color"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_items_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/title_header"/>
 
     <FrameLayout
         android:id="@+id/pb_loading"
@@ -36,19 +54,16 @@
             android:indeterminate="true" />
     </FrameLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/tv_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="@dimen/font_32x"
-        android:textStyle="italic|bold"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/order_info_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/ic_empty_cart"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/order_info_layout"

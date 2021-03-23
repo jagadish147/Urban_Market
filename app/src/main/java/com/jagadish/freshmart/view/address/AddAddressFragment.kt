@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
@@ -21,6 +22,7 @@ import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentAddAddressBinding
 import com.jagadish.freshmart.databinding.FragmentAddressListBinding
 import com.jagadish.freshmart.utils.*
+import com.jagadish.freshmart.view.login.ui.details.LoginDetailsFragmentArgs
 import com.jagadish.freshmart.view.login.ui.login.LoginFragmentDirections
 import com.jagadish.freshmart.view.login.ui.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +35,7 @@ class AddAddressFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddAddressBinding
     private val loginViewModel: AdressViewModel by viewModels()
-
+    private val args: AddAddressFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,9 +48,39 @@ class AddAddressFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
+        binding.address = args.requestAddress
+        if(args.requestAddress.id !=0){
+            binding.buttonSave.text = "Update Address"
+        }
         binding.buttonSave.setOnClickListener {
-            loginViewModel.requestAddAddress(AddAddressReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),binding.addressLine1.text.toString().trim(),binding.addressLine2.text.toString().trim(),binding.city.text.toString().trim(),binding.state.text.toString().trim(),binding.zip.text.toString().trim()))
-//
+            if(args.requestAddress.id !=0){
+
+                loginViewModel.updateAddress(AddAddressReq(
+                    args.requestAddress.id ,
+                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
+                    binding.addressLine1.text.toString().trim(),
+                    binding.addressLine2.text.toString().trim(),
+                    binding.city.text.toString().trim(),
+                    binding.state.text.toString().trim(),
+                    binding.zip.text.toString().trim(),
+                    binding.defaultCheckBox.isChecked
+                ))
+            }else {
+                loginViewModel.requestAddAddress(
+                    AddAddressReq(
+                        SharedPreferencesUtils.getIntPreference(
+                            SharedPreferencesUtils.PREF_USER_ID
+                        ),
+                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
+                        binding.addressLine1.text.toString().trim(),
+                        binding.addressLine2.text.toString().trim(),
+                        binding.city.text.toString().trim(),
+                        binding.state.text.toString().trim(),
+                        binding.zip.text.toString().trim(),
+                        binding.defaultCheckBox.isChecked
+                    )
+                )
+            }
         }
     }
 
@@ -59,6 +91,7 @@ class AddAddressFragment : BaseFragment() {
 
     private fun observeViewModel() {
         observe(loginViewModel.recipesLiveData, ::handleRecipesList)
+        observe(loginViewModel.updateAddress, ::handleUpdateAddress)
         observeSnackBarMessages(loginViewModel.showSnackBar)
         observeToast(loginViewModel.showToast)
 
@@ -101,6 +134,20 @@ class AddAddressFragment : BaseFragment() {
     }
 
     private fun navigateHome(res: AddAddressRes){
+        findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+    }
+
+    private fun handleUpdateAddress(status: Resource<AddAddressRes>){
+        when (status){
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let { updateAddressSuccess() }
+            is Resource.DataError -> {
+                status.errorCode?.let { loginViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun updateAddressSuccess(){
         findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
     }
 }

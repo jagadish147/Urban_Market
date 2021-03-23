@@ -2,6 +2,8 @@ package com.jagadish.freshmart.view.main.ui.store
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +25,9 @@ import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.main.MainActivity
+import com.jagadish.freshmart.view.main.ui.store.adapter.BannersAdapter
 import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
+import com.jagadish.freshmart.view.main.ui.store.adapter.StoreAdapter
 import com.jagadish.freshmart.view.main.ui.store.model.HomeModel
 import com.jagadish.freshmart.view.products.ProductsListActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +55,28 @@ class StoreFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.storeRecyclerView.layoutManager = layoutManager
         binding.storeRecyclerView.setHasFixedSize(true)
+        val layoutManagerSearch = LinearLayoutManager(context)
+        binding.searchRecyclerview.layoutManager = layoutManagerSearch
+        binding.searchRecyclerview.setHasFixedSize(true)
+
+        binding.searchHome.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                recipesListViewModel.searchProducts(s.toString())
+            }
+
+        })
+
+        binding.searchClear.setOnClickListener {
+            binding.searchHome.text?.clear()
+        }
 
     }
     //https://jsonblob.com/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
@@ -125,7 +151,11 @@ class StoreFragment : BaseFragment() {
     }
 
     private fun showSearchError() {
-        recipesListViewModel.showToastMessage(SEARCH_ERROR)
+        binding.storeRecyclerView.toVisible()
+        binding.searchRecyclerview.toGone()
+        binding.searchClear.toGone()
+        binding.searchRecyclerview.hideKeyboard()
+//        recipesListViewModel.showToastMessage(SEARCH_ERROR)
     }
 
     private fun showDataView(show: Boolean) {
@@ -141,9 +171,14 @@ class StoreFragment : BaseFragment() {
     }
 
 
-    private fun showSearchResult(recipesItem: ShopItem) {
-        recipesListViewModel.openRecipeDetails(recipesItem)
-        binding.pbLoading.toGone()
+    private fun showSearchResult(recipesItem: List<ShopItem>) {
+        binding.storeRecyclerView.toGone()
+        binding.searchRecyclerview.toVisible()
+        binding.searchClear.toVisible()
+        binding.searchRecyclerview.adapter = StoreAdapter(recipesListViewModel, recipesItem)
+
+//        recipesListViewModel.openRecipeDetails(recipesItem)
+//        binding.pbLoading.toGone()
     }
 
     private fun noSearchResult(unit: Unit) {

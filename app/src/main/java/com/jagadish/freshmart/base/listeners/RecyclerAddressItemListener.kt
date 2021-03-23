@@ -13,4 +13,6 @@ interface RecyclerAddressItemListener {
     fun onItemSelected(recipe : AddAddressReq,position : Int)
 
     fun onItemRemoveAddress(addressReq: AddAddressReq,position: Int)
+
+    fun onItemEditAddress(addressReq: AddAddressReq,position: Int)
 }

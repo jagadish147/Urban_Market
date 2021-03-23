@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import com.google.android.material.snackbar.Snackbar
+import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.CATEGORY_KEY
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseActivity
@@ -26,6 +27,7 @@ import com.jagadish.freshmart.databinding.ActivitySplashBinding
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.AddressActivity
+import com.jagadish.freshmart.view.deliveryboy.DeliveryHomeActivity
 import com.jagadish.freshmart.view.intro.IntroSliderActivity
 import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.MainActivity
@@ -45,13 +47,20 @@ class SplashActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_splash)
         observeViewModel()
 
-        if(!SharedPreferencesUtils.getStringPreference(
-                SharedPreferencesUtils.PREF_DEVICE_CART
-            ).isNullOrEmpty()) {
-            binding.pbLoading.toGone()
-            recipesListViewModel. getCartItems()
+        if(BuildConfig.FLAVOR == "user") {
+            if (!SharedPreferencesUtils.getStringPreference(
+                    SharedPreferencesUtils.PREF_DEVICE_CART
+                ).isNullOrEmpty()
+            ) {
+                binding.pbLoading.toGone()
+                recipesListViewModel.getCartItems()
+            } else {
+                checkFCM()
+            }
         }else{
-            checkFCM()
+            Handler().postDelayed({
+                navigateDeliveryBoy()
+            }, 2000)
         }
     }
 
@@ -155,6 +164,15 @@ class SplashActivity : BaseActivity() {
             startActivity(Intent(this@SplashActivity, IntroSliderActivity::class.java))
         } else {
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        }
+        finish()
+    }
+
+    private fun navigateDeliveryBoy(){
+        if (!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+            startActivity(Intent(this@SplashActivity, DeliveryHomeActivity::class.java))
+        }else{
+            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
         }
         finish()
     }

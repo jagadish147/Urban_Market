@@ -19,9 +19,9 @@ class AddressAdapter(private val recipesListViewModel: AdressViewModel, private 
 
         override fun onItemSelected(recipe: AddAddressReq,position : Int) {
             for(item in recipes){
-                item.default = false
+                item.defaultAddress = false
             }
-            recipes[position].default = true
+            recipes[position].defaultAddress = true
             notifyDataSetChanged()
             recipesListViewModel.openRecipeDetails(recipe)
         }
@@ -30,6 +30,10 @@ class AddressAdapter(private val recipesListViewModel: AdressViewModel, private 
             recipes.drop(position)
             notifyDataSetChanged()
             recipesListViewModel.removeAddress(addressReq)
+        }
+
+        override fun onItemEditAddress(addressReq: AddAddressReq, position: Int) {
+            recipesListViewModel.updateAddressNavigate(addressReq)
         }
 
 

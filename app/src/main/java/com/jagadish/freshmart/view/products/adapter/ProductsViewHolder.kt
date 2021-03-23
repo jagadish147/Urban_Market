@@ -3,6 +3,10 @@ package com.jagadish.freshmart.view.products.adapter
 import android.graphics.Paint
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.databinding.ViewProductItemBinding
@@ -19,7 +23,8 @@ class ProductsViewHolder(private val itemBinding: ViewProductItemBinding) : Recy
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Picasso.get().load(recipesItem.image.tumb.url).into(itemBinding.productImage)
+        Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).diskCacheStrategy(
+            DiskCacheStrategy.DATA).transform(CenterInside(), RoundedCorners(24)).into(itemBinding.productImage)
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description
         if(recipesItem.discount_price != 0.00) {

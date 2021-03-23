@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/delivery_home_navigation"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_dash_board">
+
+    <fragment
+        android:id="@+id/navigation_dash_board"
+        android:name="com.jagadish.freshmart.view.deliveryboy.ui.dashboard.DashboardFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_notifications" >
+
+        <action
+            android:id="@+id/action_navigation_dash_board_to_navigation_profile"
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.jagadish.freshmart.view.main.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_notifications" >
+
+    </fragment>
+</navigation>

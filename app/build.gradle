@@ -39,6 +39,27 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
+    flavorDimensions 'urban_market'
+    productFlavors {
+        user {
+            dimension 'urban_market'
+            applicationId 'com.jagadish'
+            applicationIdSuffix 'freshmart'
+            versionCode 1
+            versionName '1.0'
+            targetSdkVersion 30
+            buildConfigField "String", "BASE_URL", '"https://urbanmarket.herokuapp.com/api/v1/"'
+        }
+        delivery_boy {
+            dimension 'urban_market'
+            applicationId 'com.urbanmarket'
+            applicationIdSuffix 'deliveryboy'
+            versionCode 1
+            versionName '1.0'
+            targetSdkVersion 30
+            buildConfigField "String", "BASE_URL", '"https://urbanmarket.herokuapp.com/api/v1/"'
+        }
+    }
 }
 
 dependencies {
