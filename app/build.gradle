@@ -52,8 +52,8 @@ android {
         }
         delivery_boy {
             dimension 'urban_market'
-            applicationId 'com.urbanmarket'
-            applicationIdSuffix 'deliveryboy'
+            applicationId 'com.jagadish'
+            applicationIdSuffix 'freshmart'
             versionCode 1
             versionName '1.0'
             targetSdkVersion 30

@@ -64,7 +64,7 @@ class CartFragment : BaseFragment() {
 
         binding.orderConfirmBtn.setOnClickListener {
             if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
-                recipesListViewModel.createOrderId(binding.address.id)
+                recipesListViewModel.createOrderId(binding.address!!.id)
             }else{
                 val nextScreenIntent =
                     Intent(requireActivity(), LoginActivity::class.java).apply {
