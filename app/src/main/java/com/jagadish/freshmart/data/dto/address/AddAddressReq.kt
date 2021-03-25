@@ -25,6 +25,6 @@ data class AddAddressReq (
     @Json(name = "default")
     var defaultAddress : Boolean = false,
     @Json(name = "address_type")
-    val address_type : String = "other",// defalut, reside,home
+    val address_type : String = "defalut",// defalut, reside,home
 
 ) : Parcelable

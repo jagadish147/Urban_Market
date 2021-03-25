@@ -48,8 +48,8 @@ class AddAddressFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        binding.address = args.requestAddress
         if(args.requestAddress.id !=0){
+            binding.address = args.requestAddress
             binding.buttonSave.text = "Update Address"
         }
         binding.buttonSave.setOnClickListener {
@@ -63,7 +63,8 @@ class AddAddressFragment : BaseFragment() {
                     binding.city.text.toString().trim(),
                     binding.state.text.toString().trim(),
                     binding.zip.text.toString().trim(),
-                    binding.defaultCheckBox.isChecked
+                    binding.defaultCheckBox.isChecked,
+                    if(binding.defaultCheckBox.isChecked)"default" else "other",
                 ))
             }else {
                 loginViewModel.requestAddAddress(
@@ -77,7 +78,8 @@ class AddAddressFragment : BaseFragment() {
                         binding.city.text.toString().trim(),
                         binding.state.text.toString().trim(),
                         binding.zip.text.toString().trim(),
-                        binding.defaultCheckBox.isChecked
+                        binding.defaultCheckBox.isChecked,
+                        if(binding.defaultCheckBox.isChecked)"default" else "other",
                     )
                 )
             }

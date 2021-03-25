@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.view.address
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,11 +12,12 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.jagadish.freshmart.CATEGORY_KEY
-import com.jagadish.freshmart.R
+import com.jagadish.freshmart.*
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
+import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
@@ -53,7 +55,8 @@ class AddressListFragment : BaseFragment() {
         binding.addressRecyclerView.setHasFixedSize(true)
         addessViewModel.fetchAddress()
         binding.addNewAddress.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_address_list_to_navigation_address_add)
+            val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(AddAddressReq())
+            findNavController().navigate(bundle)
         }
     }
 
@@ -61,6 +64,8 @@ class AddressListFragment : BaseFragment() {
         observe(addessViewModel.addressLiveData, ::handleRecipesList)
         observe(addessViewModel.noSearchFound, ::noSearchResult)
         observe(addessViewModel.openRecipeDetails, ::updateAddress)
+        observe(addessViewModel.updateDefaultAddressDetails, ::updateDefaultAddress)
+        observe(addessViewModel.updateAddress, ::handleUpdateAddress)
         observeSnackBarMessages(addessViewModel.showSnackBar)
         observeToast(addessViewModel.showToast)
 
@@ -69,6 +74,21 @@ class AddressListFragment : BaseFragment() {
     private fun updateAddress(addressReq: SingleEvent<AddAddressReq>){
         val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(addressReq.peekContent())
         findNavController().navigate(bundle)
+    }
+
+    private fun updateDefaultAddress(addressReq: SingleEvent<AddAddressReq>){
+        addessViewModel.updateAddress(AddAddressReq(
+            addressReq.peekContent().id ,
+            addressReq.peekContent().phone_number,
+            addressReq.peekContent().address_line1,
+            addressReq.peekContent().address_line2,
+            addressReq.peekContent().city,
+            addressReq.peekContent().state,
+            addressReq.peekContent().zip,
+            true,
+            "default" ,
+        ))
+        updateAddressSuccess(addressReq = addressReq.peekContent())
     }
 
     private fun handleSearch(query: String) {
@@ -85,7 +105,10 @@ class AddressListFragment : BaseFragment() {
             showDataView(true)
         } else {
             showDataView(false)
-            findNavController().navigate(R.id.action_navigation_address_list_to_navigation_address_add)
+            val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(
+                AddAddressReq()
+            )
+            findNavController().navigate(bundle)
         }
     }
 
@@ -144,4 +167,23 @@ class AddressListFragment : BaseFragment() {
         }
     }
 
+    private fun handleUpdateAddress(status: Resource<AddAddressRes>){
+        when (status){
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let {  }
+            is Resource.DataError -> {
+                status.errorCode?.let { addessViewModel.showToastMessage(it) }
+            }
+        }
+    }
+
+    private fun updateAddressSuccess(addressReq: AddAddressReq){
+        addressAdapter.updateDefaultAddress(addressReq)
+        val data = Intent().apply {
+            putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS, true)
+            putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA,addressReq)
+        }
+        requireActivity().setResult(Activity.RESULT_OK, data)
+        requireActivity(). finish()
+    }
 }

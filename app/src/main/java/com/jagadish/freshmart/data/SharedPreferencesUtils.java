@@ -24,6 +24,7 @@ public class SharedPreferencesUtils {
     }
 
     private static WeakReference<SharedPreferences> sharedPref;
+    private static WeakReference<SharedPreferences> appSharedPref;
     private static Context mContext;
 
     private static final String PREF_NAME = "fresh-mart";
@@ -34,6 +35,8 @@ public class SharedPreferencesUtils {
             mContext = context;
             sharedPref = new WeakReference<>(context
                     .getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE));
+            appSharedPref = new WeakReference<>(context
+                    .getSharedPreferences(APP_PREF_NAME, Activity.MODE_PRIVATE));
         }
     }
 
@@ -47,12 +50,12 @@ public class SharedPreferencesUtils {
     }
 
     private static SharedPreferences getAppSharedPref() {
-        if (sharedPref == null || sharedPref.get() == null) {
-            sharedPref = new WeakReference<>(mContext
+        if (appSharedPref == null || appSharedPref.get() == null) {
+            appSharedPref = new WeakReference<>(mContext
                     .getSharedPreferences(APP_PREF_NAME, Activity.MODE_PRIVATE));
         }
 
-        return sharedPref.get();
+        return appSharedPref.get();
     }
 
 

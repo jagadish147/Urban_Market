@@ -15,6 +15,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
@@ -26,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.databinding.ActivityMainBinding
 import com.jagadish.freshmart.utils.Singleton
 import com.jagadish.freshmart.view.intro.IntroSliderActivity
 import com.jagadish.freshmart.view.login.LoginActivity
@@ -55,6 +57,7 @@ class MainActivity : BaseActivity() {
     private var mLastLocation: Location? = null
 
     var currentAddress: LiveData<SelectedAddress> = address
+    private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,20 +65,20 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this@MainActivity, LocationRequestFragment::class.java))
             finish()
         } else {
-            setContentView(R.layout.activity_main)
-            val navView: BottomNavigationView = findViewById(R.id.nav_view)
+            binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
             val navController = findNavController(R.id.nav_host_fragment)
 
-            navView.setupWithNavController(navController)
+            binding.navView.setupWithNavController(navController)
 
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             getLastLocation()
+
             if(Singleton.getInstance().cart != null && Singleton.getInstance().cart?.count != 0) {
-                navView.getOrCreateBadge(R.id.navigation_cart).number =
+                binding.navView.getOrCreateBadge(R.id.navigation_cart).number =
                     Singleton.getInstance().cart.count
             }
-            navView.setOnNavigationItemSelectedListener { item ->
+            binding.navView.setOnNavigationItemSelectedListener { item ->
              var isNavigate= false
                 when (item.itemId) {
                     R.id.navigation_store -> {
@@ -221,5 +224,9 @@ class MainActivity : BaseActivity() {
     private fun openGpsEnableSetting() {
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivityForResult(intent, REQUEST_ENABLE_GPS)
+    }
+
+    fun clearCartBadge(){
+        binding.navView.removeBadge(R.id.navigation_cart)
     }
 }

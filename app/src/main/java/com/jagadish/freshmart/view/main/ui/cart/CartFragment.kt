@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.view.main.ui.cart
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +11,14 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
+import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS
+import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddressRes
+import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.order.OrderRes
@@ -59,8 +64,7 @@ class CartFragment : BaseFragment() {
         binding.cartItemsRecyclerView.layoutManager = layoutManager
         binding.cartItemsRecyclerView.setHasFixedSize(true)
         recipesListViewModel.getRecipes()
-        if(SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN))
-            recipesListViewModel.fetchAddress()
+
 
         binding.orderConfirmBtn.setOnClickListener {
             if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
@@ -80,7 +84,7 @@ class CartFragment : BaseFragment() {
                     Intent(requireActivity(), AddressActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
                     }
-                startActivity(nextScreenIntent)
+                startActivityForResult(nextScreenIntent,202)
             }else{
                 val nextScreenIntent =
                     Intent(requireActivity(), LoginActivity::class.java).apply {
@@ -115,6 +119,8 @@ class CartFragment : BaseFragment() {
 
     private fun bindListData(recipes: Cart) {
         if (!(recipes.products.isNullOrEmpty())) {
+            if(SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN))
+                recipesListViewModel.fetchAddress()
             recipesAdapter = CartItemsAdapter(recipesListViewModel,recipes.products )
             binding.cartItemsRecyclerView.adapter = recipesAdapter
             binding.cart = recipes
@@ -251,5 +257,15 @@ class CartFragment : BaseFragment() {
             }
     }
 
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 202 && resultCode == Activity.RESULT_OK) {
+            if(data?.getBooleanExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS,false)!!){
+                val addressReq = data.getParcelableExtra<AddAddressReq>(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA)
+                binding.addAddressBtn.text = "Change Address"
+                binding.defaultAddress.text = addressReq!!.address_line1 +","+ addressReq.address_line2 +","+addressReq.city
+                binding.address = addressReq
+            }
+        }
+    }
 }

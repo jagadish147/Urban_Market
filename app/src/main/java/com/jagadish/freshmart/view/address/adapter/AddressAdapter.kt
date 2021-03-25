@@ -56,5 +56,12 @@ class AddressAdapter(private val recipesListViewModel: AdressViewModel, private 
     fun getSelectedItems() : List<AddAddressReq>{
         return recipes
     }
+
+    fun updateDefaultAddress(addressReq: AddAddressReq){
+        for(item in recipes){
+            item.defaultAddress = addressReq.id == item.id
+        }
+        notifyDataSetChanged()
+    }
 }
 

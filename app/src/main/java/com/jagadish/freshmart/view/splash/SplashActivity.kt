@@ -172,7 +172,7 @@ class SplashActivity : BaseActivity() {
         navigateHome()
     }
     private fun navigateHome(){
-        if (!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_APP_FIRST_TIME)) {
+        if (!SharedPreferencesUtils.getAppBooleanPreference(SharedPreferencesUtils.PREF_APP_FIRST_TIME)) {
             startActivity(Intent(this@SplashActivity, IntroSliderActivity::class.java))
         } else {
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
@@ -181,7 +181,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun navigateDeliveryBoy(){
-        if (!SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+        if (!SharedPreferencesUtils.getAppBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
             startActivity(Intent(this@SplashActivity, DeliveryHomeActivity::class.java))
         }else{
             startActivity(Intent(this@SplashActivity, LoginActivity::class.java))

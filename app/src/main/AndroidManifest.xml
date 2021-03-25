@@ -33,7 +33,7 @@
         <activity
             android:name=".view.products.ProductsListActivity"
             android:label="@string/title_activity_products_list"
-            android:theme="@style/Theme_Freshmart_Dark_NoActionBar" />
+            android:theme="@style/Theme.Freshmart.Dark.NoActionBar" />
         <activity
             android:name=".view.login.LoginActivity"
             android:label="@string/title_activity_login" />

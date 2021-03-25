@@ -27,7 +27,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme_Freshmart_Dark_NoActionBar">
+    <style name="Theme.Freshmart.Dark.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -35,7 +35,7 @@
     <style name="Theme.Freshmart.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.Freshmart.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme_Freshmart_Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Freshmart.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_color</item>
         <item name="colorPrimaryVariant">@color/main_color</item>

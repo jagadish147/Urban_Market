@@ -17,6 +17,7 @@ import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.databinding.FragmentProfileBinding
 import com.jagadish.freshmart.view.address.AddressActivity
+import com.jagadish.freshmart.view.main.MainActivity
 import com.jagadish.freshmart.view.main.ui.orders.OrdersViewModel
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +57,7 @@ class ProfileFragment : BaseFragment() {
                 .startChooser();
         }
         binding.logoutText.setOnClickListener { SharedPreferencesUtils.clearAllPreferences()
+            (activity as MainActivity).clearCartBadge()
             findNavController().navigate(R.id.action_navigation_profile_to_navigation_store)
         }
 

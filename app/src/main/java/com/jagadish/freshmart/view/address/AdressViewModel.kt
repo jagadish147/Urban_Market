@@ -107,8 +107,12 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         }
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val updateDefaultAddressPrivate = MutableLiveData<SingleEvent<AddAddressReq>>()
+    val updateDefaultAddressDetails: LiveData<SingleEvent<AddAddressReq>> get() = updateDefaultAddressPrivate
+
     fun openRecipeDetails(recipe: AddAddressReq) {
-        openRecipeDetailsPrivate.value = SingleEvent(recipe)
+        updateDefaultAddressPrivate.value = SingleEvent(recipe)
     }
 
     fun showToastMessage(errorCode: Int) {
