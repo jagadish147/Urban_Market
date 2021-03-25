@@ -1,2 +1,3 @@
+include ':place_autocomplete'
 include ':app'
 rootProject.name = "Freshmart"

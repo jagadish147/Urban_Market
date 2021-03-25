@@ -11,12 +11,14 @@ import kotlinx.android.parcel.Parcelize
 @JsonClass(generateAdapter = false)
 @Parcelize
 data class Shop(
-    @Json(name = "status")
-    val status: Boolean = false,
+    @Json(name = "success")
+    val success: Boolean = false,
     @Json(name = "message")
     val message: String = "",
+    @Json(name ="status")
+    val status : Int = 0,
     @Json(name = "categories")
-    val shopList: List<ShopItem>,
+    val shopList: List<ShopItem> = ArrayList(),
     @Json(name = "banners")
-    val banners: List<ShopItem>,
+    val banners: List<ShopItem> = ArrayList(),
     ): Parcelable

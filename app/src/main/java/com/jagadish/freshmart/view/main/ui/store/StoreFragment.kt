@@ -1,9 +1,15 @@
 package com.jagadish.freshmart.view.main.ui.store
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
+import android.location.Address
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.CATEGORY_KEY
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
@@ -29,7 +36,11 @@ import com.jagadish.freshmart.view.main.ui.store.adapter.BannersAdapter
 import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
 import com.jagadish.freshmart.view.main.ui.store.adapter.StoreAdapter
 import com.jagadish.freshmart.view.main.ui.store.model.HomeModel
+import com.jagadish.freshmart.view.main.ui.store.model.SelectedAddress
 import com.jagadish.freshmart.view.products.ProductsListActivity
+import com.oneclickaway.opensource.placeautocomplete.data.api.bean.place_details.PlaceDetails
+import com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity
+import com.oneclickaway.opensource.placeautocomplete.utils.SearchPlacesStatusCodes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -78,14 +89,39 @@ class StoreFragment : BaseFragment() {
             binding.searchHome.text?.clear()
         }
 
+        binding.addressLayout.setOnClickListener {
+            val intent = Intent(requireContext(), SearchPlaceActivity::class.java)
+            intent.putExtra(
+                SearchPlacesStatusCodes.CONFIG,
+                SearchPlaceActivity.Config.Builder(apiKey = BuildConfig.ApiKey)
+                    .setSearchBarTitle("Enter Source Location")
+                    .setMyLocation("12.9716,77.5946")
+                    .setEnclosingRadius("500")
+                    .build()
+
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val pair = Pair.create(
+                    (binding.addressTxt as? View),
+                    SearchPlacesStatusCodes.PLACEHOLDER_TRANSITION
+                )
+                val options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), pair).toBundle()
+                startActivityForResult(intent, 700, options)
+
+            } else {
+                startActivityForResult(intent, 700)
+//                overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+            }
+        }
+
     }
     //https://jsonblob.com/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
     //https://jsonblob.com/api/jsonBlob/eccd16e6-7a2e-11eb-becc-a3dfce0ac389
 
     private fun observeViewModel() {
         (activity as MainActivity).currentAddress.observe(viewLifecycleOwner, Observer {
-            featureName.text = it.featureName
-            address_txt.text = it.getAddressLine(0)
+            featureName.text = it.shortAddress
+            address_txt.text = it.longAddress
             recipesListViewModel.getRecipes(it.postalCode)
         })
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
@@ -161,6 +197,7 @@ class StoreFragment : BaseFragment() {
     private fun showDataView(show: Boolean) {
         binding.tvNoData.visibility = if (show) View.GONE else View.VISIBLE
         binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
+        binding.searchHome.visibility = if (show) View.VISIBLE else View.GONE
         binding.pbLoading.toGone()
     }
 
@@ -189,7 +226,13 @@ class StoreFragment : BaseFragment() {
     private fun handleRecipesList(status: Resource<Shop>) {
         when (status) {
             is Resource.Loading -> showLoadingView()
-            is Resource.Success -> status.data?.let { bindListData(recipes = it) }
+            is Resource.Success -> status.data?.let {
+            if(it.success) {
+                bindListData(recipes = it)
+            }else {
+                showDataView(false)
+            }
+            }
             is Resource.DataError -> {
                 showDataView(false)
                 status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
@@ -205,6 +248,21 @@ class StoreFragment : BaseFragment() {
                 )
             )
                 findNavController().navigate(R.id.action_navigation_store_to_navigation_cart)
+        }else if (requestCode == 700 && resultCode == Activity.RESULT_OK) {
+
+            val placeDetails =
+                data?.getParcelableExtra<PlaceDetails>(SearchPlacesStatusCodes.PLACE_DATA)
+            var postalCode = ""
+            for( item in placeDetails!!.addressComponents!!){
+                if(item?.types?.contains("postal_code") == true){
+                    postalCode = item.longName
+                }
+            }
+            (activity as MainActivity).address.value =
+                placeDetails.name?.let { placeDetails.formattedAddress?.let { it1 ->
+                    SelectedAddress(it,
+                        it1,postalCode)
+                } }
         }
     }
 }

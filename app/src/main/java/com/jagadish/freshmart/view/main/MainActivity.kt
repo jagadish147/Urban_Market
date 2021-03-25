@@ -32,6 +32,7 @@ import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.ui.cart.CartFragment
 import com.jagadish.freshmart.view.main.ui.location.LocationRequestFragment
 import com.jagadish.freshmart.view.main.ui.store.StoreFragment
+import com.jagadish.freshmart.view.main.ui.store.model.SelectedAddress
 import com.jagadish.freshmart.view.orderinfo.OrderinfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,10 +51,10 @@ class MainActivity : BaseActivity() {
     /**
      * Represents a geographical location.
      */
-    private var address = MutableLiveData<Address>()
+     var address = MutableLiveData<SelectedAddress>()
     private var mLastLocation: Location? = null
 
-    val currentAddress: LiveData<Address> = address
+    var currentAddress: LiveData<SelectedAddress> = address
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,7 +140,7 @@ class MainActivity : BaseActivity() {
                                 1
                             ) as ArrayList<Address>?
                         if (addresses != null && addresses.size > 0) {
-                            address.value = addresses[0]
+                            address.value = SelectedAddress(addresses[0].featureName,addresses[0].getAddressLine(0),addresses[0].postalCode)
                         }
                     }
 

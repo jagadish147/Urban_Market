@@ -58,9 +58,18 @@ class SplashActivity : BaseActivity() {
                 checkFCM()
             }
         }else{
-            Handler().postDelayed({
-                navigateDeliveryBoy()
-            }, 2000)
+//            Handler().postDelayed({
+//                navigateDeliveryBoy()
+//            }, 2000)
+            if (!SharedPreferencesUtils.getStringPreference(
+                    SharedPreferencesUtils.PREF_DEVICE_CART
+                ).isNullOrEmpty()
+            ) {
+                binding.pbLoading.toGone()
+                recipesListViewModel.getCartItems()
+            } else {
+                checkFCM()
+            }
         }
     }
 
@@ -75,7 +84,10 @@ class SplashActivity : BaseActivity() {
             )
 
         }else{
-            checkFCM()
+            Handler().postDelayed({
+                checkFCM()
+            }, 2000)
+
         }
     }
 

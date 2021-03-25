@@ -12,18 +12,10 @@
 
         <action
             android:id="@+id/action_navigation_login_to_navigation_login_details"
-            app:destination="@id/navigation_login_details"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navigation_login_details" />
         <action
             android:id="@+id/action_navigation_login_to_navigation_mobile_verification"
-            app:destination="@id/navigation_mobile_verification"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navigation_mobile_verification"/>
         <argument
             android:name="requestOtpRes"
             app:argType="com.jagadish.freshmart.data.dto.login.RequestOtpRes" />
@@ -35,11 +27,7 @@
         tools:layout="@layout/fragment_login_details" >
         <action
             android:id="@+id/action_navigation_login_details_to_navigation_mobile_verification"
-            app:destination="@id/navigation_mobile_verification"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navigation_mobile_verification" />
         <argument
             android:name="requestOtpRes"
             app:argType="com.jagadish.freshmart.data.dto.login.RequestOtpRes" />
@@ -54,11 +42,7 @@
             app:argType="com.jagadish.freshmart.data.dto.login.RequestOtpRes" />
         <action
             android:id="@+id/action_navigation_mobile_verification_to_navigation_login_details"
-            app:destination="@id/navigation_login_details"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navigation_login_details" />
     </fragment>
 
 

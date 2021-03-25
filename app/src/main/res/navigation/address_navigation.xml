@@ -12,11 +12,7 @@
 
         <action
             android:id="@+id/action_navigation_address_list_to_navigation_address_add"
-            app:destination="@id/navigation_address_add"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navigation_address_add"/>
 
         <argument
             android:name="requestAddress"
@@ -31,11 +27,7 @@
 
         <action
             android:id="@+id/action_navigation_address_add_to_navigation_address_list"
-            app:destination="@id/navigation_address_list"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navigation_address_list"/>
         <argument
             android:name="requestAddress"
             app:argType="com.jagadish.freshmart.data.dto.address.AddAddressReq" />
