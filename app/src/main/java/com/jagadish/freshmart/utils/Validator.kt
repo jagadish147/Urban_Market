@@ -95,6 +95,19 @@ class Validator {
             return valid
         }
 
+        fun isValidPassword(data: Any, updateUI: Boolean = true): Boolean {
+            val str = getText(data)
+            val valid = str.length >= 4
+
+            // Set error if required
+            if (updateUI) {
+                val error: String? = if (valid) null else EMAIL_VALIDATION_MSG
+                setError(data, error)
+            }
+
+            return valid
+        }
+
         /**
          * Checks if the phone is valid.
          * @param data - can be EditText or String

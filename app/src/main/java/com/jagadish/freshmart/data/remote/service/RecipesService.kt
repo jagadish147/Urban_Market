@@ -5,6 +5,7 @@ import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
+import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -43,6 +44,9 @@ interface RecipesService {
     @POST("customers/request_otp")
     suspend fun requestOTP(@Body requestOtp : RequestOtpReq): Response<RequestOtpRes>
 
+    @POST("drivers/login")
+    suspend fun requestDeliveryBoyLogin(@Body requestOtp : RequestOtpReq): Response<RequestOtpRes>
+
     @POST("customers")
     suspend fun requestCustomers(@Body customerReq : CustomersRequest): Response<CustomersRes>
 
@@ -67,4 +71,8 @@ interface RecipesService {
 
     @POST("orders/update_payment_status")
     suspend fun requestPaymentStatus(@Body paymentStatusReq : PaymentStatusReq): Response<PaymentStatusRes>
+
+    @GET("drivers/orders?")
+    suspend fun requestDeliveryBoyScheduleOrders(@Query("id") customerId : Int): Response<DeliveryBoyOrders>
+
 }

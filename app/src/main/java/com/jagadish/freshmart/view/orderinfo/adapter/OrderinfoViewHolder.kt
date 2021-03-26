@@ -20,7 +20,7 @@ class OrderinfoViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Picasso.get().load(recipesItem.image.tumb.url).into(itemBinding.productImage)
+        Picasso.get().load(recipesItem.image_url).into(itemBinding.productImage)
             itemBinding.quantityLayout.visibility = View.GONE
             itemBinding.addBtn.visibility = View.GONE
             itemBinding.quantityTxt.text = recipesItem.quantity.toString()

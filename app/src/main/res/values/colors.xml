@@ -10,4 +10,6 @@
     <color name="main_color">#ED4A68</color>
     <color name="light_main_color">#80ED4A68</color>
     <color name="light_gray">#8DA6A5A5</color>
+    <color name="red">#F44336</color>
+    <color name="yellow">#FF9800</color>
 </resources>

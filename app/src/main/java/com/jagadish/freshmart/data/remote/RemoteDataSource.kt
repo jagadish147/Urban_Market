@@ -6,6 +6,7 @@ import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
+import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -50,4 +51,8 @@ internal interface RemoteDataSource {
     suspend fun requestOrderId(orderReq : OrderReq): Resource<OrderRes>
 
     suspend fun requestPaymentStatus(paymentStausReq : PaymentStatusReq): Resource<PaymentStatusRes>
+
+    suspend fun requestDeliveryBoyLogin(addItemReq: RequestOtpReq): Resource<RequestOtpRes>
+
+    suspend fun requestDeliveryBoyScheduleOrders(deliveryBoyId: Int): Resource<DeliveryBoyOrders>
 }

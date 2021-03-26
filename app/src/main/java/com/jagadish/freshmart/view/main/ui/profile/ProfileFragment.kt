@@ -11,12 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.databinding.FragmentProfileBinding
 import com.jagadish.freshmart.view.address.AddressActivity
+import com.jagadish.freshmart.view.deliveryboy.login.DeliveryBoyLoginActivity
 import com.jagadish.freshmart.view.main.MainActivity
 import com.jagadish.freshmart.view.main.ui.orders.OrdersViewModel
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
@@ -43,11 +45,23 @@ class ProfileFragment : BaseFragment() {
         binding.profileEmail.text = "| "+SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL)
         binding.profileMobile.text = SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE)
 
+        if(BuildConfig.FLAVOR != "user"){
+            binding.addressLabel.text = "Delivery Reports"
+        }
         binding.addressText.setOnClickListener {
-            val nextScreenIntent = Intent(requireActivity(), AddressActivity::class.java).apply {
+            if(BuildConfig.FLAVOR != "user") {
+                val nextScreenIntent =
+                    Intent(requireActivity(), AddressActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
+                    }
+                startActivity(nextScreenIntent)
+            }else{
+                val nextScreenIntent =
+                    Intent(requireActivity(), OrderInfoActivity::class.java).apply {
+//                putExtra(CATEGORY_KEY, it)
+                    }
+                startActivity(nextScreenIntent)
             }
-            startActivity(nextScreenIntent)
         }
         binding.referText.setOnClickListener {
             ShareCompat.IntentBuilder.from(requireActivity())
@@ -56,9 +70,15 @@ class ProfileFragment : BaseFragment() {
                 .setText("http://play.google.com/store/apps/details?id=" + requireActivity().getPackageName())
                 .startChooser();
         }
-        binding.logoutText.setOnClickListener { SharedPreferencesUtils.clearAllPreferences()
-            (activity as MainActivity).clearCartBadge()
-            findNavController().navigate(R.id.action_navigation_profile_to_navigation_store)
+        binding.logoutText.setOnClickListener {
+            SharedPreferencesUtils.clearAllPreferences()
+            if(BuildConfig.FLAVOR == "user") {
+                (activity as MainActivity).clearCartBadge()
+                findNavController().navigate(R.id.action_navigation_profile_to_navigation_store)
+            }else{
+                startActivity(Intent(requireActivity(), DeliveryBoyLoginActivity::class.java))
+                requireActivity().finish()
+            }
         }
 
     }

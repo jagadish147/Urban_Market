@@ -5,6 +5,7 @@ import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
+import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -65,6 +66,18 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
     override suspend fun requestOTP(addItemReq: RequestOtpReq): Flow<Resource<RequestOtpRes>> {
         return flow {
             emit(remoteRepository.requestOTP(addItemReq))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestDeliveryBoyLogin(addItemReq: RequestOtpReq): Flow<Resource<RequestOtpRes>> {
+        return flow {
+            emit(remoteRepository.requestDeliveryBoyLogin(addItemReq))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestDeliveryBoyScheduleOrders(deliveryBoyId: Int): Flow<Resource<DeliveryBoyOrders>> {
+        return flow {
+            emit(remoteRepository.requestDeliveryBoyScheduleOrders(deliveryBoyId))
         }.flowOn(ioDispatcher)
     }
 

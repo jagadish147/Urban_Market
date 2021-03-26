@@ -38,6 +38,9 @@
             android:name=".view.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".view.deliveryboy.login.DeliveryBoyLoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
             android:name=".view.main.MainActivity"
             android:label="@string/title_activity_main" />
         <activity android:name=".view.splash.SplashActivity" >

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/delivery_boy_login_nav"
+    app:startDestination="@+id/navigation_delivery_login">
+    <fragment
+        android:id="@+id/navigation_delivery_login"
+        android:name="com.jagadish.freshmart.view.deliveryboy.login.DeliveryBoyLoginFragment"
+        tools:layout="@layout/fragment_delivery_boy_login">
+    </fragment>
+</navigation>

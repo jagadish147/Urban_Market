@@ -11,4 +11,10 @@ import kotlinx.android.parcel.Parcelize
 data class RequestOtpReq (
     @Json(name = "phone_number")
     val phone_number: String = "",
+    @Json(name = "password")
+    val password : String = "",
+    @Json(name = "login")
+    val login : String = "",
+    @Json(name = "auth_token")
+    val auth_token : String ="",
     ): Parcelable

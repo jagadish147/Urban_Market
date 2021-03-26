@@ -6,6 +6,7 @@ import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
+import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -108,6 +109,30 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
         return when (val response = processCall({recipesService.requestOTP(addItemReq)})) {
             is RequestOtpRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestDeliveryBoyLogin(addItemReq: RequestOtpReq) : Resource<RequestOtpRes>{
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestDeliveryBoyLogin(addItemReq)})) {
+            is RequestOtpRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestDeliveryBoyScheduleOrders(deliveryBoyId: Int): Resource<DeliveryBoyOrders> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestDeliveryBoyScheduleOrders(deliveryBoyId)})) {
+            is DeliveryBoyOrders -> {
                 Resource.Success(data = response )
             }
             else -> {

@@ -1,4 +1,4 @@
-package com.jagadish.freshmart.view.login.ui.login
+package com.jagadish.freshmart.view.deliveryboy.login
 
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
@@ -23,38 +24,45 @@ import com.jagadish.freshmart.data.dto.login.RequestOtpReq
 import com.jagadish.freshmart.data.dto.login.RequestOtpRes
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.ActivityLoginBinding
+import com.jagadish.freshmart.databinding.FragmentDeliveryBoyLoginBinding
 import com.jagadish.freshmart.databinding.FragmentLoginBinding
 import com.jagadish.freshmart.utils.*
+import com.jagadish.freshmart.view.deliveryboy.DeliveryHomeActivity
 import com.jagadish.freshmart.view.intro.IntroSliderActivity
 import com.jagadish.freshmart.view.login.LoginActivity
+import com.jagadish.freshmart.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_delivery_boy_login.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.login
+import kotlinx.android.synthetic.main.fragment_login.mobile_number
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment() {
+class DeliveryBoyLoginFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = LoginFragment()
+        fun newInstance() = DeliveryBoyLoginFragment()
     }
 
-    private lateinit var binding: FragmentLoginBinding
-    private val loginViewModel: LoginViewModel by viewModels()
+    private lateinit var binding: FragmentDeliveryBoyLoginBinding
+    private val loginViewModel: DeliveryBoyFragmentLoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLoginBinding.inflate(inflater,container,false)
+        binding = FragmentDeliveryBoyLoginBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
+
         observeViewModel()
         login.setOnClickListener {
-            if(Validator.isValidPhone(mobile_number.text.toString()))
-                loginViewModel.requestOtp(RequestOtpReq(mobile_number.text.toString()))
+            if (Validator.isValidPhone(mobile_number.text.toString(),true) && Validator.isValidPassword(password.text.toString(),true))
+                loginViewModel.requestDeliveryBoyLogin(RequestOtpReq(mobile_number.text.toString(),password.text.toString(),mobile_number.text.toString(),SharedPreferencesUtils.getAppStringPreference(SharedPreferencesUtils.PREF_APP_FCM_TOKEN)))
         }
 
 
@@ -107,9 +115,13 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun navigateHome(res: RequestOtpRes){
-        res.mobileNumber = binding.mobileNumber.text.toString()
-        val bundle = LoginFragmentDirections.actionNavigationLoginToNavigationMobileVerification(res)
-        findNavController().navigate(bundle)
+        SharedPreferencesUtils.setBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN,true)
+        SharedPreferencesUtils.setIntPreference(SharedPreferencesUtils.PREF_USER_ID,res.driver_id)
+        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_NAME,res.name)
+        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE,res.phone_number)
+        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL,res.email)
+        startActivity(Intent(requireActivity(), DeliveryHomeActivity::class.java))
+        requireActivity().finish()
     }
 
 }

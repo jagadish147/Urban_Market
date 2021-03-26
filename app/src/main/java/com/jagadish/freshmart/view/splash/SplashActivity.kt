@@ -28,6 +28,7 @@ import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.AddressActivity
 import com.jagadish.freshmart.view.deliveryboy.DeliveryHomeActivity
+import com.jagadish.freshmart.view.deliveryboy.login.DeliveryBoyLoginActivity
 import com.jagadish.freshmart.view.intro.IntroSliderActivity
 import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.MainActivity
@@ -58,18 +59,18 @@ class SplashActivity : BaseActivity() {
                 checkFCM()
             }
         }else{
-//            Handler().postDelayed({
-//                navigateDeliveryBoy()
-//            }, 2000)
-            if (!SharedPreferencesUtils.getStringPreference(
-                    SharedPreferencesUtils.PREF_DEVICE_CART
-                ).isNullOrEmpty()
-            ) {
-                binding.pbLoading.toGone()
-                recipesListViewModel.getCartItems()
-            } else {
-                checkFCM()
-            }
+            Handler().postDelayed({
+                navigateDeliveryBoy()
+            }, 2000)
+//            if (!SharedPreferencesUtils.getStringPreference(
+//                    SharedPreferencesUtils.PREF_DEVICE_CART
+//                ).isNullOrEmpty()
+//            ) {
+//                binding.pbLoading.toGone()
+//                recipesListViewModel.getCartItems()
+//            } else {
+//                checkFCM()
+//            }
         }
     }
 
@@ -181,10 +182,10 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun navigateDeliveryBoy(){
-        if (!SharedPreferencesUtils.getAppBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+        if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
             startActivity(Intent(this@SplashActivity, DeliveryHomeActivity::class.java))
         }else{
-            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            startActivity(Intent(this@SplashActivity, DeliveryBoyLoginActivity::class.java))
         }
         finish()
     }

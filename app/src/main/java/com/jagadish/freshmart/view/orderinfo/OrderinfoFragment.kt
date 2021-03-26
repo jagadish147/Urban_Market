@@ -14,12 +14,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
+import com.jagadish.freshmart.ORDER_INFO
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
+import com.jagadish.freshmart.data.dto.deliver.orders.ScheduleOrders
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
@@ -59,8 +61,10 @@ class OrderinfoFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.cartItemsRecyclerView.layoutManager = layoutManager
         binding.cartItemsRecyclerView.setHasFixedSize(true)
-        recipesListViewModel.getRecipes()
-
+//        recipesListViewModel.getRecipes()
+       val orderInfo = requireActivity().intent.getParcelableExtra<ScheduleOrders>(ORDER_INFO)
+        orderInfo?.let {
+            bindListData(it) }
         binding.orderConfirmBtn.setOnClickListener {
             val nextScreenIntent = Intent(requireActivity(), OrderInfoActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
@@ -70,7 +74,7 @@ class OrderinfoFragment : BaseFragment() {
     }
 
     private fun observeViewModel() {
-        observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
+//        observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
@@ -88,12 +92,12 @@ class OrderinfoFragment : BaseFragment() {
     }
 
 
-    private fun bindListData(recipes: Cart) {
-        if (!(recipes.products.isNullOrEmpty())) {
-            recipesAdapter = OrderinfoAdapter(recipesListViewModel,recipes.products )
+    private fun bindListData(recipes: ScheduleOrders) {
+        if (!(recipes.items.isNullOrEmpty())) {
+            recipesAdapter = OrderinfoAdapter(recipesListViewModel,recipes.items )
             binding.cartItemsRecyclerView.adapter = recipesAdapter
-            binding.order = recipes
-            binding.orderInfoLayout.toVisible()
+//            binding.order = recipes
+//            binding.orderInfoLayout.toVisible()
             showDataView(true)
         } else {
             showDataView(false)
@@ -144,10 +148,10 @@ class OrderinfoFragment : BaseFragment() {
         binding.pbLoading.toGone()
     }
 
-    private fun handleRecipesList(status: Resource<Cart>) {
+    private fun handleRecipesList(status: Resource<ScheduleOrders>) {
         when (status) {
             is Resource.Loading -> showLoadingView()
-            is Resource.Success -> status.data?.let { bindListData(recipes = it) }
+            is Resource.Success -> status.data?.let {  }
             is Resource.DataError -> {
                 showDataView(false)
                 status.errorCode?.let { recipesListViewModel.showToastMessage(it) }

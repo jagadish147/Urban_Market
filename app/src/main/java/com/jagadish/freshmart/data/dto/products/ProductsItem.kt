@@ -26,5 +26,7 @@ data class ProductsItem (
     val unit : String = "",
     @Json(name = "description")
     val description:String ="",
-    var isAddCart : Boolean = false
+    var isAddCart : Boolean = false,
+    @Json(name = "image_url")
+    val image_url : String = "",
 ): Parcelable

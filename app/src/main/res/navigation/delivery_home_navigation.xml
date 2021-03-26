@@ -9,7 +9,7 @@
         android:id="@+id/navigation_dash_board"
         android:name="com.jagadish.freshmart.view.deliveryboy.ui.dashboard.DashboardFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_notifications" >
+        tools:layout="@layout/fragment_dashboard" >
 
         <action
             android:id="@+id/action_navigation_dash_board_to_navigation_profile"
@@ -20,7 +20,11 @@
         android:id="@+id/navigation_profile"
         android:name="com.jagadish.freshmart.view.main.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_notifications" >
+        tools:layout="@layout/fragment_profile" >
 
+
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_dash_board"
+            app:destination="@id/navigation_dash_board" />
     </fragment>
 </navigation>
