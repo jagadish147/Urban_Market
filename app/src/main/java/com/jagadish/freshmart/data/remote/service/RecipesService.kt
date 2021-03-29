@@ -6,14 +6,13 @@ import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
+import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
+import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
 import com.jagadish.freshmart.data.dto.login.RequestOtpRes
-import com.jagadish.freshmart.data.dto.order.OrderReq
-import com.jagadish.freshmart.data.dto.order.OrderRes
-import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
-import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
+import com.jagadish.freshmart.data.dto.order.*
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import retrofit2.Response
@@ -72,7 +71,16 @@ interface RecipesService {
     @POST("orders/update_payment_status")
     suspend fun requestPaymentStatus(@Body paymentStatusReq : PaymentStatusReq): Response<PaymentStatusRes>
 
+    @POST("drivers/update_order_status")
+    suspend fun requestUpdateOrderStatus(@Body updateOrderStatus : UpdateOrderStatus): Response<UpdateOrderStatusRes>
+
     @GET("drivers/orders?")
     suspend fun requestDeliveryBoyScheduleOrders(@Query("id") customerId : Int): Response<DeliveryBoyOrders>
+
+    @GET("drivers/orders?")
+    suspend fun requestDeliveryBoyAllOrders(@Query("id") customerId : Int ,@Query("all") all : Boolean): Response<DeliveryBoyOrders>
+
+    @GET("customers/orders?")
+    suspend fun requestCustomerOrders(@Query("phone_number") phone_number : String): Response<OrdersRes>
 
 }

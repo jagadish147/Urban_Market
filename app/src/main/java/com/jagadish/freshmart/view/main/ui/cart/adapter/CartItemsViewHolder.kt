@@ -23,7 +23,7 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).diskCacheStrategy(
+        Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).diskCacheStrategy(
             DiskCacheStrategy.DATA).into(itemBinding.productImage)
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description

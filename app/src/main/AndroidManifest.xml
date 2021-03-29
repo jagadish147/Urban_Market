@@ -19,17 +19,18 @@
         android:theme="@style/Theme.Freshmart" >
         <activity
             android:name=".view.deliveryboy.DeliveryHomeActivity"
-            android:label="@string/title_activity_delivery_boy_main" >
+            android:label="@string/title_activity_delivery_boy_main"
+            android:theme="@style/Theme.Freshmart.Dark">
         </activity>
         <activity android:name=".view.payment.status.OrderStatusActivity" />
         <activity
             android:name=".view.address.AddressActivity"
             android:label="@string/title_activity_address"
-            android:theme="@style/Theme.Freshmart.NoActionBar" />
+            android:theme="@style/Theme.Freshmart.Dark" />
         <activity
             android:name=".view.orderinfo.OrderInfoActivity"
             android:label="@string/title_activity_order_info"
-            android:theme="@style/Theme.Freshmart.NoActionBar" />
+            android:theme="@style/Theme.Freshmart.Dark"/>
         <activity
             android:name=".view.products.ProductsListActivity"
             android:label="@string/title_activity_products_list"
@@ -61,7 +62,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <activity android:name="com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity">
+        <activity android:name="com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity"
+            android:theme="@style/Theme.Freshmart">
         </activity>
     </application>
 

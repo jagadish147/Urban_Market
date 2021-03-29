@@ -37,7 +37,9 @@
             android:id="@+id/mobile_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"/>
+            android:inputType="phone"
+            android:maxLength="10"
+            android:digits="0123456789"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

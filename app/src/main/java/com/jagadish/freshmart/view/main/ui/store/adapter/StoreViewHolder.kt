@@ -30,7 +30,7 @@ class StoreViewHolder(private val itemBinding: ShopItemBinding) : RecyclerView.V
             .setAutoStart(true)
             .build()
         val shimmerDrawable = ShimmerDrawable().apply { setShimmer(shimmer) }
-        Glide.with(itemBinding.categoryImage.context).load(recipesItem.image.tumb.url).transform(CenterInside(),RoundedCorners(24))
+        Glide.with(itemBinding.categoryImage.context).load(recipesItem.image.tumb.url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).transform(CenterInside(),RoundedCorners(24))
             .diskCacheStrategy(
                 DiskCacheStrategy.DATA).placeholder(shimmerDrawable).into(itemBinding.categoryImage)
         itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }

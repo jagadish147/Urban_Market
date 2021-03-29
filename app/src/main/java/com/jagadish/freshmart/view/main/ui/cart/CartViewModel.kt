@@ -13,6 +13,8 @@ import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
+import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
+import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
 import com.jagadish.freshmart.data.dto.order.OrderReq
 import com.jagadish.freshmart.data.dto.order.OrderRes
 import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
@@ -168,6 +170,24 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                     paymentStatusReq
                 ).collect {
                     paymentStatusLiveDataPrivate.value = it
+                }
+            }
+        }
+    }
+
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val orderStatusLiveDataPrivate = MutableLiveData<Resource<UpdateOrderStatusRes>>()
+    val orderStatusLiveData: LiveData<Resource<UpdateOrderStatusRes>> get() = orderStatusLiveDataPrivate
+
+    fun updateOrderStatus(updateOrderStatus: UpdateOrderStatus) {
+        viewModelScope.launch {
+            orderStatusLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestUpdateOrderStatus(
+                    updateOrderStatus
+                ).collect {
+                    orderStatusLiveDataPrivate.value = it
                 }
             }
         }

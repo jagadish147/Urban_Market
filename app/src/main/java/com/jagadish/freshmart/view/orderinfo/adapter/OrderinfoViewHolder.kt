@@ -2,6 +2,10 @@ package com.jagadish.freshmart.view.orderinfo.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.base.listeners.RecyclerItemListener
@@ -20,7 +24,11 @@ class OrderinfoViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Picasso.get().load(recipesItem.image_url).into(itemBinding.productImage)
+        itemBinding.unit.text = recipesItem.unit
+        itemBinding.description.text = recipesItem.description
+        Glide.with(itemBinding.productImage.context).load(recipesItem.image_url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).diskCacheStrategy(
+            DiskCacheStrategy.DATA).transform(CenterInside(), RoundedCorners(24))
+            .into(itemBinding.productImage)
             itemBinding.quantityLayout.visibility = View.GONE
             itemBinding.addBtn.visibility = View.GONE
             itemBinding.quantityTxt.text = recipesItem.quantity.toString()

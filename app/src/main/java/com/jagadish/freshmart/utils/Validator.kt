@@ -21,6 +21,7 @@ class Validator {
         private val NAME_VALIDATION_MSG = "Enter a valid name"
         private val EMAIL_VALIDATION_MSG = "Enter a valid email address"
         private val PHONE_VALIDATION_MSG = "Enter a valid phone number"
+        private val PASSWORD_VALIDATION_MSG = "Enter a valid Password"
         private val OTP_VALIDATION_MSG = "Enter a valid OTP"
 
         /**
@@ -101,7 +102,7 @@ class Validator {
 
             // Set error if required
             if (updateUI) {
-                val error: String? = if (valid) null else EMAIL_VALIDATION_MSG
+                val error: String? = if (valid) null else PASSWORD_VALIDATION_MSG
                 setError(data, error)
             }
 
@@ -135,6 +136,18 @@ class Validator {
          */
         fun setError(data: Any, error: String?) {
             if (data is EditText && !error.isNullOrBlank()) {
+                val snackbar = TSnackbar.make(
+                    data.rootView.findViewById(android.R.id.content),
+                    error.toString(),
+                    TSnackbar.LENGTH_LONG
+                )
+                val snackbarView = snackbar.view
+                snackbarView.setBackgroundColor(ContextCompat.getColor(data.rootView.context, R.color.red))
+                val textView =
+                    snackbarView.findViewById<View>(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+                textView.setTextColor(Color.WHITE)
+                snackbar.show()
+            } else if (data is TextView && !error.isNullOrBlank()) {
                 val snackbar = TSnackbar.make(
                     data.rootView.findViewById(android.R.id.content),
                     error.toString(),

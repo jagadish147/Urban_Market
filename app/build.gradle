@@ -43,8 +43,8 @@ android {
     productFlavors {
         user {
             dimension 'urban_market'
-            applicationId 'com.jagadish'
-            applicationIdSuffix 'freshmart'
+            applicationId 'com.urbanmarket'
+            applicationIdSuffix 'user'
             versionCode 1
             versionName '1.0'
             targetSdkVersion 30
@@ -53,8 +53,8 @@ android {
         }
         delivery_boy {
             dimension 'urban_market'
-            applicationId 'com.jagadish'
-            applicationIdSuffix 'freshmart'
+            applicationId 'com.urbanmarket'
+            applicationIdSuffix 'delivery'
             versionCode 1
             versionName '1.0'
             targetSdkVersion 30

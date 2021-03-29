@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.jagadish.freshmart.BuildConfig
+import com.jagadish.freshmart.IS_COME_PROFILE
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.SharedPreferencesUtils
@@ -34,6 +37,15 @@ class ProfileFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val window = requireActivity()!!.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.decorView.systemUiVisibility =
+            window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        window.statusBarColor = ContextCompat.getColor(
+            requireContext(),
+            com.jagadish.freshmart.R.color.main_color
+        )
         binding = FragmentProfileBinding.inflate(inflater,container,false)
 
         return binding.root
@@ -51,13 +63,13 @@ class ProfileFragment : BaseFragment() {
         binding.addressText.setOnClickListener {
             if(BuildConfig.FLAVOR != "user") {
                 val nextScreenIntent =
-                    Intent(requireActivity(), AddressActivity::class.java).apply {
-//                putExtra(CATEGORY_KEY, it)
+                    Intent(requireActivity(), OrderInfoActivity::class.java).apply {
+                    putExtra(IS_COME_PROFILE, true)
                     }
                 startActivity(nextScreenIntent)
             }else{
                 val nextScreenIntent =
-                    Intent(requireActivity(), OrderInfoActivity::class.java).apply {
+                    Intent(requireActivity(), AddressActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
                     }
                 startActivity(nextScreenIntent)

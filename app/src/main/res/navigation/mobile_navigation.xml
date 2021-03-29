@@ -46,7 +46,7 @@
         android:id="@+id/navigation_orders"
         android:name="com.jagadish.freshmart.view.main.ui.orders.OrdersFragment"
         android:label="@string/title_orders"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_orders" />
 
     <fragment
         android:id="@+id/navigation_profile"

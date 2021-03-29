@@ -7,14 +7,13 @@ import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
+import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
+import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
 import com.jagadish.freshmart.data.dto.login.RequestOtpRes
-import com.jagadish.freshmart.data.dto.order.OrderReq
-import com.jagadish.freshmart.data.dto.order.OrderRes
-import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
-import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
+import com.jagadish.freshmart.data.dto.order.*
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
@@ -133,6 +132,45 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
         return when (val response = processCall({recipesService.requestDeliveryBoyScheduleOrders(deliveryBoyId)})) {
             is DeliveryBoyOrders -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestDeliveryBoyAllOrders(
+        deliveryBoyId: Int,
+        all: Boolean
+    ): Resource<DeliveryBoyOrders> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestDeliveryBoyAllOrders(deliveryBoyId,all)})) {
+            is DeliveryBoyOrders -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestCustomerOrders(phoneNumber: String): Resource<OrdersRes> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestCustomerOrders(phoneNumber)})) {
+            is OrdersRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestUpdateOrderStatus(updateOrderStatus: UpdateOrderStatus): Resource<UpdateOrderStatusRes> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestUpdateOrderStatus(updateOrderStatus)})) {
+            is UpdateOrderStatusRes -> {
                 Resource.Success(data = response )
             }
             else -> {

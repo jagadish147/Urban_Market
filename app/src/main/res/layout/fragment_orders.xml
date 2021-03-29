@@ -3,31 +3,28 @@
     <data>
 
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.deliveryboy.ui.dashboard.DashboardFragment" >
-
+    tools:context=".view.main.ui.orders.OrdersFragment">
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scheduled Orders"
+        android:text="Orders"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/font_18x"
-        android:textStyle="bold"
+        android:textStyle="normal"
         android:padding="@dimen/space_10x"
-        android:background="@color/main_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/main_color"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cart_items_recycler_view"
+        android:id="@+id/orders_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,13 +50,14 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/tv_no_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:layout_width="@dimen/error_msg_icon"
+        android:layout_height="@dimen/error_msg_icon"
+        app:srcCompat="@drawable/no_orders_yet"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/no_orders_yet"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

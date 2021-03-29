@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/order_info_navigation"
-    app:startDestination="@id/order_info">
+    app:startDestination="@id/order_list">
 
     <fragment
         android:id="@+id/order_info"
@@ -11,18 +11,20 @@
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_order_info" >
 
-        <action
-            android:id="@+id/action_FirstFragment_to_Second2Fragment"
-            app:destination="@id/Second2Fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/Second2Fragment"
-        android:name="com.jagadish.freshmart.view.orderinfo.AddressFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_address" >
 
         <action
-            android:id="@+id/action_Second2Fragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_order_info_to_order_list"
+            app:destination="@id/order_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/order_list"
+        android:name="com.jagadish.freshmart.view.deliveryboy.ui.dashboard.DashboardFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_dashboard" >
+
+
+        <action
+            android:id="@+id/action_order_list_to_order_info"
+            app:destination="@id/order_info" />
     </fragment>
 </navigation>

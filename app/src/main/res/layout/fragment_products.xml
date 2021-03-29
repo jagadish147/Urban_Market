@@ -37,15 +37,13 @@
             android:indeterminate="true" />
     </FrameLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/tv_no_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_data"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="@dimen/font_32x"
+        android:layout_width="@dimen/error_msg_icon"
+        android:layout_height="@dimen/error_msg_icon"
         android:textStyle="italic|bold"
         android:visibility="gone"
+        app:srcCompat="@drawable/no_product_found"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -3,14 +3,14 @@ package com.jagadish.freshmart.view.main.ui.cart
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
+import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS
 import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
 import com.jagadish.freshmart.base.BaseFragment
@@ -18,7 +18,6 @@ import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddressRes
-import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.order.OrderRes
@@ -35,6 +34,7 @@ import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
 import com.jagadish.freshmart.view.payment.status.OrderStatusActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class CartFragment : BaseFragment() {
 
@@ -47,6 +47,16 @@ class CartFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val window = requireActivity()!!.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.decorView.systemUiVisibility =
+            window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        window.statusBarColor = ContextCompat.getColor(
+            requireContext(),
+            com.jagadish.freshmart.R.color.main_color
+        )
+
         binding = FragmentCartBinding.inflate(layoutInflater, container, false)
         return binding.root
 
@@ -67,15 +77,24 @@ class CartFragment : BaseFragment() {
 
 
         binding.orderConfirmBtn.setOnClickListener {
-            if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
-                recipesListViewModel.createOrderId(binding.address!!.id)
-            }else{
-                val nextScreenIntent =
-                    Intent(requireActivity(), LoginActivity::class.java).apply {
-//                putExtra(CATEGORY_KEY, it)
+
+                if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
+                    if (binding.address != null) {
+                        recipesListViewModel.createOrderId(binding.address!!.id)
+                    } else {
+                        Validator.setError(
+                            binding.orderConfirmBtn,
+                            resources.getString(R.string.error_address)
+                        )
                     }
-                startActivity(nextScreenIntent)
-            }
+                } else {
+                    val nextScreenIntent =
+                        Intent(requireActivity(), LoginActivity::class.java).apply {
+//                putExtra(CATEGORY_KEY, it)
+                        }
+                    startActivity(nextScreenIntent)
+                }
+
         }
 
         binding.addAddressBtn.setOnClickListener {
@@ -84,7 +103,7 @@ class CartFragment : BaseFragment() {
                     Intent(requireActivity(), AddressActivity::class.java).apply {
 //                putExtra(CATEGORY_KEY, it)
                     }
-                startActivityForResult(nextScreenIntent,202)
+                startActivityForResult(nextScreenIntent, 202)
             }else{
                 val nextScreenIntent =
                     Intent(requireActivity(), LoginActivity::class.java).apply {
@@ -101,7 +120,7 @@ class CartFragment : BaseFragment() {
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
-        observeEvent(recipesListViewModel.openCartView, ::showCartView )
+        observeEvent(recipesListViewModel.openCartView, ::showCartView)
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
         observe(recipesListViewModel.addressLiveData, ::handleAddressList)
@@ -121,7 +140,7 @@ class CartFragment : BaseFragment() {
         if (!(recipes.products.isNullOrEmpty())) {
             if(SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN))
                 recipesListViewModel.fetchAddress()
-            recipesAdapter = CartItemsAdapter(recipesListViewModel,recipes.products )
+            recipesAdapter = CartItemsAdapter(recipesListViewModel, recipes.products)
             binding.cartItemsRecyclerView.adapter = recipesAdapter
             binding.cart = recipes
             binding.orderInfoLayout.toVisible()
@@ -236,7 +255,7 @@ class CartFragment : BaseFragment() {
     }
 
     private fun bindOrderId(orderRes: OrderRes){
-        val paymentstatusReq = PaymentStatusReq(orderRes.order_id,"Card","123456")
+        val paymentstatusReq = PaymentStatusReq(orderRes.order_id, "Card", "123456")
         recipesListViewModel.checkPaymentStatus(paymentstatusReq)
     }
 
@@ -253,15 +272,17 @@ class CartFragment : BaseFragment() {
 
     private fun bindPaymentStatus(paymentStatusRes: PaymentStatusRes){
             if(paymentStatusRes.success && paymentStatusRes.status == 200){
-                startActivity(Intent(requireActivity(),OrderStatusActivity::class.java))
+                startActivity(Intent(requireActivity(), OrderStatusActivity::class.java))
             }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 202 && resultCode == Activity.RESULT_OK) {
-            if(data?.getBooleanExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS,false)!!){
-                val addressReq = data.getParcelableExtra<AddAddressReq>(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA)
+            if(data?.getBooleanExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS, false)!!){
+                val addressReq = data.getParcelableExtra<AddAddressReq>(
+                    RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
+                )
                 binding.addAddressBtn.text = "Change Address"
                 binding.defaultAddress.text = addressReq!!.address_line1 +","+ addressReq.address_line2 +","+addressReq.city
                 binding.address = addressReq

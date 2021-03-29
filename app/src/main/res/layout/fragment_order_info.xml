@@ -4,6 +4,9 @@
         <variable
             name="order"
             type="com.jagadish.freshmart.data.dto.cart.Cart" />
+        <variable
+            name="address"
+            type="com.jagadish.freshmart.data.dto.deliver.orders.ScheduleOrders" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,7 +18,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cart_items_recycler_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -50,47 +53,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/address_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_16x"
-            android:layout_marginEnd="@dimen/space_16x"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/cart_items_recycler_view">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/address_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:text="@string/label_address_details"
-                android:textColor="@color/main_color"
-                android:textSize="@dimen/font_16x"
-                android:layout_marginTop="@dimen/space_10x" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/address_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/address_label"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="@dimen/space_10x"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_16x"/>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/change_address_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/address_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="@string/action_change_address"
-                android:textColor="@color/main_color"
-                android:textSize="@dimen/font_16x"
-                android:layout_marginTop="@dimen/space_10x"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/order_info_layout"
@@ -99,13 +62,30 @@
             android:layout_marginStart="@dimen/space_16x"
             android:layout_marginEnd="@dimen/space_16x"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/address_layout">
+            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_address_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/label_address_details"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/font_16x"
+                android:layout_marginTop="@dimen/space_10x" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/default_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{address.address.address_line1 +`\n`+ address.address.address_line2 +`\n`+address.address.city }"
+                app:layout_constraintTop_toBottomOf="@+id/label_address_details"
+                app:layout_constraintStart_toStartOf="@+id/label_address_details"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/label_payment_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/default_address"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/label_payment_details"
                 android:textColor="@color/main_color"
@@ -173,25 +153,45 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/value_delivery_charge"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/cancel_btn"
                 android:text="@{`₹`+String.valueOf(order.total_price)}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_16x"
                 tools:text="$ 10"
-                android:layout_marginTop="@dimen/space_10x"/>
+                android:layout_marginTop="@dimen/space_10x"
+                android:layout_marginBottom="@dimen/space_10x"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/order_confirm_btn"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_btn"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_selector"
-                android:text="@string/label_place_order"
-                android:textSize="@dimen/font_18x"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/button_cancel"
+                android:text="@string/action_cancel"
                 android:textColor="@color/white"
-                android:gravity="center"
-                android:padding="@dimen/space_10x"
-                android:layout_marginTop="@dimen/space_16x"
-                app:layout_constraintTop_toBottomOf="@+id/label_total_amount" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/accept_btn"
+                android:layout_marginBottom="@dimen/space_10x"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/accept_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="@dimen/space_10x"
+                android:background="@drawable/button_success"
+                android:text="@string/action_completed"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cancel_btn"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

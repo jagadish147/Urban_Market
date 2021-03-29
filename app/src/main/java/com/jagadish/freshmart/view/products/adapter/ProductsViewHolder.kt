@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.databinding.ViewProductItemBinding
@@ -23,7 +24,7 @@ class ProductsViewHolder(private val itemBinding: ViewProductItemBinding) : Recy
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         itemBinding.productPrice.text = "₹ ${recipesItem.price}"
-        Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).diskCacheStrategy(
+        Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).diskCacheStrategy(
             DiskCacheStrategy.DATA).transform(CenterInside(), RoundedCorners(24)).into(itemBinding.productImage)
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description

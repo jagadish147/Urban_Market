@@ -1,40 +1,76 @@
 {
   "project_info": {
-    "project_number": "103491697405",
-    "project_id": "freshmart-90e87",
-    "storage_bucket": "freshmart-90e87.appspot.com"
+    "project_number": "531893965512",
+    "project_id": "urbanmarket-b18ad",
+    "storage_bucket": "urbanmarket-b18ad.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:103491697405:android:dcc9d2ed384bb1739bdc94",
+        "mobilesdk_app_id": "1:531893965512:android:8cf72a02bfef01327d0bfd",
         "android_client_info": {
-          "package_name": "com.jagadish.freshmart"
+          "package_name": "com.urbanmarket.delivery"
         }
       },
       "oauth_client": [
         {
-          "client_id": "103491697405-n677cs5engod3eod9125d03q6h96l666.apps.googleusercontent.com",
+          "client_id": "531893965512-1o432otbp41k05dsdsdt0u7ji4h3bmr6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQECrcMzYliG-wD8-K6I_J5-9f6CuAOBg"
+          "current_key": "AIzaSyDKjADlh_nUTTIBbq892VupZPHL_JujGJw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "103491697405-n677cs5engod3eod9125d03q6h96l666.apps.googleusercontent.com",
+              "client_id": "531893965512-1o432otbp41k05dsdsdt0u7ji4h3bmr6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "103491697405-fvplrbt89irv9u12fjdkpsr1k35bsa10.apps.googleusercontent.com",
+              "client_id": "531893965512-099ccvkvlnrc5lkp9keid6tfb1tqj9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.dt"
+                "bundle_id": "com.urbanmarket.deliveryBoy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531893965512:android:14932a75b42f84187d0bfd",
+        "android_client_info": {
+          "package_name": "com.urbanmarket.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "531893965512-1o432otbp41k05dsdsdt0u7ji4h3bmr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKjADlh_nUTTIBbq892VupZPHL_JujGJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "531893965512-1o432otbp41k05dsdsdt0u7ji4h3bmr6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "531893965512-099ccvkvlnrc5lkp9keid6tfb1tqj9i2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.urbanmarket.deliveryBoy"
               }
             }
           ]

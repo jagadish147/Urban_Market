@@ -21,7 +21,7 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
     <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Login in</string>
+    <string name="action_sign_in_short">Login</string>
     <string name="action_verify">Verify</string>
     <string name="action_next">Next</string>
     <string name="action_allow">Allow</string>
@@ -30,6 +30,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="action_cancel">Cancel</string>\
+    <string name="action_completed">Complete</string>
 
 
     <string name="no_location_detected">
@@ -77,5 +79,6 @@
     <string name="action_save">Save</string>
     <string name="action_add_address">Add Address</string>
     <string name="title_activity_delivery_boy_main">MainActivity</string>
+    <string name="error_address">Please Add Deliver Address</string>
 
 </resources>

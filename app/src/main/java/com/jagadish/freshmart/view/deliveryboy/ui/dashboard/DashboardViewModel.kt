@@ -100,6 +100,19 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
             }
         }
     }
+
+    fun fetchAllOrders() {
+        viewModelScope.launch {
+            addressLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestDeliveryBoyAllOrders(
+                    SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),true
+                ).collect {
+                    addressLiveDataPrivate.value = it
+                }
+            }
+        }
+    }
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val onItemClickLiveDataPrivate = MutableLiveData<SingleEvent<ScheduleOrders>>()
     val onItemClickLiveData: LiveData<SingleEvent<ScheduleOrders>> get() = onItemClickLiveDataPrivate

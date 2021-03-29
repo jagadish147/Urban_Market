@@ -61,7 +61,8 @@ class DeliveryBoyLoginFragment : BaseFragment() {
 
         observeViewModel()
         login.setOnClickListener {
-            if (Validator.isValidPhone(mobile_number.text.toString(),true) && Validator.isValidPassword(password.text.toString(),true))
+            if (Validator.isValidPhone(mobile_number,true))
+                if( Validator.isValidPassword(password,true))
                 loginViewModel.requestDeliveryBoyLogin(RequestOtpReq(mobile_number.text.toString(),password.text.toString(),mobile_number.text.toString(),SharedPreferencesUtils.getAppStringPreference(SharedPreferencesUtils.PREF_APP_FCM_TOKEN)))
         }
 
@@ -76,6 +77,7 @@ class DeliveryBoyLoginFragment : BaseFragment() {
     }
 
     private fun bindListData(res: RequestOtpRes) {
+        hideLoadingView()
         if(res.success) {
             navigateHome(res)
         }else{
@@ -102,6 +104,9 @@ class DeliveryBoyLoginFragment : BaseFragment() {
         binding.pbLoading.toVisible()
     }
 
+    private fun hideLoadingView(){
+        binding.pbLoading.toGone()
+    }
 
 
     private fun handleRecipesList(status: Resource<RequestOtpRes>) {
