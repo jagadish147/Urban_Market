@@ -4,15 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.atom.mpsdklibrary.PayActivity
 import com.google.android.material.snackbar.Snackbar
-import com.jagadish.freshmart.CATEGORY_KEY
-import com.jagadish.freshmart.R
-import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS
-import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
+import com.jagadish.freshmart.*
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
@@ -31,9 +30,12 @@ import com.jagadish.freshmart.view.address.AddressActivity
 import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
+import com.jagadish.freshmart.view.payment.OrderPlaceActivity
+import com.jagadish.freshmart.view.payment.PaymentDetailsModel
 import com.jagadish.freshmart.view.payment.status.OrderStatusActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
 
 @AndroidEntryPoint
 class CartFragment : BaseFragment() {
@@ -255,8 +257,22 @@ class CartFragment : BaseFragment() {
     }
 
     private fun bindOrderId(orderRes: OrderRes){
-        val paymentstatusReq = PaymentStatusReq(orderRes.order_id, "Card", "123456")
-        recipesListViewModel.checkPaymentStatus(paymentstatusReq)
+        val nextScreenIntent =
+            Intent(requireActivity(), OrderPlaceActivity::class.java).apply {
+                putExtra(
+                    PAYMENT_DETAILS, PaymentDetailsModel(
+                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_NAME),
+                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
+                    binding.cart!!.count,
+                    binding.address!!,
+                    binding.cart!!.total_price,
+                    0.0,
+                    binding.cart!!.delivery_charge,
+                    binding.cart!!.total_price,
+                        orderRes,
+                ))
+            }
+        startActivity(nextScreenIntent)
     }
 
     private fun handlePaymentStatus(status: Resource<PaymentStatusRes>) {

@@ -11,7 +11,7 @@ data class AddAddressReq (
     @Json(name = "id")
     var id: Int = 0,
     @Json(name = "phone_number")
-    val phone_number : String = "",
+    var phone_number : String = "",
     @Json(name = "address_line1")
     val address_line1 : String = "",
     @Json(name = "address_line2")

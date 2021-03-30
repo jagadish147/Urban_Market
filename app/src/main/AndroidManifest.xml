@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.jagadish.freshmart" >
+    package="com.jagadish.freshmart">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -16,13 +16,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Freshmart" >
+        android:theme="@style/Theme.Freshmart">
+        <activity android:name=".view.payment.OrderPlaceActivity"
+            android:theme="@style/Theme.Freshmart.Dark" />
         <activity
             android:name=".view.deliveryboy.DeliveryHomeActivity"
             android:label="@string/title_activity_delivery_boy_main"
-            android:theme="@style/Theme.Freshmart.Dark">
-        </activity>
-        <activity android:name=".view.payment.status.OrderStatusActivity" />
+            android:theme="@style/Theme.Freshmart.Dark"/>
+        <activity android:name=".view.payment.status.OrderStatusActivity"
+            android:theme="@style/Theme.Freshmart.Dark"/>
         <activity
             android:name=".view.address.AddressActivity"
             android:label="@string/title_activity_address"
@@ -30,7 +32,7 @@
         <activity
             android:name=".view.orderinfo.OrderInfoActivity"
             android:label="@string/title_activity_order_info"
-            android:theme="@style/Theme.Freshmart.Dark"/>
+            android:theme="@style/Theme.Freshmart.Dark" />
         <activity
             android:name=".view.products.ProductsListActivity"
             android:label="@string/title_activity_products_list"
@@ -44,7 +46,7 @@
         <activity
             android:name=".view.main.MainActivity"
             android:label="@string/title_activity_main" />
-        <activity android:name=".view.splash.SplashActivity" >
+        <activity android:name=".view.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,15 +58,19 @@
 
         <service
             android:name=".utils.FirebaseInstanse"
-            android:stopWithTask="false" >
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <activity android:name="com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity"
-            android:theme="@style/Theme.Freshmart">
-        </activity>
+
+        <activity
+            android:name="com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity"
+            android:theme="@style/Theme.Freshmart"/>
+        <activity android:name="com.atom.mpsdklibrary.PayActivity"
+            android:theme="@style/Theme.Freshmart"/>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 
 </manifest>

@@ -9,6 +9,9 @@ const val ORDER_INFO = "order_info"
 const val IS_COME_PROFILE = "is_came_profile"
 const val Is_INTERNAL_DETAILS = "is_internal_details"
 const val IS_HIDE_DATA = "is_hide_data"
+const val PAYMENT_DETAILS = "payment_details"
+const val ORDER_DETAILS = "order_details"
+const val PAYMENT_STATUS = "payment_status"
 
 
 const val RESULT_ACTIVITY_IS_VIEW_CART = "navigate_cart"

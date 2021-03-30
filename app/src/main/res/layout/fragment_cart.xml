@@ -72,7 +72,7 @@
         android:layout_marginStart="@dimen/space_16x"
         android:layout_marginEnd="@dimen/space_16x"
         android:visibility="gone"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="@dimen/space_10x"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView

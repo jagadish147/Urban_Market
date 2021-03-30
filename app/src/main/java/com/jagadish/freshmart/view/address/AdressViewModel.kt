@@ -131,6 +131,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         viewModelScope.launch {
             updateAddressPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
+                addressReq.phone_number = SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE)
                 dataRepositoryRepository.requestUpdateAddress(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),
                     addressReq
                 ).collect {
