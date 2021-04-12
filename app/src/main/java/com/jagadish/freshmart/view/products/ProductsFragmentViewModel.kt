@@ -15,6 +15,7 @@ import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.utils.SingleEvent
+import com.jagadish.freshmart.utils.Singleton
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -89,29 +90,52 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
-    fun checkCartItems(recipe: AddItemRes){
+    fun checkCartItems(recipe: AddItemRes,productsItem: ProductsItem,){
+        if(recipe.success && Singleton.getInstance().cart != null ) {
+            var isExistingProduct : Boolean = false
+            for((index, value) in Singleton.getInstance().cart.products.withIndex()){
+                if(value.id == productsItem.id){
+                    isExistingProduct = true
+                    Singleton.getInstance().cart.products[index].quantity = productsItem.quantity
+                    Singleton.getInstance().cart.total_price = recipe.total_price
+                    break
+                }
+            }
+            if(!isExistingProduct) {
+                Singleton.getInstance().cart.products.toMutableList().add(productsItem)
+                Singleton.getInstance().cart.total_price = recipe.total_price
+            }
+        }
         checkItemsInCartPrivate.value = SingleEvent(recipe)
     }
 
-    fun addCartItem(categoryId: AddItemReq) {
+    fun addCartItem(productsItem: ProductsItem,categoryId: AddItemReq) {
         viewModelScope.launch {
 //            recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 dataRepositoryRepository.requestAddItem(categoryId).collect {
                     showToastPrivate.value = SingleEvent(it.data!!.message)
-                    checkCartItems(it.data)
+                    checkCartItems(it.data,productsItem)
                 }
             }
         }
     }
 
-    fun removeCartItem(categoryId: AddItemReq) {
+    /**
+     * UI actions as event, user action is single one time event, Shouldn't be multiple time consumption
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val removeCartItemPrivate = MutableLiveData<SingleEvent<ProductsItem>>()
+    val removeCartItem: LiveData<SingleEvent<ProductsItem>> get() = removeCartItemPrivate
+
+    fun removeCartItem(productsItem: ProductsItem,categoryId: AddItemReq) {
         viewModelScope.launch {
 //            recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 dataRepositoryRepository.requestRemoveItem(categoryId).collect {
+                    removeCartItemPrivate.value = SingleEvent(productsItem)
                     showToastPrivate.value = SingleEvent(it.data!!.message)
-                    checkCartItems(it.data)
+                    checkCartItems(it.data,productsItem)
                 }
             }
         }

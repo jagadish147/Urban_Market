@@ -28,6 +28,7 @@ import com.jagadish.freshmart.databinding.FragmentCartBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.AddressActivity
 import com.jagadish.freshmart.view.login.LoginActivity
+import com.jagadish.freshmart.view.main.MainActivity
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
 import com.jagadish.freshmart.view.payment.OrderPlaceActivity
@@ -142,9 +143,11 @@ class CartFragment : BaseFragment() {
         if (!(recipes.products.isNullOrEmpty())) {
             if(SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN))
                 recipesListViewModel.fetchAddress()
-            recipesAdapter = CartItemsAdapter(recipesListViewModel, recipes.products)
+            recipesAdapter = CartItemsAdapter(recipesListViewModel, ArrayList(recipes.products))
             binding.cartItemsRecyclerView.adapter = recipesAdapter
             binding.cart = recipes
+            Singleton.getInstance().cart = recipes
+            (activity as MainActivity).updateCart()
             binding.orderInfoLayout.toVisible()
             showDataView(true)
         } else {
@@ -209,11 +212,26 @@ class CartFragment : BaseFragment() {
 
     private fun showCartView(navigateEvent: SingleEvent<AddItemRes>) {
         navigateEvent.getContentIfNotHandled()?.let {
-            val cart = binding.cart
-            cart!!.order_price = it.total_price
-            cart!!.total_price = it.total_price
-            binding.cart = cart
-            binding.orderInfoLayout.toVisible()
+
+            if(it.success && it.count>0) {
+                val cart = binding.cart
+                cart!!.order_price = it.total_price
+                cart!!.total_price = it.total_price
+                cart!!.count = it.count
+                cart!!.delivery_charge = it.delivery_charge
+                cart!!.discount_price = cart.discount_price
+                binding.cart = cart
+                Singleton.getInstance().cart = cart
+                (activity as MainActivity).updateCart()
+                binding.orderInfoLayout.toVisible()
+            }else{
+                recipesAdapter = CartItemsAdapter(recipesListViewModel, ArrayList(it.items))
+                binding.cartItemsRecyclerView.adapter = recipesAdapter
+                binding.orderInfoLayout.toGone()
+                showDataView(false)
+                Singleton.getInstance().cart = Cart()
+                (activity as MainActivity).updateCart()
+            }
         }
     }
 
@@ -234,13 +252,14 @@ class CartFragment : BaseFragment() {
                 if(item.defaultAddress){
                     binding.addAddressBtn.text = "Change Address"
                     binding.defaultAddress.text = item.address_line1 +","+ item.address_line2 +","+item.city
+                    binding.defaultAddress.visibility = View.VISIBLE
                     binding.address = item
                     break
                 }
             }
             showDataView(true)
         } else {
-            showDataView(false)
+            showDataView(true)
             binding.addAddressBtn.text = "Add Address"
         }
     }
@@ -301,6 +320,7 @@ class CartFragment : BaseFragment() {
                 )
                 binding.addAddressBtn.text = "Change Address"
                 binding.defaultAddress.text = addressReq!!.address_line1 +","+ addressReq.address_line2 +","+addressReq.city
+                binding.defaultAddress.visibility = View.VISIBLE
                 binding.address = addressReq
             }
         }

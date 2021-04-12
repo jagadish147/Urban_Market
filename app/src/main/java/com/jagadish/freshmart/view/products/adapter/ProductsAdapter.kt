@@ -30,29 +30,41 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
             recipes[recipes.indexOf(productsItem)].isAddCart = true
           recipes[recipes.indexOf(productsItem)].quantity = 1
             notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.addCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
+            recipesListViewModel.addCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemRemoveCart(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].isAddCart = false
             recipes[recipes.indexOf(productsItem)].quantity = 0
-            notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
+            recipes.toMutableList().apply {
+                remove(productsItem)
+            }
+            recipesListViewModel.removeCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityIncrease(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].quantity++
             notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.addCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
+            recipesListViewModel.addCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityDecrease(productsItem: ProductsItem) {
-            recipes[recipes.indexOf(productsItem)].quantity--
-            if(recipes[recipes.indexOf(productsItem)].quantity == 0){
-                onItemRemoveCart(productsItem)
+            if (recipes[recipes.indexOf(productsItem)].quantity > 0) {
+                recipes[recipes.indexOf(productsItem)].quantity--
+                if (recipes[recipes.indexOf(productsItem)].quantity == 0) {
+                    onItemRemoveCart(productsItem)
+                }else{
+                    recipesListViewModel.removeCartItem(
+                        productsItem,
+                        AddItemReq(
+                            SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),
+                            productsItem.id
+                        )
+                    )
+                }
+                notifyItemChanged(recipes.indexOf(productsItem))
+
             }
-            notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
     }
     //https://jsonblob.com/add55310-7c87-11eb-981f-b9bef68ee992
@@ -70,7 +82,7 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
         return recipes.size
     }
 
-    fun getSelectedItems() : List<ProductsItem>{
+    fun getItems() : List<ProductsItem>{
         return recipes
     }
 }

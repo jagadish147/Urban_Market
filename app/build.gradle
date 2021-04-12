@@ -48,7 +48,7 @@ android {
             versionCode 1
             versionName '1.0'
             targetSdkVersion 30
-            buildConfigField "String", "BASE_URL", '"https://urbanmarket.herokuapp.com/api/v1/"'
+            buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
             buildConfigField 'String', "ApiKey", '"AIzaSyDM9EDhGjnyH7-FIbgQtzCI8mWa3ZA7kf4"'
         }
         delivery_boy {
@@ -58,7 +58,7 @@ android {
             versionCode 1
             versionName '1.0'
             targetSdkVersion 30
-            buildConfigField "String", "BASE_URL", '"https://urbanmarket.herokuapp.com/api/v1/"'
+            buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
             buildConfigField 'String', "ApiKey", '"AIzaSyDM9EDhGjnyH7-FIbgQtzCI8mWa3ZA7kf4"'
         }
     }
@@ -80,8 +80,14 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation "androidx.browser:browser:1.2.0"
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+    implementation platform('com.google.firebase:firebase-bom:26.8.0')
+
+    // Declare the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-auth-ktx'
 
     // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies

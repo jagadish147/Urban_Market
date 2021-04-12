@@ -79,6 +79,7 @@ class ProductsFragment : BaseFragment() {
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
+        observe(recipesListViewModel.removeCartItem, ::removeCarItemSuccess)
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
 
@@ -94,7 +95,7 @@ class ProductsFragment : BaseFragment() {
 
     private fun bindListData(recipes: Products) {
         if (!(recipes.products.isNullOrEmpty())) {
-            if(Singleton.getInstance().cart.products.isNotEmpty()){
+            if(Singleton.getInstance().cart != null && Singleton.getInstance().cart!!.products.isNotEmpty()){
                 for(item in Singleton.getInstance().cart.products){
                     for(product in recipes.products)
                     if(item.id == product.id){
@@ -102,7 +103,7 @@ class ProductsFragment : BaseFragment() {
                         product.isAddCart = true
                     }
                 }
-                recipesListViewModel.checkCartItems(AddItemRes(true,"",Singleton.getInstance().cart.count,Singleton.getInstance().cart.total_price,ArrayList()))
+//                recipesListViewModel.checkCartItems(AddItemRes(true,"",Singleton.getInstance().cart.count,Singleton.getInstance().cart.total_price,ArrayList()))
             }
 
             recipesAdapter = ProductsAdapter(recipesListViewModel,recipes.products )
@@ -175,5 +176,16 @@ class ProductsFragment : BaseFragment() {
                 binding.priceDetails = navigateEvent.peekContent()
             }
         }
+    }
+
+    private fun removeCarItemSuccess(productsItem: SingleEvent<ProductsItem>) {
+
+//        recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem)].quantity--
+//        if(recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem)].quantity == 0){
+//            onItemRemoveCart(productsItem)
+//        }
+//        recipesAdapter.notifyItemChanged(recipesAdapter.getItems().indexOf(productsItem))
+
+
     }
 }

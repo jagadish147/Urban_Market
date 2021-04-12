@@ -115,7 +115,7 @@ class OrderPlaceActivity : BaseActivity() {
                 val resKey = data.getStringArrayExtra("responseKeyArray")
                 val resValue = data.getStringArrayExtra("responseValueArray")
                 if (resKey != null && resValue != null) {
-                    val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", "123456")
+                    val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", "123456","Success")
                     orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
                     for (i in resKey.indices)
                         println("  " + i + " resKey : " + resKey[i] + " resValue : " + resValue[i])

@@ -21,9 +21,13 @@ data class Cart (
     @Json(name = "total")
     var order_price: Double = 0.0,
     @Json(name = "delivery_charge")
-    val delivery_charge: Double = 0.0,
+    var delivery_charge: Double = 0.0,
     @Json(name = "count")
-    val count : Int = 0,
+    var count : Int = 0,
+    @Json(name = "min_delivery")
+    val min_delivery : Double = 0.0,
+    @Json(name = "discount_price")
+    var discount_price : Double = 0.0,
     var total_price: Double = order_price,
 
 ): Parcelable

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "531893965512-l9t7idcve9n8k8nu6f5sldpvs8k9m9q8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urbanmarket.delivery",
+            "certificate_hash": "f1269e8254313c9c6f9d5c1238d2a82b62aa6df0"
+          }
+        },
+        {
           "client_id": "531893965512-1o432otbp41k05dsdsdt0u7ji4h3bmr6.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -49,6 +57,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "531893965512-qaufr2tfvp25gt7cat8isr84lqvqrn8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urbanmarket.user",
+            "certificate_hash": "f1269e8254313c9c6f9d5c1238d2a82b62aa6df0"
+          }
+        },
         {
           "client_id": "531893965512-1o432otbp41k05dsdsdt0u7ji4h3bmr6.apps.googleusercontent.com",
           "client_type": 3

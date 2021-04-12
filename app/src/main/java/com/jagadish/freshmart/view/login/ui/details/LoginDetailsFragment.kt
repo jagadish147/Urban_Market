@@ -104,10 +104,10 @@ class LoginDetailsFragment : BaseFragment() {
 
     private fun navigateHome(res: CustomersRes){
         SharedPreferencesUtils.setBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN,true)
-        SharedPreferencesUtils.setIntPreference(SharedPreferencesUtils.PREF_USER_ID,res.customer.id)
-        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_NAME,res.customer.name)
+        SharedPreferencesUtils.setIntPreference(SharedPreferencesUtils.PREF_USER_ID,res.id)
+        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_NAME,res.name)
         SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE,args.requestOtpRes.mobileNumber)
-        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL,res.customer.email)
+        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL,res.email)
         startActivity(Intent(requireActivity(), MainActivity::class.java))
         requireActivity().finish()
     }

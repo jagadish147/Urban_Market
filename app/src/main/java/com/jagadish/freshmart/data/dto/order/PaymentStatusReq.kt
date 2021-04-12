@@ -14,4 +14,6 @@ data class PaymentStatusReq(
     val mode: String = "",
     @Json(name = "transaction_id")
     val transaction_id: String = "",
+    @Json(name = "status")
+    var status : String = "",
 ): Parcelable

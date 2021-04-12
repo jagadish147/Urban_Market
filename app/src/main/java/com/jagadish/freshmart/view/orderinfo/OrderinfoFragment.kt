@@ -2,15 +2,14 @@ package com.jagadish.freshmart.view.orderinfo
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.*
@@ -18,22 +17,15 @@ import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
-import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.deliver.orders.ScheduleOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
-import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentOrderInfoBinding
-import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.main.ui.cart.CartViewModel
-import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
 import com.jagadish.freshmart.view.orderinfo.adapter.OrderinfoAdapter
-import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
-import com.jagadish.freshmart.view.products.ProductsListActivity
-import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -66,17 +58,37 @@ class OrderinfoFragment : BaseFragment() {
         orderInfo?.let {
             bindListData(it) }
 
-        if(requireActivity().intent.getBooleanExtra(IS_HIDE_DATA,false)){
+        if(requireActivity().intent.getBooleanExtra(IS_HIDE_DATA, false)){
             binding.cancelBtn.toGone()
             binding.acceptBtn.toGone()
         }
 
         binding.cancelBtn.setOnClickListener {
-            recipesListViewModel.updateOrderStatus(UpdateOrderStatus(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),orderInfo!!.number,"Cancelled"))
+            recipesListViewModel.updateOrderStatus(
+                UpdateOrderStatus(
+                    SharedPreferencesUtils.getIntPreference(
+                        SharedPreferencesUtils.PREF_USER_ID
+                    ), orderInfo!!.number, "Cancelled"
+                )
+            )
         }
 
         binding.acceptBtn.setOnClickListener {
-            recipesListViewModel.updateOrderStatus(UpdateOrderStatus(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),orderInfo!!.number,"Accepted"))
+            recipesListViewModel.updateOrderStatus(
+                UpdateOrderStatus(
+                    SharedPreferencesUtils.getIntPreference(
+                        SharedPreferencesUtils.PREF_USER_ID
+                    ), orderInfo!!.number, "Finished"
+                )
+            )
+        }
+
+        binding.addressNavigation.setOnClickListener {
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?daddr="+binding.address!!.address.address_line1+binding.address!!.address.address_line2+binding.address!!.address.city+binding.address!!.address.state+binding.address!!.address.zip)
+            )
+            startActivity(intent)
         }
     }
 
@@ -85,7 +97,7 @@ class OrderinfoFragment : BaseFragment() {
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
-        observeEvent(recipesListViewModel.openCartView, ::showCartView )
+        observeEvent(recipesListViewModel.openCartView, ::showCartView)
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
 
@@ -101,7 +113,7 @@ class OrderinfoFragment : BaseFragment() {
 
     private fun bindListData(recipes: ScheduleOrders) {
         if (!(recipes.items.isNullOrEmpty())) {
-            recipesAdapter = OrderinfoAdapter(recipesListViewModel,recipes.items )
+            recipesAdapter = OrderinfoAdapter(recipesListViewModel, recipes.items)
             binding.cartItemsRecyclerView.adapter = recipesAdapter
             binding.address = recipes
             binding.orderInfoLayout.toVisible()
@@ -172,7 +184,7 @@ class OrderinfoFragment : BaseFragment() {
         }
     }
 
-    private fun updateOrderStatusSuccess(updateOrderStatusRes : UpdateOrderStatusRes){
+    private fun updateOrderStatusSuccess(updateOrderStatusRes: UpdateOrderStatusRes){
         val data = Intent().apply {
             putExtra(RESULT_ACTIVITY_ORDER_STATUS, true)
         }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -45,6 +46,8 @@ import com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity
 import com.oneclickaway.opensource.placeautocomplete.utils.SearchPlacesStatusCodes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class StoreFragment : BaseFragment() {
@@ -205,15 +208,21 @@ class StoreFragment : BaseFragment() {
     }
 
     private fun showDataView(show: Boolean) {
-        binding.tvNoData.visibility = if (show) View.GONE else View.VISIBLE
+        binding.searchNoData.visibility = if (show) View.GONE else View.VISIBLE
         binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
         binding.searchHome.visibility = if (show) View.VISIBLE else View.GONE
         binding.pbLoading.toGone()
     }
-
+    private fun showErrorLocationDataView(show: Boolean) {
+        binding.locationNoData.visibility = if (show) View.GONE else View.VISIBLE
+        binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
+        binding.searchHome.visibility = if (show) View.VISIBLE else View.GONE
+        binding.pbLoading.toGone()
+    }
     private fun showLoadingView() {
         binding.pbLoading.toVisible()
-        binding.tvNoData.toGone()
+        binding.searchNoData.toGone()
+        binding.locationNoData.toGone()
         binding.storeRecyclerView.toGone()
     }
 
@@ -240,7 +249,7 @@ class StoreFragment : BaseFragment() {
             if(it.success) {
                 bindListData(recipes = it)
             }else {
-                showDataView(false)
+                showErrorLocationDataView(false)
             }
             }
             is Resource.DataError -> {
@@ -262,17 +271,29 @@ class StoreFragment : BaseFragment() {
 
             val placeDetails =
                 data?.getParcelableExtra<PlaceDetails>(SearchPlacesStatusCodes.PLACE_DATA)
-            var postalCode = ""
-            for( item in placeDetails!!.addressComponents!!){
-                if(item?.types?.contains("postal_code") == true){
-                    postalCode = item.longName
+            val mGeocoder = Geocoder(requireActivity(), Locale.getDefault())
+            var addresses = placeDetails!!.geometry!!.location!!.lat?.let {
+                placeDetails!!.geometry!!.location!!.lng?.let { it1 ->
+                    mGeocoder.getFromLocation(
+                        it,
+                        it1,
+                        1
+                    )
                 }
             }
-            (activity as MainActivity).address.value =
-                placeDetails.name?.let { placeDetails.formattedAddress?.let { it1 ->
-                    SelectedAddress(it,
-                        it1,postalCode)
-                } }
+//            var postalCode = ""
+//            for( item in placeDetails!!.addressComponents!!){
+//                if(item?.types?.contains("postal_code") == true){
+//                    postalCode = item.longName
+//                }
+//            }
+
+            (activity as MainActivity).address.value = SelectedAddress(addresses?.get(0)!!.subLocality,addresses[0].getAddressLine(0),addresses[0].postalCode)
+
+//                placeDetails.name?.let { placeDetails.formattedAddress?.let { it1 ->
+//                    SelectedAddress(it,
+//                        it1,postalCode)
+//                } }
         }
     }
 }

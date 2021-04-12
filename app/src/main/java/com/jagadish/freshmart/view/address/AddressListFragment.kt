@@ -66,6 +66,7 @@ class AddressListFragment : BaseFragment() {
         observe(addessViewModel.openRecipeDetails, ::updateAddress)
         observe(addessViewModel.updateDefaultAddressDetails, ::updateDefaultAddress)
         observe(addessViewModel.updateAddress, ::handleUpdateAddress)
+        observe(addessViewModel.updateAddressRequest, ::updateAddressSuccess )
         observeSnackBarMessages(addessViewModel.showSnackBar)
         observeToast(addessViewModel.showToast)
 
@@ -88,7 +89,7 @@ class AddressListFragment : BaseFragment() {
             true,
             "default" ,
         ))
-        updateAddressSuccess(addressReq = addressReq.peekContent())
+
     }
 
     private fun handleSearch(query: String) {
@@ -170,18 +171,18 @@ class AddressListFragment : BaseFragment() {
     private fun handleUpdateAddress(status: Resource<AddAddressRes>){
         when (status){
             is Resource.Loading -> showLoadingView()
-            is Resource.Success -> status.data?.let {  }
+            is Resource.Success -> status.data?.let { }
             is Resource.DataError -> {
                 status.errorCode?.let { addessViewModel.showToastMessage(it) }
             }
         }
     }
 
-    private fun updateAddressSuccess(addressReq: AddAddressReq){
-        addressAdapter.updateDefaultAddress(addressReq)
+    private fun updateAddressSuccess(addressReq: SingleEvent<AddAddressReq>){
+        addressAdapter.updateDefaultAddress(addressReq.peekContent())
         val data = Intent().apply {
             putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS, true)
-            putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA,addressReq)
+            putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA,addressReq.peekContent())
         }
         requireActivity().setResult(Activity.RESULT_OK, data)
         requireActivity(). finish()

@@ -19,7 +19,7 @@ import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
  * Created by AhmedEltaher
  */
 
-class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private val recipes: List<ProductsItem>) : RecyclerView.Adapter<CartItemsViewHolder>() {
+class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private val recipes: ArrayList<ProductsItem>) : RecyclerView.Adapter<CartItemsViewHolder>() {
 
     private val onItemClickListener: ProductsRecyclerItemListener = object : ProductsRecyclerItemListener {
 
@@ -41,7 +41,9 @@ class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private 
         override fun onItemRemoveCart(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].isAddCart = false
             recipes[recipes.indexOf(productsItem)].quantity = 0
-            notifyItemChanged(recipes.indexOf(productsItem))
+
+            recipes.remove(productsItem)
+            notifyDataSetChanged()
             recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
@@ -56,12 +58,21 @@ class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private 
         }
 
         override fun onItemQuantityDecrease(productsItem: ProductsItem) {
-            recipes[recipes.indexOf(productsItem)].quantity--
-            if(recipes[recipes.indexOf(productsItem)].quantity == 0){
-                onItemRemoveCart(productsItem)
+            if (recipes[recipes.indexOf(productsItem)].quantity > 0) {
+                recipes[recipes.indexOf(productsItem)].quantity--
+                if (recipes[recipes.indexOf(productsItem)].quantity == 0) {
+                    onItemRemoveCart(productsItem)
+                }else{
+                    recipesListViewModel.removeCartItem(
+                        AddItemReq(
+                            SharedPreferencesUtils.getIntPreference(
+                                SharedPreferencesUtils.PREF_DEVICE_CART_ID
+                            ), productsItem.id
+                        )
+                    )
+                }
+                notifyItemChanged(recipes.indexOf(productsItem))
             }
-            notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
     }
     //https://jsonblob.com/add55310-7c87-11eb-981f-b9bef68ee992

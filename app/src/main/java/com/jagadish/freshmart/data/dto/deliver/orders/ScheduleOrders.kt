@@ -24,5 +24,7 @@ data class ScheduleOrders(
     @Json(name = "address")
     val address : AddAddressReq ,
     @Json(name = "customer")
-    val customer : Customer
+    val customer : Customer,
+    @Json(name = "total")
+    val total : Double = 0.0,
 ): Parcelable

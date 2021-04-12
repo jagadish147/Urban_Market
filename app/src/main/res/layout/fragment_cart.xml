@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View"/>
         <variable
             name="cart"
             type="com.jagadish.freshmart.data.dto.cart.Cart" />
@@ -33,10 +34,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_items_recycler_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_header"/>
+        app:layout_constraintTop_toBottomOf="@+id/title_header"
+        app:layout_constraintBottom_toTopOf="@+id/order_info_layout"/>
 
     <FrameLayout
         android:id="@+id/pb_loading"
@@ -87,8 +89,12 @@
             android:layout_marginTop="@dimen/space_10x" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/default_address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/background_gray"
+            android:textColor="@color/black"
+            android:padding="@dimen/space_5x"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/label_address_details"
             app:layout_constraintStart_toStartOf="@+id/label_address_details"/>
         <androidx.appcompat.widget.AppCompatTextView
@@ -113,6 +119,14 @@
             android:textSize="@dimen/font_16x"
             android:layout_marginTop="@dimen/space_10x" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/order_confirm_btn"
+            app:layout_constraintTop_toBottomOf="@+id/label_payment_details"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@color/background_gray"
+            android:layout_marginBottom="@dimen/space_5x"/>
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_order_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,7 +135,8 @@
             android:text="@string/label_order_amount"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            android:layout_marginTop="@dimen/space_10x" />
+            android:layout_marginTop="@dimen/space_10x"
+            android:layout_marginStart="@dimen/space_5x"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/value_order_amount"
@@ -132,7 +147,8 @@
             android:text="@{`₹`+String.valueOf(cart.order_price)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            tools:text="$ 100"/>
+            tools:text="$ 100"
+            android:layout_marginEnd="@dimen/space_5x"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_delivery_charge"
@@ -143,7 +159,18 @@
             android:text="@string/label_delivery_charge"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            android:layout_marginTop="@dimen/space_10x" />
+            android:layout_marginTop="@dimen/space_10x"
+            android:layout_marginStart="@dimen/space_5x" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/info_delivery_charge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/label_delivery_charge"
+            app:layout_constraintStart_toStartOf="@+id/label_delivery_charge"
+            android:text="@{cart.delivery_charge > 0? `Add more Rs. `+(cart.min_delivery-cart.total_price)+` to get free delivery `:``}"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/font_12x"
+            android:visibility="@{cart.delivery_charge > 0? View.VISIBLE : View.GONE}"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/value_delivery_charge"
@@ -154,19 +181,30 @@
             android:text="@{cart.delivery_charge == 0? `Free`:`₹`+String.valueOf(cart.delivery_charge)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            tools:text="$ 10"/>
+            tools:text="$ 10"
+            android:layout_marginEnd="@dimen/space_5x"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/label_delivery_charge"
+            app:layout_constraintTop_toBottomOf="@+id/info_delivery_charge"
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/label_total_amount"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            android:layout_marginTop="@dimen/space_10x"/>
-
+            android:layout_marginTop="@dimen/space_10x"
+            android:layout_marginStart="@dimen/space_5x"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/saved_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/label_total_amount"
+            app:layout_constraintStart_toStartOf="@+id/label_total_amount"
+            android:text="@{`You have saved Rs. `+cart.discount_price }"
+            android:textColor="@color/teal_700"
+            android:textSize="@dimen/font_12x"
+            android:visibility="@{cart.discount_price > 0? View.VISIBLE : View.GONE}"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -175,7 +213,8 @@
             android:text="@{`₹`+String.valueOf(cart.total_price)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
-            tools:text="$ 10"/>
+            tools:text="$ 10"
+            android:layout_marginEnd="@dimen/space_5x"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/order_confirm_btn"
@@ -188,7 +227,7 @@
             android:gravity="center"
             android:padding="@dimen/space_10x"
             android:layout_marginTop="@dimen/space_16x"
-            app:layout_constraintTop_toBottomOf="@+id/label_total_amount" />
+            app:layout_constraintTop_toBottomOf="@+id/saved_text" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

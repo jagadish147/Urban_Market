@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.IS_COME_PROFILE
 import com.jagadish.freshmart.R
@@ -85,13 +86,22 @@ class ProfileFragment : BaseFragment() {
         binding.logoutText.setOnClickListener {
             SharedPreferencesUtils.clearAllPreferences()
             if(BuildConfig.FLAVOR == "user") {
-                (activity as MainActivity).clearCartBadge()
-                findNavController().navigate(R.id.action_navigation_profile_to_navigation_store)
+                val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
+                if (isUserSignedIn) signOut()
+
             }else{
                 startActivity(Intent(requireActivity(), DeliveryBoyLoginActivity::class.java))
                 requireActivity().finish()
             }
         }
 
+
+
+    }
+
+    fun signOut(){
+        FirebaseAuth.getInstance().signOut()
+        (activity as MainActivity).clearCartBadge()
+        findNavController().navigate(R.id.action_navigation_profile_to_navigation_store)
     }
 }

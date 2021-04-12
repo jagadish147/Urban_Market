@@ -17,4 +17,6 @@ data class RequestOtpReq (
     val login : String = "",
     @Json(name = "auth_token")
     val auth_token : String ="",
+    @Json(name = "cart_id")
+    val car_id : Int = 0,
     ): Parcelable

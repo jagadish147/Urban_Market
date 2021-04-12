@@ -113,7 +113,7 @@
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/tv_no_data"
+        android:id="@+id/search_no_data"
         android:layout_width="@dimen/error_msg_icon"
         android:layout_height="@dimen/error_msg_icon"
         app:srcCompat="@drawable/no_product_found"
@@ -123,5 +123,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/location_no_data"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:visibility="gone">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/location_icon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/ic_unservice_location"
+        android:textStyle="italic|bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_location_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/location_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="TEMPORARY UNSERVICEABLE"
+        android:textSize="@dimen/font_18x"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/space_16x"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/header_location_error"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:textSize="@dimen/font_16x"
+        android:textStyle="normal"
+        android:layout_marginTop="@dimen/space_10x"
+        android:text="Due to unavoidable circumstances, we are currently un-serviceable. We will back soon!"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

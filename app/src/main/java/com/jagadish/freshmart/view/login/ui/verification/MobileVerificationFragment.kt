@@ -3,15 +3,20 @@ package com.jagadish.freshmart.view.login.ui.verification
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.*
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
@@ -30,6 +35,8 @@ import com.jagadish.freshmart.view.login.ui.login.LoginViewModel
 import com.jagadish.freshmart.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_mobile_verification.*
+import java.util.concurrent.TimeUnit
+
 @AndroidEntryPoint
 class MobileVerificationFragment : BaseFragment() {
 
@@ -40,6 +47,10 @@ class MobileVerificationFragment : BaseFragment() {
     private lateinit var binding: FragmentMobileVerificationBinding
     private val args: MobileVerificationFragmentArgs by navArgs()
     private val loginViewModel: MobileVerificationViewModel by viewModels()
+    // get reference of the firebase auth
+    lateinit var auth: FirebaseAuth
+    lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    lateinit var res : RequestOtpRes
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,17 +62,70 @@ class MobileVerificationFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeViewModel()
-
+         res = args?.requestOtpRes
+        binding.descTxt.text= "We sent a verification code to "+res.mobileNumber+" please enter verification code below"
+        resendOTPTimer()
+        binding.resendTxt.setOnClickListener {
+            resendVerificationCode(res.mobileNumber,res.fcmResendToken)
+        }
         verify.setOnClickListener {
-            val res = args?.requestOtpRes
-            if(Validator.isValidOtp(otp_view.otp.toString(),res.customer_otp)) {
-                if(res.status == 404){
-                    val data = MobileVerificationFragmentDirections.actionNavigationMobileVerificationToNavigationLoginDetails(res)
-                    findNavController().navigate(data)
-                }else
-                    loginViewModel.requestLogin(RequestOtpReq(res.mobileNumber))
+            val otp = otp_view.otp.toString()
+            if(otp.isNotEmpty()){
+                val credential : PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                    res.fcmOtp, otp)
+                signInWithPhoneAuthCredential(credential)
+            }
+
+//            val res = args?.requestOtpRes
+//            if(Validator.isValidOtp(otp_view.otp.toString(),res.customer_otp)) {
+//                if(res.status == 404){
+//                    val data = MobileVerificationFragmentDirections.actionNavigationMobileVerificationToNavigationLoginDetails(res)
+//                    findNavController().navigate(data)
+//                }else
+//                    loginViewModel.requestLogin(RequestOtpReq(res.mobileNumber,"","",SharedPreferencesUtils.getAppStringPreference(SharedPreferencesUtils.PREF_APP_FCM_TOKEN),SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID)))
+//            }
+        }
+
+        auth=FirebaseAuth.getInstance()
+
+        // get storedVerificationId from the intent
+        val storedVerificationId= args?.requestOtpRes
+
+        mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                // verification completed
+
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
+                // This callback is invoked if an invalid request for verification is made,
+                // for instance if the the phone number format is invalid.
+
+                if (e is FirebaseAuthInvalidCredentialsException) {
+                    // Invalid request
+                    Validator.setError(binding.descTxt,"Invalid phone number.")
+                } else if (e is FirebaseTooManyRequestsException) {
+                    // The SMS quota for the project has been exceeded
+                    Validator.setError(binding.descTxt,"Quota exceeded.")
+                }
+
+            }
+            override fun onCodeSent(verificationId: String?,
+                                    token: PhoneAuthProvider.ForceResendingToken?) {
+                resendOTPTimer()
+                if (verificationId != null) {
+                    res.fcmOtp = verificationId
+                }
+                if (token != null) {
+                    res.fcmResendToken = token
+                }
+            }
+            override fun onCodeAutoRetrievalTimeOut(verificationId: String?) {
+                // called when the timeout duration has passed without triggering onVerificationCompleted
+                super.onCodeAutoRetrievalTimeOut(verificationId)
             }
         }
+
     }
 
     private fun observeViewModel() {
@@ -114,7 +178,66 @@ class MobileVerificationFragment : BaseFragment() {
         SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_NAME,res.customer.name)
         SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE,args.requestOtpRes.mobileNumber)
         SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL,res.customer.email)
+        SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_DEVICE_CART, res.cart_id.toString())
         startActivity(Intent(requireActivity(), MainActivity::class.java))
         requireActivity().finish()
+    }
+
+
+    // verifies if the code matches sent by firebase
+    // if success start the new activity in our case it is main Activity
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    if(res.status == 404){
+                        val data = MobileVerificationFragmentDirections.actionNavigationMobileVerificationToNavigationLoginDetails(res)
+                        findNavController().navigate(data)
+                    }else
+                        loginViewModel.requestLogin(RequestOtpReq(res.mobileNumber,"","",SharedPreferencesUtils.getAppStringPreference(SharedPreferencesUtils.PREF_APP_FCM_TOKEN),SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID)))
+                } else {
+                    // Sign in failed, display a message and update the UI
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
+                        Toast.makeText(requireContext(),"Invalid OTP", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+    }
+
+    private fun resendOTPTimer(){
+        binding.loading.toGone()
+        binding.resendTxt.isClickable = false
+        val timer = object: CountDownTimer(60000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                updateTextUI(millisUntilFinished)
+
+            }
+
+            override fun onFinish() {
+                binding.resendTxt.text = "Resend OTP"
+                binding.resendTxt.isClickable = true
+            }
+        }
+        timer.start()
+    }
+    private fun updateTextUI(time_in_milli_seconds : Long) {
+        val minute = (time_in_milli_seconds / 1000) / 60
+        val seconds = (time_in_milli_seconds / 1000) % 60
+
+        binding.resendTxt.text  = "$minute:$seconds"
+    }
+
+    private fun resendVerificationCode(phoneNumber: String,
+                                       token: PhoneAuthProvider.ForceResendingToken?) {
+        binding.loading.toVisible()
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber("+91"+phoneNumber) // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(requireActivity()) // Activity (for callback binding)
+            .setCallbacks(mCallbacks)
+            .setForceResendingToken(token)// OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
     }
 }

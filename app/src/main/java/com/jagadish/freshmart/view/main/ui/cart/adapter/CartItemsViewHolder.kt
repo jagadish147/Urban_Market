@@ -22,13 +22,16 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
 
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
-        itemBinding.productPrice.text = "₹ ${recipesItem.price}"
+        if(recipesItem.quantity != 0)
+            itemBinding.productPrice.text = "₹ ${recipesItem.price- (recipesItem.discount_price* recipesItem.quantity)}"
+        else
+            itemBinding.productPrice.text = "₹ ${recipesItem.price- (recipesItem.discount_price)}"
         Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).diskCacheStrategy(
             DiskCacheStrategy.DATA).into(itemBinding.productImage)
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description
         if(recipesItem.discount_price != 0.00) {
-            itemBinding.discountPrice.text = recipesItem.discount_price.toString()
+            itemBinding.discountPrice.text = (recipesItem.price).toString()
             itemBinding.discountPrice.paintFlags =
                 (itemBinding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG)
         }

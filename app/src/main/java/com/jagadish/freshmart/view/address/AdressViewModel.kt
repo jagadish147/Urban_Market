@@ -137,8 +137,13 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                 ).collect {
                     showToastPrivate.value = SingleEvent(it.data!!.message)
                     updateAddressPrivate.value = it
+                    updateAddressRequestPrivate.value = SingleEvent(addressReq)
                 }
             }
         }
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val updateAddressRequestPrivate: MutableLiveData<SingleEvent<AddAddressReq>> = MutableLiveData()
+    val updateAddressRequest: LiveData<SingleEvent<AddAddressReq>> get() = updateAddressRequestPrivate
 }

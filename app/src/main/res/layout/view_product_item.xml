@@ -8,8 +8,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/product_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         app:srcCompat="@color/white"
         android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +21,7 @@
         android:id="@+id/product_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="1"
+        android:maxLines="2"
         android:ellipsize="end"
         android:gravity="start"
         android:textSize="@dimen/font_16x"
@@ -39,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space_10x"
         app:layout_constraintTop_toBottomOf="@+id/product_name"
-        app:layout_constraintStart_toStartOf="@+id/product_name"/>
+        app:layout_constraintStart_toStartOf="@+id/product_name"
+        android:layout_marginTop="@dimen/space_5x"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_price"
@@ -51,17 +52,17 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:layout_marginStart="@dimen/space_16x"
-        app:layout_constraintTop_toTopOf="@+id/discount_price"
-        app:layout_constraintStart_toEndOf="@+id/discount_price"
-        tools:text="recipes title ........... this is a sample text " />
+        app:layout_constraintTop_toTopOf="@+id/unit"
+        app:layout_constraintStart_toEndOf="@+id/unit"
+        tools:text="$ 200 " />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/discount_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_16x"
-        app:layout_constraintTop_toTopOf="@+id/unit"
-        app:layout_constraintStart_toEndOf="@+id/unit"/>
+        app:layout_constraintTop_toTopOf="@+id/product_price"
+        app:layout_constraintStart_toEndOf="@+id/product_price"/>
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -73,7 +74,8 @@
         app:layout_constraintTop_toBottomOf="@+id/unit"
         android:textColor="@color/grey"
         android:maxLines="2"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:layout_marginTop="@dimen/space_5x"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/add_btn"
         android:layout_width="wrap_content"

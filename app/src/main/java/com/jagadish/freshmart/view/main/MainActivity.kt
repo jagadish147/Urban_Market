@@ -74,10 +74,7 @@ class MainActivity : BaseActivity() {
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             getLastLocation()
 
-            if(Singleton.getInstance().cart != null && Singleton.getInstance().cart?.count != 0) {
-                binding.navView.getOrCreateBadge(R.id.navigation_cart).number =
-                    Singleton.getInstance().cart.count
-            }
+            updateCart()
             binding.navView.setOnNavigationItemSelectedListener { item ->
              var isNavigate= false
                 when (item.itemId) {
@@ -228,5 +225,14 @@ class MainActivity : BaseActivity() {
 
     fun clearCartBadge(){
         binding.navView.removeBadge(R.id.navigation_cart)
+    }
+
+    fun updateCart(){
+        if(Singleton.getInstance().cart != null && Singleton.getInstance().cart?.count != 0) {
+            binding.navView.getOrCreateBadge(R.id.navigation_cart).number =
+                Singleton.getInstance().cart.count
+        }else{
+            clearCartBadge()
+        }
     }
 }
