@@ -26,6 +26,7 @@ import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
+import com.jagadish.freshmart.view.details.ProductDetailsActivity
 import com.jagadish.freshmart.view.main.MainActivity
 import com.jagadish.freshmart.view.main.ui.store.StoreViewModel
 import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
@@ -63,8 +64,7 @@ class ProductsFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.productsRecyclerView.layoutManager = layoutManager
         binding.productsRecyclerView.setHasFixedSize(true)
-        val category = requireActivity().intent.getParcelableExtra<ShopItem>(CATEGORY_KEY)
-        recipesListViewModel.getRecipes(category!!.id)
+
         binding.viewCart.setOnClickListener { val data = Intent().apply {
             putExtra(RESULT_ACTIVITY_IS_VIEW_CART, true)
         }
@@ -72,6 +72,11 @@ class ProductsFragment : BaseFragment() {
             requireActivity(). finish() }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val category = requireActivity().intent.getParcelableExtra<ShopItem>(CATEGORY_KEY)
+        recipesListViewModel.getRecipes(category!!.id)
+    }
 
     private fun observeViewModel() {
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
@@ -116,7 +121,7 @@ class ProductsFragment : BaseFragment() {
 
     private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ProductsItem>) {
         navigateEvent.getContentIfNotHandled()?.let {
-            val nextScreenIntent = Intent(requireActivity(), ProductsListActivity::class.java).apply {
+            val nextScreenIntent = Intent(requireActivity(), ProductDetailsActivity::class.java).apply {
                 putExtra(CATEGORY_KEY, it)
             }
             startActivity(nextScreenIntent)

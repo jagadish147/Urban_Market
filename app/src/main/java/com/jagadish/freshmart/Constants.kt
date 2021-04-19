@@ -12,6 +12,7 @@ const val IS_HIDE_DATA = "is_hide_data"
 const val PAYMENT_DETAILS = "payment_details"
 const val ORDER_DETAILS = "order_details"
 const val PAYMENT_STATUS = "payment_status"
+const val CASH_ON_DELIVERY = "cash_on_delivery"
 
 
 const val RESULT_ACTIVITY_IS_VIEW_CART = "navigate_cart"

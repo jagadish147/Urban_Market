@@ -1,9 +1,7 @@
 package com.jagadish.freshmart.view.payment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -14,12 +12,10 @@ import com.jagadish.freshmart.*
 import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
-import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.databinding.ActivityOrderPlaceBinding
 import com.jagadish.freshmart.utils.*
-import com.jagadish.freshmart.view.orderinfo.OrderInfoActivity
 import com.jagadish.freshmart.view.payment.status.OrderStatusActivity
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +27,7 @@ class OrderPlaceActivity : BaseActivity() {
 
     private lateinit var binding:ActivityOrderPlaceBinding
     private val orderPlaceViewModel: OrderPlaceViewModel by viewModels()
+    var paymentStatus = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +46,7 @@ class OrderPlaceActivity : BaseActivity() {
 
             when {
                 binding.cashOnDelivery.isChecked -> {
-                    val paymentstatusReq = PaymentStatusReq(paymentDetails!!.orderres.order_id, "Cash", "123456")
+                    val paymentstatusReq = PaymentStatusReq(paymentDetails!!.orderres.order_id, "Cash", binding.orderDetails!!.orderres!!.order_id)
                     orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
                 }
                 binding.onlinePayment.isChecked -> {
@@ -99,7 +96,8 @@ class OrderPlaceActivity : BaseActivity() {
         if(paymentStatusRes.success && paymentStatusRes.status == 200){
             val nextScreenIntent = Intent(this, OrderStatusActivity::class.java).apply {
                 putExtra(ORDER_DETAILS, binding.orderDetails)
-                putExtra(PAYMENT_STATUS, true)
+                putExtra(PAYMENT_STATUS, paymentStatus)
+                putExtra(CASH_ON_DELIVERY,binding.cashOnDelivery.isChecked)
             }
             startActivity(nextScreenIntent)
         }
@@ -115,27 +113,55 @@ class OrderPlaceActivity : BaseActivity() {
                 val resKey = data.getStringArrayExtra("responseKeyArray")
                 val resValue = data.getStringArrayExtra("responseValueArray")
                 if (resKey != null && resValue != null) {
-                    val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", "123456","Success")
-                    orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
-                    for (i in resKey.indices)
-                        println("  " + i + " resKey : " + resKey[i] + " resValue : " + resValue[i])
+                    for (i in resKey.indices){
+                        if(resKey[i].equals("f_code")){
+                            if(resValue[i].equals("success_00")){
+                                onSuccesPayment(resKey,resValue)
+                                break
+                            }else if(resValue[i].equals("F_05")){
+                                onFailedPayment(resKey,resValue)
+                                break
+                            }else if(resValue[i].equals("C_06")){
+                                finish()
+                                break
+                            }
+                        }
+                    }
                 }
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                println("RECEIVED BACK--->$message")
+            }
+        }
+    }
+
+    private fun onSuccesPayment(resKey: Array<String>, resValue: Array<String>) {
+        for (i in resKey.indices) {
+            if (resKey[i].equals("bank_txn")) {
+                paymentStatus = true
+                val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", resValue[i],"Success")
+                    orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
+            }
+        }
+    }
+
+    private fun onFailedPayment(resKey: Array<String>, resValue: Array<String>) {
+        for (i in resKey.indices) {
+            if (resKey[i].equals("bank_txn")) {
+                paymentStatus = false
+                val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", resValue[i],"Failed")
+                    orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
             }
         }
     }
 
     //Payment gateway
     fun payNow() {
-        Toast.makeText(this, "Pay now clicked", Toast.LENGTH_LONG).show();
         val newPayIntent= Intent(this, PayActivity:: class.java);
-        newPayIntent.putExtra("isLive", false); //true for Live
+        newPayIntent.putExtra("isLive", true); //true for Live
         newPayIntent.putExtra("txnscamt", "0"); //Fixed. Must be �0�
-        newPayIntent.putExtra("merchantId", "197");
-        newPayIntent.putExtra("loginid","197" );
-        newPayIntent.putExtra("password", "Test@123");//NCA@1234
-        newPayIntent.putExtra("prodid", "NSE");//NCA
+        newPayIntent.putExtra("merchantId", "122649");
+        newPayIntent.putExtra("loginid","122649" );
+        newPayIntent.putExtra("password", "4818313e");//NCA@1234
+        newPayIntent.putExtra("prodid", "MARKET");//NCA
         newPayIntent.putExtra("txncurr", "INR"); //Fixed. Must be �INR�
         newPayIntent.putExtra("clientcode",encodeBase64( "007") );
         newPayIntent.putExtra("custacc","100000036600" );
@@ -145,10 +171,10 @@ class OrderPlaceActivity : BaseActivity() {
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
         val currentDate = sdf.format(Date())
         newPayIntent.putExtra("date", currentDate);//Should be in same format
-        newPayIntent.putExtra("signature_request","KEY123657234" );
-        newPayIntent.putExtra("signature_response","KEYRESP123657234" );
+        newPayIntent.putExtra("signature_request","cc261852543518a0ac" );
+        newPayIntent.putExtra("signature_response","08e6b9de7f03db0054" );
         newPayIntent.putExtra("discriminator","All");//NB,All
-        newPayIntent.putExtra("ru","https://paynetzuat.atomtech.in/mobilesdk/param");
+        newPayIntent.putExtra("ru","https://payment.atomtech.in/paynetz/epi/fts");
         //Optinal Parameters
         newPayIntent.putExtra("customerName", binding.orderDetails!!.userName);//Only for Name
         newPayIntent.putExtra("customerEmailID", SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_EMAIL));//Only for Email ID

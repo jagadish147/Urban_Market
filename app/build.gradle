@@ -17,7 +17,7 @@ android {
         applicationId "com.jagadish.freshmart"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
+        versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -45,7 +45,7 @@ android {
             dimension 'urban_market'
             applicationId 'com.urbanmarket'
             applicationIdSuffix 'user'
-            versionCode 1
+            versionCode 3
             versionName '1.0'
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
@@ -55,7 +55,7 @@ android {
             dimension 'urban_market'
             applicationId 'com.urbanmarket'
             applicationIdSuffix 'delivery'
-            versionCode 1
+            versionCode 2
             versionName '1.0'
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'

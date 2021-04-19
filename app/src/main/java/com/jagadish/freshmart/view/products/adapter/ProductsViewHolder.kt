@@ -55,7 +55,7 @@ class ProductsViewHolder(private val itemBinding: ViewProductItemBinding) : Recy
         itemBinding.quantityMinusBtn.setOnClickListener { recyclerItemListener.onItemQuantityDecrease(
             recipesItem
         ) }
-//        itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }
+        itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }
     }
 }
 

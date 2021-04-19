@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
-import com.jagadish.freshmart.ORDER_DETAILS
-import com.jagadish.freshmart.PAYMENT_DETAILS
-import com.jagadish.freshmart.R
+import com.jagadish.freshmart.*
 import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.databinding.ActivityOrderStatusBinding
 import com.jagadish.freshmart.view.main.MainActivity
@@ -29,10 +27,22 @@ class OrderStatusActivity : BaseActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.title = "Order Status"
         val paymentDetails =  intent.getParcelableExtra<PaymentDetailsModel>(ORDER_DETAILS)
+        val paymentMode = intent.getBooleanExtra(CASH_ON_DELIVERY,false)
+        val paymentStatus = intent.getBooleanExtra(PAYMENT_STATUS,false)
         binding.orderdetails = paymentDetails
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
         val currentDate = sdf.format(Date())
         binding.orderdate = currentDate
+
+        if(!paymentMode) {
+            binding.paymentStatusTxt.text =
+                if (paymentStatus) "Payment Successful" else "Payment Failed"
+            binding.paymentStatusImage.setAnimation(if (paymentStatus) R.raw.payment_confirm else R.raw.payment_failed)
+        }else{
+            binding.paymentStatusTxt.text = "Cash On Delivery"
+        }
+
+        binding.gotostoreBtn.setOnClickListener {  onBackPressed()}
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -47,7 +57,9 @@ class OrderStatusActivity : BaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this@OrderStatusActivity, MainActivity::class.java))
+        var intent = Intent(this@OrderStatusActivity, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
         finish()
     }
 }

@@ -17,14 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Freshmart">
-        <activity android:name=".view.payment.OrderPlaceActivity"
+        <activity android:name=".view.details.ProductDetailsActivity"
+            android:theme="@style/Theme.Freshmart.Dark">
+
+        </activity>
+        <activity
+            android:name=".view.payment.OrderPlaceActivity"
             android:theme="@style/Theme.Freshmart.Dark" />
         <activity
             android:name=".view.deliveryboy.DeliveryHomeActivity"
             android:label="@string/title_activity_delivery_boy_main"
-            android:theme="@style/Theme.Freshmart.Dark"/>
-        <activity android:name=".view.payment.status.OrderStatusActivity"
-            android:theme="@style/Theme.Freshmart.Dark"/>
+            android:theme="@style/Theme.Freshmart.Dark" />
+        <activity
+            android:name=".view.payment.status.OrderStatusActivity"
+            android:theme="@style/Theme.Freshmart.Dark" />
         <activity
             android:name=".view.address.AddressActivity"
             android:label="@string/title_activity_address"
@@ -46,7 +52,8 @@
         <activity
             android:name=".view.main.MainActivity"
             android:label="@string/title_activity_main" />
-        <activity android:name=".view.splash.SplashActivity"
+        <activity
+            android:name=".view.splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,10 +75,14 @@
 
         <activity
             android:name="com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity"
-            android:theme="@style/Theme.Freshmart"/>
-        <activity android:name="com.atom.mpsdklibrary.PayActivity"
-            android:theme="@style/Theme.Freshmart"/>
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+            android:theme="@style/Theme.Freshmart" />
+        <activity
+            android:name="com.atom.mpsdklibrary.PayActivity"
+            android:theme="@style/Theme.Freshmart" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>
