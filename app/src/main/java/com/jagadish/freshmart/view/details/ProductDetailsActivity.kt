@@ -47,9 +47,9 @@ class ProductDetailsActivity : BaseActivity() {
 
         binding.productName.text = productDetails!!.name
         if(productDetails.quantity != 0)
-            binding.productPrice.text = "₹ ${productDetails.price- (productDetails.discount_price* productDetails.quantity)}"
+            binding.productPrice.text = "₹ ${(productDetails.price* productDetails.quantity)- (productDetails.discount_price* productDetails.quantity)}"
         else
-            binding.productPrice.text = "₹ ${productDetails.price- (productDetails.discount_price)}"
+            binding.productPrice.text = "₹ ${(productDetails.price* productDetails.quantity)- (productDetails.discount_price)}"
 
         if(productDetails.discount_price != 0.00) {
             binding.discountPrice.text = (productDetails.price).toString()

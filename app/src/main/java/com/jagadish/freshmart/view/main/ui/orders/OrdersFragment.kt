@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.R
@@ -65,6 +67,8 @@ class OrdersFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.ordersRecyclerView.layoutManager = layoutManager
         binding.ordersRecyclerView.setHasFixedSize(true)
+        val itemDecor = DividerItemDecoration(context, LinearLayout.VERTICAL)
+        binding.ordersRecyclerView.addItemDecoration(itemDecor)
         recipesListViewModel.getOrders()
 
 

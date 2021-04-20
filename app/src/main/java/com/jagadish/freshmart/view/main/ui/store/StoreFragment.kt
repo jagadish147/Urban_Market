@@ -203,7 +203,7 @@ class StoreFragment : BaseFragment() {
         binding.storeRecyclerView.toVisible()
         binding.searchRecyclerview.toGone()
         binding.searchClear.toGone()
-        binding.searchRecyclerview.hideKeyboard()
+//        binding.searchRecyclerview.hideKeyboard()
 //        recipesListViewModel.showToastMessage(SEARCH_ERROR)
     }
 
@@ -287,8 +287,13 @@ class StoreFragment : BaseFragment() {
 //                    postalCode = item.longName
 //                }
 //            }
-
-            (activity as MainActivity).address.value = SelectedAddress(addresses?.get(0)!!.subLocality,addresses[0].getAddressLine(0),addresses[0].postalCode)
+            var address =""
+             if(addresses?.get(0)?.subLocality != null){
+                 address =  addresses.get(0)!!.subLocality
+             } else{
+                 address = addresses?.get(0)!!.featureName
+             }
+            (activity as MainActivity).address.value = SelectedAddress(address ,addresses[0].getAddressLine(0),addresses[0].postalCode)
 
 //                placeDetails.name?.let { placeDetails.formattedAddress?.let { it1 ->
 //                    SelectedAddress(it,

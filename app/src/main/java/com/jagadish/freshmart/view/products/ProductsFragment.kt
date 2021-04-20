@@ -3,37 +3,33 @@ package com.jagadish.freshmart.view.products
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout.HORIZONTAL
+import android.widget.LinearLayout.VERTICAL
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
-import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
-import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
-import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.details.ProductDetailsActivity
-import com.jagadish.freshmart.view.main.MainActivity
-import com.jagadish.freshmart.view.main.ui.store.StoreViewModel
-import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
-import com.jagadish.freshmart.view.main.ui.store.model.HomeModel
 import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
+
 
 /**
  * A simple [Fragment] subclass as the defaultAddress destination in the navigation.
@@ -64,7 +60,8 @@ class ProductsFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.productsRecyclerView.layoutManager = layoutManager
         binding.productsRecyclerView.setHasFixedSize(true)
-
+        val itemDecor = DividerItemDecoration(context, VERTICAL)
+        binding.productsRecyclerView.addItemDecoration(itemDecor)
         binding.viewCart.setOnClickListener { val data = Intent().apply {
             putExtra(RESULT_ACTIVITY_IS_VIEW_CART, true)
         }
@@ -80,7 +77,7 @@ class ProductsFragment : BaseFragment() {
 
     private fun observeViewModel() {
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
-        observeEvent(recipesListViewModel.openCartView, ::showCartView )
+        observeEvent(recipesListViewModel.openCartView, ::showCartView)
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
@@ -101,17 +98,21 @@ class ProductsFragment : BaseFragment() {
     private fun bindListData(recipes: Products) {
         if (!(recipes.products.isNullOrEmpty())) {
             if(Singleton.getInstance().cart != null && Singleton.getInstance().cart!!.products.isNotEmpty()){
+                var count = 0
                 for(item in Singleton.getInstance().cart.products){
                     for(product in recipes.products)
                     if(item.id == product.id){
+                        count++
                         product.quantity = item.quantity
                         product.isAddCart = true
                     }
                 }
+                binding.viewCartLayout.toVisible()
+                binding.priceDetails = AddItemRes(true,"",Singleton.getInstance().cart.products.size,0.0,recipes.products)
 //                recipesListViewModel.checkCartItems(AddItemRes(true,"",Singleton.getInstance().cart.count,Singleton.getInstance().cart.total_price,ArrayList()))
             }
 
-            recipesAdapter = ProductsAdapter(recipesListViewModel,recipes.products )
+            recipesAdapter = ProductsAdapter(recipesListViewModel, recipes.products)
             binding.productsRecyclerView.adapter = recipesAdapter
             showDataView(true)
         } else {

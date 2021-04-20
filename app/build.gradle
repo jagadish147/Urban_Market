@@ -50,6 +50,7 @@ android {
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
             buildConfigField 'String', "ApiKey", '"AIzaSyDM9EDhGjnyH7-FIbgQtzCI8mWa3ZA7kf4"'
+            resValue "string", "app_name", "@string/app_name_user"
         }
         delivery_boy {
             dimension 'urban_market'
@@ -60,6 +61,7 @@ android {
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
             buildConfigField 'String', "ApiKey", '"AIzaSyDM9EDhGjnyH7-FIbgQtzCI8mWa3ZA7kf4"'
+            resValue "string", "app_name", "@string/app_name_delivery"
         }
     }
 }

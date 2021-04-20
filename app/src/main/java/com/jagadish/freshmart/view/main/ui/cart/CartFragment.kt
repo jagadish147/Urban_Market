@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.atom.mpsdklibrary.PayActivity
 import com.google.android.material.snackbar.Snackbar
@@ -76,6 +78,8 @@ class CartFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.cartItemsRecyclerView.layoutManager = layoutManager
         binding.cartItemsRecyclerView.setHasFixedSize(true)
+        val itemDecor = DividerItemDecoration(context, LinearLayout.VERTICAL)
+        binding.cartItemsRecyclerView.addItemDecoration(itemDecor)
         recipesListViewModel.getRecipes()
 
 

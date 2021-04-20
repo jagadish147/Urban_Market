@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">UM Delivery</string>
+    <string name="app_name_user">UrbanMarket</string>
+    <string name="app_name_delivery">UM Delivery</string>
     <string name="text_intro1">Travel Everywhere</string>
     <string name="text_intro2">Best Room Rates</string>
     <string name="text_intro3">Exotic Destinations</string>
