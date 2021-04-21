@@ -102,7 +102,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                 }
             }
             if(!isExistingProduct) {
-                Singleton.getInstance().cart.products.toMutableList().add(productsItem)
+                Singleton.getInstance().cart.products.add(productsItem)
                 Singleton.getInstance().cart.total_price = recipe.total_price
             }
         }

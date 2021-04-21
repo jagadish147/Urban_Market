@@ -25,7 +25,7 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
         if(recipesItem.quantity != 0)
             itemBinding.productPrice.text = "₹ ${(recipesItem.price* recipesItem.quantity)- (recipesItem.discount_price* recipesItem.quantity)}"
         else
-            itemBinding.productPrice.text = "₹ ${(recipesItem.price* recipesItem.quantity)- (recipesItem.discount_price)}"
+            itemBinding.productPrice.text = "₹ ${recipesItem.price- (recipesItem.discount_price)}"
         Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).diskCacheStrategy(
             DiskCacheStrategy.DATA).into(itemBinding.productImage)
         itemBinding.unit.text = recipesItem.unit
