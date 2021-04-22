@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name_user">UrbanMarket</string>
     <string name="app_name_delivery">UM Delivery</string>
-    <string name="text_intro1">Travel Everywhere</string>
-    <string name="text_intro2">Best Room Rates</string>
-    <string name="text_intro3">Exotic Destinations</string>
-    <string name="desc_intro1">Enjoy flight to any destination with so many discounts and promotions</string>
-    <string name="desc_intro2">Book your favorite hotel room with hassle-free and reasonable rates</string>
-    <string name="desc_intro3">Enjoy your beautiful moments to exotic places around the world</string>
+    <string name="text_intro1">Need Fruits Now?</string>
+    <string name="text_intro2">Hassle Free Payments</string>
+    <string name="text_intro3">Doorstep Deliveries</string>
+    <string name="desc_intro1">Select wide range of products from fresh fruits.</string>
+    <string name="desc_intro2">Pay as per your convenience, we accept all credit and debit cards and Cash on delivery</string>
+    <string name="desc_intro3">Our delivery will be delivered within 2&#8211;4 hours</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_store">Store</string>

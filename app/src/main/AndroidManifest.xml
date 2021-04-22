@@ -18,53 +18,64 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Freshmart">
         <activity android:name=".view.details.ProductDetailsActivity"
-            android:theme="@style/Theme.Freshmart.Dark">
+            android:theme="@style/Theme.Freshmart.Dark"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
             android:name=".view.payment.OrderPlaceActivity"
             android:theme="@style/Theme.Freshmart.Dark"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.deliveryboy.DeliveryHomeActivity"
             android:label="@string/title_activity_delivery_boy_main"
             android:theme="@style/Theme.Freshmart.Dark"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.payment.status.OrderStatusActivity"
             android:theme="@style/Theme.Freshmart.Dark"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.address.AddressActivity"
             android:label="@string/title_activity_address"
             android:theme="@style/Theme.Freshmart.Dark"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.orderinfo.OrderInfoActivity"
             android:label="@string/title_activity_order_info"
             android:theme="@style/Theme.Freshmart.Dark"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.products.ProductsListActivity"
             android:label="@string/title_activity_products_list"
             android:theme="@style/Theme.Freshmart.Dark.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.deliveryboy.login.DeliveryBoyLoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.splash.SplashActivity"
             android:theme="@style/SplashTheme"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,7 +83,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.intro.IntroSliderActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity android:name=".view.main.ui.location.LocationRequestFragment" />
 
         <service
@@ -86,10 +98,12 @@
 
         <activity
             android:name="com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity"
-            android:theme="@style/Theme.Freshmart" />
+            android:theme="@style/Theme.Freshmart"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.atom.mpsdklibrary.PayActivity"
-            android:theme="@style/Theme.Freshmart" />
+            android:theme="@style/Theme.Freshmart"
+            android:screenOrientation="portrait"/>
 
         <uses-library
             android:name="org.apache.http.legacy"

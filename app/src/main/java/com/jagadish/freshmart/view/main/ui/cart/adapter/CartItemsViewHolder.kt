@@ -31,7 +31,10 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description
         if(recipesItem.discount_price != 0.00) {
-            itemBinding.discountPrice.text = (recipesItem.price).toString()
+            if(recipesItem.quantity != 0)
+                itemBinding.discountPrice.text = "₹ ${(recipesItem.price* recipesItem.quantity)}"
+            else
+            itemBinding.discountPrice.text = "₹"+(recipesItem.price).toString()
             itemBinding.discountPrice.paintFlags =
                 (itemBinding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG)
         }

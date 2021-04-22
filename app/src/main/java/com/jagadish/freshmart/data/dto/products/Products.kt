@@ -14,7 +14,7 @@ data class Products (
     @Json(name = "message")
     val message: String = "",
     @Json(name = "products")
-    val products: List<ProductsItem> = ArrayList(),
+    val products: MutableList<ProductsItem> = ArrayList(),
     @Json(name = "count")
     var count : Int = 0,
     @Json(name = "total")

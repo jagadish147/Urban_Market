@@ -21,6 +21,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.BuildConfig
@@ -79,8 +80,8 @@ class StoreFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.storeRecyclerView.layoutManager = layoutManager
         binding.storeRecyclerView.setHasFixedSize(true)
-        val layoutManagerSearch = LinearLayoutManager(context)
-        binding.searchRecyclerview.layoutManager = layoutManagerSearch
+
+        binding.searchRecyclerview.layoutManager =  GridLayoutManager(context, 2)
         binding.searchRecyclerview.setHasFixedSize(true)
 
         binding.searchHome.addTextChangedListener(object : TextWatcher{
@@ -100,6 +101,7 @@ class StoreFragment : BaseFragment() {
 
         binding.searchClear.setOnClickListener {
             binding.searchHome.text?.clear()
+            binding.searchRecyclerview.hideKeyboard()
         }
 
         binding.addressLayout.setOnClickListener {

@@ -224,7 +224,8 @@ class CartFragment : BaseFragment() {
                 cart!!.count = it.count
                 cart!!.delivery_charge = it.delivery_charge
                 cart!!.discount_price = cart.discount_price
-                binding.cart = cart
+
+                binding.cart = Cart(it.success,it.message,it.items,it.total_price,it.delivery_charge,it.count,cart.min_delivery,cart.discount_price)
                 Singleton.getInstance().cart = cart
                 (activity as MainActivity).updateCart()
                 binding.orderInfoLayout.toVisible()

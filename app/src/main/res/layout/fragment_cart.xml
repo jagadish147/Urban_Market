@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/label_total_amount"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{`₹`+String.valueOf(cart.total_price)}"
+            android:text="@{`₹`+String.valueOf(cart.total_price +cart.delivery_charge)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
             tools:text="$ 10"

@@ -10,10 +10,10 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/category_image"
             android:layout_width="160dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             app:srcCompat="@color/white"
-            android:scaleType="fitXY"
             android:alpha="0.9"
+            android:scaleType="centerInside"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
