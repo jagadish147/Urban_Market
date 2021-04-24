@@ -25,13 +25,13 @@ class AddressActivity : BaseActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
 
-//    override fun onSupportNavigateUp(): Boolean {
-//        onBackPressed()
-//        return super.onSupportNavigateUp()
-//    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
     override fun onBackPressed() = when {
         findNavController(R.id.nav_host_fragment).graph.startDestination == findNavController(R.id.nav_host_fragment).currentDestination?.id -> finish()
-        else -> super.onBackPressed()
+        else ->  finish()
     }
 }

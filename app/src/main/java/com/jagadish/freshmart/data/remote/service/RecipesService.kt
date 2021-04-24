@@ -3,7 +3,6 @@ package com.jagadish.freshmart.data.remote.service
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
-import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
@@ -55,8 +54,8 @@ interface RecipesService {
     @POST("customers/{Id}/add_address")
     suspend fun requestAddAddress(@Path("Id") customerId : Int,@Body customerReq : AddAddressReq): Response<AddAddressRes>
 
-    @POST("customers/{Id}/remove_address")
-    suspend fun requestRemoveAddress(@Path("Id") customerId : Int,@Body customerReq : AddAddressReq): Response<AddAddressRes>
+    @POST("customers/remove_address")
+    suspend fun requestRemoveAddress(@Body customerReq : AddAddressReq): Response<AddAddressRes>
 
     @POST("customers/update_address")
     suspend fun requestUpdateAddress(@Body customerReq : AddAddressReq): Response<AddAddressRes>

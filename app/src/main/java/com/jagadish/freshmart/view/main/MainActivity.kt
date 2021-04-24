@@ -239,9 +239,9 @@ class MainActivity : BaseActivity() {
     }
 
     fun updateCart(){
-        if(Singleton.getInstance().cart != null && Singleton.getInstance().cart?.count != 0) {
+        if(Singleton.getInstance().cart != null && Singleton.getInstance().cart?.products?.size != 0) {
             binding.navView.getOrCreateBadge(R.id.navigation_cart).number =
-                Singleton.getInstance().cart.count
+                Singleton.getInstance().cart.products.size
         }else{
             clearCartBadge()
         }
@@ -295,7 +295,7 @@ class MainActivity : BaseActivity() {
                 longitude,
                 1
             ) as ArrayList<Address>?
-        if (addresses != null && addresses.size > 0) {
+        if (addresses != null && addresses.size > 0 && address.value == null) {
             address.value = SelectedAddress(addresses[0].featureName,addresses[0].getAddressLine(0),addresses[0].postalCode)
         }
     }

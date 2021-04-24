@@ -3,7 +3,6 @@ package com.jagadish.freshmart.view.main.ui.store
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource

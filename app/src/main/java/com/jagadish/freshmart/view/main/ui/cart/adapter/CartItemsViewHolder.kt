@@ -12,6 +12,8 @@ import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.databinding.ShopItemBinding
 import com.jagadish.freshmart.databinding.ViewProductItemBinding
+import com.jagadish.freshmart.utils.toGone
+import com.jagadish.freshmart.utils.toVisible
 import com.squareup.picasso.Picasso
 
 /**
@@ -23,7 +25,7 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
     fun bind(recipesItem: ProductsItem, recyclerItemListener: ProductsRecyclerItemListener) {
         itemBinding.productName.text = recipesItem.name
         if(recipesItem.quantity != 0)
-            itemBinding.productPrice.text = "₹ ${(recipesItem.price* recipesItem.quantity)- (recipesItem.discount_price* recipesItem.quantity)}"
+            itemBinding.productPrice.text = "₹ ${recipesItem.price- (recipesItem.discount_price* recipesItem.quantity)}"
         else
             itemBinding.productPrice.text = "₹ ${recipesItem.price- (recipesItem.discount_price)}"
         Glide.with(itemBinding.productImage.context).load(recipesItem.image.tumb.url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).diskCacheStrategy(
@@ -31,9 +33,9 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
         itemBinding.unit.text = recipesItem.unit
         itemBinding.description.text = recipesItem.description
         if(recipesItem.discount_price != 0.00) {
-            if(recipesItem.quantity != 0)
-                itemBinding.discountPrice.text = "₹ ${(recipesItem.price* recipesItem.quantity)}"
-            else
+//            if(recipesItem.quantity != 0)
+//                itemBinding.discountPrice.text = "₹ ${(recipesItem.price)}"
+//            else
             itemBinding.discountPrice.text = "₹"+(recipesItem.price).toString()
             itemBinding.discountPrice.paintFlags =
                 (itemBinding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG)
@@ -46,9 +48,28 @@ class CartItemsViewHolder(private val itemBinding: ViewProductItemBinding) : Rec
             itemBinding.quantityLayout.visibility = View.VISIBLE
             itemBinding.addBtn.visibility = View.GONE
             recyclerItemListener.onItemAddCart(recipesItem)}
-        itemBinding.quantityAddBtn.setOnClickListener { recyclerItemListener.onItemQuantityIncrease(recipesItem) }
-        itemBinding.quantityMinusBtn.setOnClickListener { recyclerItemListener.onItemQuantityDecrease(recipesItem) }
+        itemBinding.quantityAddBtn.setOnClickListener {
+            if(!recipesItem.isLoad) {
+                updateLoaderQuantity(true)
+                recyclerItemListener.onItemQuantityIncrease(recipesItem)
+            }}
+        itemBinding.quantityMinusBtn.setOnClickListener {
+            if(!recipesItem.isLoad) {
+                updateLoaderQuantity(true)
+                recyclerItemListener.onItemQuantityDecrease(recipesItem)
+            }}
 //        itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }
+        updateLoaderQuantity(recipesItem.isLoad)
+    }
+
+    private fun updateLoaderQuantity(isLoad : Boolean){
+        if(isLoad){
+            itemBinding.quantityTxt.toGone()
+            itemBinding.quantityProgress.toVisible()
+        }else{
+            itemBinding.quantityTxt.toVisible()
+            itemBinding.quantityProgress.toGone()
+        }
     }
 }
 

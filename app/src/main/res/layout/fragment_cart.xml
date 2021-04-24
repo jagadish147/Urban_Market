@@ -106,7 +106,8 @@
             android:text="@string/action_add_address"
             android:textColor="@color/main_color"
             android:textSize="@dimen/font_16x"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:background="@drawable/bg_rect_shape_pink"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_payment_details"
@@ -144,7 +145,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/label_order_amount"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{`₹`+String.valueOf(cart.order_price)}"
+            android:text="@{`₹`+String.format(`%.2f`,cart.order_price)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
             tools:text="$ 100"
@@ -167,7 +168,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/label_delivery_charge"
             app:layout_constraintStart_toStartOf="@+id/label_delivery_charge"
-            android:text="@{cart.delivery_charge > 0? `Add more Rs. `+(cart.min_delivery-cart.total_price)+` to get free delivery `:``}"
+            android:text="@{cart.delivery_charge > 0? String.format(`Add more Rs. %.2f`,cart.min_delivery-cart.total_price)+` to get free delivery `:``}"
             android:textColor="@color/yellow"
             android:textSize="@dimen/font_12x"
             android:visibility="@{cart.delivery_charge > 0? View.VISIBLE : View.GONE}"/>
@@ -178,7 +179,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/label_delivery_charge"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{cart.delivery_charge == 0? `Free`:`₹`+String.valueOf(cart.delivery_charge)}"
+            android:text="@{cart.delivery_charge == 0? `Free`:`₹`+String.format(`%.2f`,cart.delivery_charge)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
             tools:text="$ 10"
@@ -201,7 +202,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/label_total_amount"
             app:layout_constraintStart_toStartOf="@+id/label_total_amount"
-            android:text="@{`You have saved Rs. `+cart.discount_price }"
+            android:text="@{String.format(`You have saved Rs. %.2f`,cart.discount_price) }"
             android:textColor="@color/teal_700"
             android:textSize="@dimen/font_12x"
             android:visibility="@{cart.discount_price > 0? View.VISIBLE : View.GONE}"/>
@@ -210,7 +211,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/label_total_amount"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{`₹`+String.valueOf(cart.total_price +cart.delivery_charge)}"
+            android:text="@{`₹`+String.format(`%.2f`,cart.total_price +cart.delivery_charge)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_16x"
             tools:text="$ 10"

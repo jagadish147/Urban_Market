@@ -1,6 +1,7 @@
 package com.jagadish.freshmart.view.products.adapter
 
 import android.graphics.Paint
+import android.opengl.Visibility
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,6 +12,8 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.databinding.ViewProductItemBinding
+import com.jagadish.freshmart.utils.toGone
+import com.jagadish.freshmart.utils.toVisible
 import com.squareup.picasso.Picasso
 
 /**
@@ -49,13 +52,26 @@ class ProductsViewHolder(private val itemBinding: ViewProductItemBinding) : Recy
             itemBinding.quantityLayout.visibility = View.VISIBLE
             itemBinding.addBtn.visibility = View.GONE
             recyclerItemListener.onItemAddCart(recipesItem)}
-        itemBinding.quantityAddBtn.setOnClickListener { recyclerItemListener.onItemQuantityIncrease(
-            recipesItem
-        ) }
-        itemBinding.quantityMinusBtn.setOnClickListener { recyclerItemListener.onItemQuantityDecrease(
-            recipesItem
-        ) }
+        itemBinding.quantityAddBtn.setOnClickListener {
+            if(!recipesItem.isLoad) {
+                recyclerItemListener.onItemQuantityIncrease(
+                    recipesItem
+                )
+            }
+        }
+        itemBinding.quantityMinusBtn.setOnClickListener {
+            if(!recipesItem.isLoad) {
+                recyclerItemListener.onItemQuantityDecrease(
+                    recipesItem
+                )}}
         itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }
+        if(recipesItem.isLoad){
+            itemBinding.quantityTxt.toGone()
+            itemBinding.quantityProgress.toVisible()
+        }else{
+            itemBinding.quantityTxt.toVisible()
+            itemBinding.quantityProgress.toGone()
+        }
     }
 }
 

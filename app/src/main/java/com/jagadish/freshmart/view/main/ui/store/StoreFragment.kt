@@ -303,4 +303,9 @@ class StoreFragment : BaseFragment() {
 //                } }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).updateCart()
+    }
 }

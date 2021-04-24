@@ -33,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * A simple [Fragment] subclass as the defaultAddress destination in the navigation.
  */
 @AndroidEntryPoint
-class AddressListFragment : BaseFragment() {
+class  AddressListFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddressListBinding
     private val addessViewModel: AdressViewModel by viewModels()
@@ -55,6 +55,10 @@ class AddressListFragment : BaseFragment() {
         binding.addressRecyclerView.setHasFixedSize(true)
         addessViewModel.fetchAddress()
         binding.addNewAddress.setOnClickListener {
+            val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(AddAddressReq())
+            findNavController().navigate(bundle)
+        }
+        binding.addAddress.setOnClickListener {
             val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(AddAddressReq())
             findNavController().navigate(bundle)
         }
@@ -106,10 +110,10 @@ class AddressListFragment : BaseFragment() {
             showDataView(true)
         } else {
             showDataView(false)
-            val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(
-                AddAddressReq()
-            )
-            findNavController().navigate(bundle)
+//            val bundle = AddressListFragmentDirections.actionNavigationAddressListToNavigationAddressAdd(
+//                AddAddressReq()
+//            )
+//            findNavController().navigate(bundle)
         }
     }
 
@@ -136,7 +140,9 @@ class AddressListFragment : BaseFragment() {
 
     private fun showDataView(show: Boolean) {
         binding.tvNoData.visibility = if (show) View.GONE else View.VISIBLE
+        binding.addAddress.visibility = if (show) View.GONE else View.VISIBLE
         binding.addressRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
+        binding.addNewAddress.visibility = if (show) View.VISIBLE else View.GONE
         binding.pbLoading.toGone()
     }
 

@@ -19,9 +19,11 @@ data class OrderItems(
     val number : String = "",
     @Json(name = "price")
     val price : String = "",
-    @Json(name = "item_count")
-    val item_count : Int = 0,
     @Json(name = "status")
     val status : String = "",
+    @Json(name = "delivery_charge")
+    val delivery_charge : Double = 0.0,
+    @Json(name = "items_count")
+    val item_count : Int = 0,
 
 ): Parcelable

@@ -11,7 +11,6 @@ import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.cart.CreateCareReq
 import com.jagadish.freshmart.data.dto.cart.CreateCartRes
-import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource

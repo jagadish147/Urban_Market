@@ -23,8 +23,7 @@
             android:id="@+id/product_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@color/white"
-            android:scaleType="fitXY"/>
+            app:srcCompat="@color/white"/>
     </androidx.cardview.widget.CardView>
 
 
@@ -51,7 +50,8 @@
         android:layout_marginEnd="@dimen/space_10x"
         app:layout_constraintTop_toBottomOf="@+id/product_name"
         app:layout_constraintStart_toStartOf="@+id/product_name"
-        android:layout_marginTop="@dimen/space_5x"/>
+        android:layout_marginTop="@dimen/space_5x"
+        tools:text="$ 200 " />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_price"
@@ -63,8 +63,8 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:layout_marginStart="@dimen/space_16x"
-        app:layout_constraintTop_toTopOf="@+id/unit"
-        app:layout_constraintStart_toEndOf="@+id/unit"
+        app:layout_constraintTop_toBottomOf="@+id/unit"
+        app:layout_constraintStart_toStartOf="@+id/unit"
         tools:text="$ 200 " />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -73,7 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_16x"
         app:layout_constraintTop_toTopOf="@+id/product_price"
-        app:layout_constraintStart_toEndOf="@+id/product_price"/>
+        app:layout_constraintStart_toEndOf="@+id/product_price"
+        tools:text="$ 200 " />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -83,7 +84,7 @@
         app:layout_constraintStart_toStartOf="@+id/unit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/unit"
-        android:textColor="@color/grey"
+        android:textColor="@color/light_gray"
         android:maxLines="2"
         android:ellipsize="end"
         android:layout_marginTop="@dimen/space_5x"
@@ -104,7 +105,7 @@
         android:layout_marginTop="@dimen/space_5x"
         android:layout_marginEnd="@dimen/space_16x"
         android:padding="@dimen/space_5x"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/quantity_layout"
         android:layout_width="wrap_content"
@@ -114,13 +115,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="@dimen/space_10x"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/quantity_minus_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_minus"/>
+        <ProgressBar
+            android:id="@+id/quantity_progress"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:text="1"
+            android:textSize="@dimen/font_18x"
+            android:textColor="@color/black"
+            android:layout_marginStart="@dimen/space_10x"
+            android:layout_marginEnd="@dimen/space_10x"
+            android:visibility="gone"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/quantity_txt"
             android:layout_width="wrap_content"
@@ -129,7 +140,8 @@
             android:textSize="@dimen/font_18x"
             android:textColor="@color/black"
             android:layout_marginStart="@dimen/space_16x"
-            android:layout_marginEnd="@dimen/space_16x"/>
+            android:layout_marginEnd="@dimen/space_16x"
+            android:visibility="visible"/>
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/quantity_add_btn"
             android:layout_width="wrap_content"

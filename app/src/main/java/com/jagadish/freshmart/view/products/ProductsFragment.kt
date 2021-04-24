@@ -71,6 +71,7 @@ class ProductsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.viewCartLayout.toGone()
         val category = requireActivity().intent.getParcelableExtra<ShopItem>(CATEGORY_KEY)
         recipesListViewModel.getRecipes(category!!.id)
     }
@@ -110,6 +111,8 @@ class ProductsFragment : BaseFragment() {
                 binding.viewCartLayout.toVisible()
                 binding.priceDetails = AddItemRes(true,"",Singleton.getInstance().cart.products.size,0.0,recipes.products)
 //                recipesListViewModel.checkCartItems(AddItemRes(true,"",Singleton.getInstance().cart.count,Singleton.getInstance().cart.total_price,ArrayList()))
+            }else{
+                binding.viewCartLayout.toGone()
             }
 
             recipesAdapter = ProductsAdapter(recipesListViewModel, recipes.products)
@@ -180,18 +183,16 @@ class ProductsFragment : BaseFragment() {
             if(navigateEvent.peekContent().count>0) {
                 binding.viewCartLayout.toVisible()
                 binding.priceDetails = navigateEvent.peekContent()
+            }else{
+                binding.viewCartLayout.toGone()
+                binding.priceDetails = navigateEvent.peekContent()
             }
         }
     }
 
     private fun removeCarItemSuccess(productsItem: SingleEvent<ProductsItem>) {
-
-//        recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem)].quantity--
-//        if(recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem)].quantity == 0){
-//            onItemRemoveCart(productsItem)
-//        }
-//        recipesAdapter.notifyItemChanged(recipesAdapter.getItems().indexOf(productsItem))
-
+        recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem.peekContent())].isLoad = false
+        recipesAdapter.notifyItemChanged(recipesAdapter.getItems().indexOf(productsItem.peekContent()))
 
     }
 }

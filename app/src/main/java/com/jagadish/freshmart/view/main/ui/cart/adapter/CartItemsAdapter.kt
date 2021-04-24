@@ -4,22 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
-import com.jagadish.freshmart.base.listeners.RecyclerItemListener
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.products.ProductsItem
-import com.jagadish.freshmart.data.dto.shop.ShopItem
-import com.jagadish.freshmart.databinding.ShopItemBinding
 import com.jagadish.freshmart.databinding.ViewProductItemBinding
 import com.jagadish.freshmart.view.main.ui.cart.CartViewModel
-import com.jagadish.freshmart.view.main.ui.store.StoreViewModel
-import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
 
 /**
  * Created by AhmedEltaher
  */
 
-class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private val recipes: ArrayList<ProductsItem>) : RecyclerView.Adapter<CartItemsViewHolder>() {
+class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private var recipes: ArrayList<ProductsItem>) : RecyclerView.Adapter<CartItemsViewHolder>() {
 
     private val onItemClickListener: ProductsRecyclerItemListener = object : ProductsRecyclerItemListener {
 
@@ -29,9 +24,11 @@ class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private 
 
         override fun onItemAddCart(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].isAddCart = true
-          recipes[recipes.indexOf(productsItem)].quantity = 1
-            notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.addCartItem(
+            recipes[recipes.indexOf(productsItem)].quantity = 1
+            recipes[recipes.indexOf(productsItem)].isLoad = true
+//            notifyItemChanged(recipes.indexOf(productsItem))
+            recipesListViewModel.checkCartItemsSze(recipes.size)
+            recipesListViewModel.addCartItem(productsItem,
                 AddItemReq(
                     SharedPreferencesUtils.getIntPreference(
                         SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id)
@@ -41,16 +38,20 @@ class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private 
         override fun onItemRemoveCart(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].isAddCart = false
             recipes[recipes.indexOf(productsItem)].quantity = 0
-
-            recipes.remove(productsItem)
-            notifyDataSetChanged()
-            recipesListViewModel.removeCartItem(AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
+            recipes[recipes.indexOf(productsItem)].isLoad = true
+//            recipes.remove(productsItem)
+//            notifyDataSetChanged()
+            recipesListViewModel.checkCartItemsSze(recipes.size)
+            recipesListViewModel.removeCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityIncrease(productsItem: ProductsItem) {
             recipes[recipes.indexOf(productsItem)].quantity++
-            notifyItemChanged(recipes.indexOf(productsItem))
-            recipesListViewModel.addCartItem(
+            recipes[recipes.indexOf(productsItem)].isLoad = true
+//            notifyItemChanged(recipes.indexOf(productsItem))
+//            notifyItemChanged(recipes.indexOf(productsItem))
+            recipesListViewModel.checkCartItemsSze(recipes.size)
+            recipesListViewModel.addCartItem(productsItem,
                 AddItemReq(
                     SharedPreferencesUtils.getIntPreference(
                         SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id)
@@ -60,18 +61,20 @@ class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private 
         override fun onItemQuantityDecrease(productsItem: ProductsItem) {
             if (recipes[recipes.indexOf(productsItem)].quantity > 0) {
                 recipes[recipes.indexOf(productsItem)].quantity--
-                if (recipes[recipes.indexOf(productsItem)].quantity == 0) {
-                    onItemRemoveCart(productsItem)
-                }else{
-                    recipesListViewModel.removeCartItem(
+                recipesListViewModel.checkCartItemsSze(recipes.size)
+//                if (recipes[recipes.indexOf(productsItem)].quantity == 0) {
+//                    onItemRemoveCart(productsItem)
+//                }else{
+                    recipes[recipes.indexOf(productsItem)].isLoad = true
+                    recipesListViewModel.removeCartItem(productsItem,
                         AddItemReq(
                             SharedPreferencesUtils.getIntPreference(
                                 SharedPreferencesUtils.PREF_DEVICE_CART_ID
                             ), productsItem.id
                         )
                     )
-                }
-                notifyItemChanged(recipes.indexOf(productsItem))
+//                }
+//                notifyItemChanged(recipes.indexOf(productsItem))
             }
         }
     }
@@ -90,8 +93,17 @@ class CartItemsAdapter(private val recipesListViewModel: CartViewModel, private 
         return recipes.size
     }
 
-    fun getSelectedItems() : List<ProductsItem>{
+    fun getItems() : ArrayList<ProductsItem>{
         return recipes
+    }
+
+    fun updateItems(newItems : ArrayList<ProductsItem>){
+        recipes = newItems
+        notifyDataSetChanged()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
     }
 }
 

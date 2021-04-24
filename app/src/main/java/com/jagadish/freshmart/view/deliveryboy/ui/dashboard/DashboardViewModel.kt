@@ -9,17 +9,9 @@ import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
-import com.jagadish.freshmart.data.dto.address.AddressRes
-import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
-import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.ScheduleOrders
-import com.jagadish.freshmart.data.dto.order.OrderReq
-import com.jagadish.freshmart.data.dto.order.OrderRes
-import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
-import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
-import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel

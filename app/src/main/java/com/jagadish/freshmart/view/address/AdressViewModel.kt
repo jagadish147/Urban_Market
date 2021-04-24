@@ -102,6 +102,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                     addressReq
                 ).collect {
                     showToastPrivate.value = SingleEvent(it.data!!.message)
+                    fetchAddress()
                 }
             }
         }

@@ -12,6 +12,7 @@ import com.jagadish.freshmart.*
 import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.databinding.ActivityOrderPlaceBinding
@@ -94,6 +95,7 @@ class OrderPlaceActivity : BaseActivity() {
 
     private fun bindPaymentStatus(paymentStatusRes: PaymentStatusRes){
         if(paymentStatusRes.success && paymentStatusRes.status == 200){
+            Singleton.getInstance().cart = Cart()
             val nextScreenIntent = Intent(this, OrderStatusActivity::class.java).apply {
                 putExtra(ORDER_DETAILS, binding.orderDetails)
                 putExtra(PAYMENT_STATUS, paymentStatus)

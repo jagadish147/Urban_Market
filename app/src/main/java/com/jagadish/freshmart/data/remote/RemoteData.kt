@@ -4,7 +4,6 @@ import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddAddressRes
 import com.jagadish.freshmart.data.dto.address.AddressRes
-import com.jagadish.freshmart.data.dto.address.GetAddressReq
 import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
@@ -16,7 +15,6 @@ import com.jagadish.freshmart.data.dto.login.RequestOtpRes
 import com.jagadish.freshmart.data.dto.order.*
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.shop.Shop
-import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.data.error.NETWORK_ERROR
 import com.jagadish.freshmart.data.error.NO_INTERNET_CONNECTION
 import com.jagadish.freshmart.data.remote.service.RecipesService
@@ -223,7 +221,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         addAddressReq: AddAddressReq
     ): Resource<AddAddressRes> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall({recipesService.requestRemoveAddress(customerId,addAddressReq)})) {
+        return when (val response = processCall({recipesService.requestRemoveAddress(addAddressReq)})) {
             is AddAddressRes -> {
                 Resource.Success(data = response )
             }

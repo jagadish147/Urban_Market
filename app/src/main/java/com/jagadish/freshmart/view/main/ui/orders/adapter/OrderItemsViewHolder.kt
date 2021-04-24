@@ -31,10 +31,13 @@ class OrderItemsViewHolder(private val itemBinding: ViewOrderItemBinding) : Recy
         itemBinding.orderNumber.text = "Order Number : "+recipesItem.number
         itemBinding.orderDate.text = "Order Date : "+recipesItem.order_date
         itemBinding.deliveryDate.text = "Delivery Date : "+recipesItem.delivery_date
-        itemBinding.price.text = "Rs : "+recipesItem.price
-        itemBinding.itemsCount.text = recipesItem.item_count.toString()+ "items"
+        itemBinding.price.text = "Rs : "+recipesItem.price+recipesItem.delivery_charge
+        itemBinding.itemsCount.text = recipesItem.item_count.toString()+ " items"
         when(recipesItem.status){
             "Accepted"->{
+                itemBinding.orderStatus.setTextColor(ContextCompat.getColor(itemBinding.root.context,R.color.teal_700))
+            }
+            "Finished"->{
                 itemBinding.orderStatus.setTextColor(ContextCompat.getColor(itemBinding.root.context,R.color.teal_700))
             }
             "Cancelled"->{
@@ -43,6 +46,15 @@ class OrderItemsViewHolder(private val itemBinding: ViewOrderItemBinding) : Recy
             "Rejected"->{
                 itemBinding.orderStatus.setTextColor(ContextCompat.getColor(itemBinding.root.context,R.color.red))
             }
+            "New"->{
+                itemBinding.orderStatus.setTextColor(ContextCompat.getColor(itemBinding.root.context,R.color.yellow))
+            }
+            "Scheduled"->{
+                itemBinding.orderStatus.setTextColor(ContextCompat.getColor(itemBinding.root.context,R.color.yellow))
+            }
+        }
+        if(recipesItem.status.isNotEmpty()){
+            itemBinding.orderStatus.text = recipesItem.status
         }
 
 //        itemView.setOnClickListener {

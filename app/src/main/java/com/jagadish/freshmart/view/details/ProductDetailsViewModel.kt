@@ -3,7 +3,6 @@ package com.jagadish.freshmart.view.details
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
@@ -12,8 +11,6 @@ import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
-import com.jagadish.freshmart.data.dto.shop.Shop
-import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.Singleton
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
@@ -96,8 +93,14 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
             for((index, value) in Singleton.getInstance().cart.products.withIndex()){
                 if(value.id == productsItem.id){
                     isExistingProduct = true
-                    Singleton.getInstance().cart.products[index].quantity = productsItem.quantity
-                    Singleton.getInstance().cart.total_price = recipe.total_price
+                    if(productsItem.quantity >=1) {
+                        Singleton.getInstance().cart.products[index].quantity =
+                            productsItem.quantity
+                        Singleton.getInstance().cart.total_price = recipe.total_price
+                    }else{
+                        Singleton.getInstance().cart.products.removeAt(index)
+                        Singleton.getInstance().cart.total_price = recipe.total_price
+                    }
                     break
                 }
             }

@@ -17,7 +17,7 @@ data class Cart (
     @Json(name = "message")
     val message: String = "",
     @Json(name = "items")
-    val products: MutableList<ProductsItem> = ArrayList(),
+    var products: MutableList<ProductsItem> = ArrayList(),
     @Json(name = "total")
     var order_price: Double = 0.0,
     @Json(name = "delivery_charge")

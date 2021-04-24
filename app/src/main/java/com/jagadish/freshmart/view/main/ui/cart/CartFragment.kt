@@ -5,13 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.atom.mpsdklibrary.PayActivity
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.*
 import com.jagadish.freshmart.base.BaseFragment
@@ -22,7 +21,6 @@ import com.jagadish.freshmart.data.dto.address.AddressRes
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.order.OrderRes
-import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
@@ -38,7 +36,6 @@ import com.jagadish.freshmart.view.payment.PaymentDetailsModel
 import com.jagadish.freshmart.view.payment.status.OrderStatusActivity
 import dagger.hilt.android.AndroidEntryPoint
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
 
 @AndroidEntryPoint
 class CartFragment : BaseFragment() {
@@ -78,6 +75,8 @@ class CartFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.cartItemsRecyclerView.layoutManager = layoutManager
         binding.cartItemsRecyclerView.setHasFixedSize(true)
+        (binding.cartItemsRecyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
+
         val itemDecor = DividerItemDecoration(context, LinearLayout.VERTICAL)
         binding.cartItemsRecyclerView.addItemDecoration(itemDecor)
         recipesListViewModel.getRecipes()
@@ -108,7 +107,7 @@ class CartFragment : BaseFragment() {
             if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
                 val nextScreenIntent =
                     Intent(requireActivity(), AddressActivity::class.java).apply {
-//                putExtra(CATEGORY_KEY, it)
+                        putExtra(IS_COME_CHANGE_ADDRESS, true)
                     }
                 startActivityForResult(nextScreenIntent, 202)
             }else{
@@ -133,6 +132,8 @@ class CartFragment : BaseFragment() {
         observe(recipesListViewModel.addressLiveData, ::handleAddressList)
         observe(recipesListViewModel.orderIdLiveData, ::handleOrderId)
         observe(recipesListViewModel.paymentStatusLiveData, ::handlePaymentStatus)
+        observe(recipesListViewModel.updatePaymentViewItem, ::updatePaymentViewSuccess)
+        observe(recipesListViewModel.removeCartItem, ::removeCarItemSuccess)
     }
 
 
@@ -189,7 +190,7 @@ class CartFragment : BaseFragment() {
     private fun showLoadingView() {
         binding.pbLoading.toVisible()
         binding.tvNoData.toGone()
-        binding.cartItemsRecyclerView.toGone()
+//        binding.cartItemsRecyclerView.toGone()
     }
 
 
@@ -222,10 +223,23 @@ class CartFragment : BaseFragment() {
                 cart!!.order_price = it.total_price
                 cart!!.total_price = it.total_price
                 cart!!.count = it.count
+                cart!!.products = it.items
                 cart!!.delivery_charge = it.delivery_charge
-                cart!!.discount_price = cart.discount_price
+                cart!!.discount_price = it.discount_price
 
-                binding.cart = Cart(it.success,it.message,it.items,it.total_price,it.delivery_charge,it.count,cart.min_delivery,cart.discount_price)
+                binding.cart = Cart(
+                    it.success,
+                    it.message,
+                    it.items,
+                    it.total_price,
+                    it.delivery_charge,
+                    it.count,
+                    cart.min_delivery,
+                    it.discount_price
+                )
+                recipesAdapter.updateItems(ArrayList(it.items)) // = CartItemsAdapter(recipesListViewModel, ArrayList(it.items))
+//                binding.cartItemsRecyclerView.adapter = recipesAdapter
+//                recipesAdapter.notifyDataSetChanged()
                 Singleton.getInstance().cart = cart
                 (activity as MainActivity).updateCart()
                 binding.orderInfoLayout.toVisible()
@@ -240,6 +254,11 @@ class CartFragment : BaseFragment() {
         }
     }
 
+    private fun updateCartView(productItem: SingleEvent<ProductsItem>) {
+        recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productItem.peekContent())].price = productItem.peekContent().price
+        recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productItem.peekContent())].discount_price = productItem.peekContent().discount_price
+        recipesAdapter.notifyItemChanged(recipesAdapter.getItems().indexOf(productItem.peekContent()))
+    }
     private fun handleAddressList(status: Resource<AddressRes>) {
         when (status) {
             is Resource.Loading -> showLoadingView()
@@ -281,20 +300,23 @@ class CartFragment : BaseFragment() {
     }
 
     private fun bindOrderId(orderRes: OrderRes){
+        binding.pbLoading.toGone()
+        val totalPrice= (binding.cart!!.total_price+binding.cart!!.delivery_charge)
         val nextScreenIntent =
             Intent(requireActivity(), OrderPlaceActivity::class.java).apply {
                 putExtra(
                     PAYMENT_DETAILS, PaymentDetailsModel(
-                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_NAME),
-                    SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
-                    binding.cart!!.count,
-                    binding.address!!,
-                    binding.cart!!.total_price,
-                    0.0,
-                    binding.cart!!.delivery_charge,
-                    binding.cart!!.total_price,
+                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_NAME),
+                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
+                        binding.cart!!.count,
+                        binding.address!!,
+                        binding.cart!!.total_price,
+                        binding.cart!!.discount_price,
+                        binding.cart!!.delivery_charge,
+                        (binding.cart!!.total_price+binding.cart!!.delivery_charge),
                         orderRes,
-                ))
+                    )
+                )
             }
         startActivity(nextScreenIntent)
     }
@@ -320,14 +342,44 @@ class CartFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 202 && resultCode == Activity.RESULT_OK) {
             if(data?.getBooleanExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS, false)!!){
-                val addressReq = data.getParcelableExtra<AddAddressReq>(
-                    RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
-                )
-                binding.addAddressBtn.text = "Change Address"
-                binding.defaultAddress.text = addressReq!!.address_line1 +","+ addressReq.address_line2 +","+addressReq.city
-                binding.defaultAddress.visibility = View.VISIBLE
-                binding.address = addressReq
+                if(SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN))
+                    recipesListViewModel.fetchAddress()
+//                val addressReq = data.getParcelableExtra<AddAddressReq>(
+//                    RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
+//                )
+//                binding.addAddressBtn.text = "Change Address"
+//                binding.defaultAddress.text = addressReq!!.address_line1 +","+ addressReq.address_line2 +","+addressReq.city
+//                binding.defaultAddress.visibility = View.VISIBLE
+//                binding.address = addressReq
             }
+        }
+    }
+
+    private fun updatePaymentViewSuccess(productsItem: SingleEvent<Int>) {
+        if(productsItem.peekContent() == 0){
+            binding.orderInfoLayout.toGone()
+            showDataView(false)
+            Singleton.getInstance().cart = Cart()
+            (activity as MainActivity).updateCart()
+        }else{
+
+        }
+    }
+
+    private fun removeCarItemSuccess(productsItem: SingleEvent<ProductsItem>) {
+        if (recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem.peekContent())].quantity == 0) {
+            recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem.peekContent())].isAddCart = false
+            recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem.peekContent())].quantity = 0
+            recipesAdapter.getItems()[recipesAdapter.getItems().indexOf(productsItem.peekContent())].isLoad = true
+            recipesAdapter.getItems().remove(productsItem.peekContent())
+            recipesAdapter.notifyDataSetChanged()
+            recipesListViewModel.checkCartItemsSze(recipesAdapter.getItems().size)
+        }else {
+            recipesAdapter.getItems()[recipesAdapter.getItems()
+                .indexOf(productsItem.peekContent())].isLoad = false
+            recipesAdapter.notifyItemChanged(
+                recipesAdapter.getItems().indexOf(productsItem.peekContent())
+            )
         }
     }
 }

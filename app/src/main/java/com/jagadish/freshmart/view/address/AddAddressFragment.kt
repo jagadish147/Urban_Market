@@ -1,30 +1,29 @@
 package com.jagadish.freshmart.view.address
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.jagadish.freshmart.IS_COME_CHANGE_ADDRESS
 import com.jagadish.freshmart.R
+import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS
+import com.jagadish.freshmart.RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddAddressRes
-import com.jagadish.freshmart.data.dto.login.RequestOtpRes
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentAddAddressBinding
-import com.jagadish.freshmart.databinding.FragmentAddressListBinding
 import com.jagadish.freshmart.utils.*
-import com.jagadish.freshmart.view.login.ui.details.LoginDetailsFragmentArgs
-import com.jagadish.freshmart.view.login.ui.login.LoginFragmentDirections
-import com.jagadish.freshmart.view.login.ui.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -136,20 +135,46 @@ class AddAddressFragment : BaseFragment() {
     }
 
     private fun navigateHome(res: AddAddressRes){
-        findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+        if(requireActivity().intent?.getBooleanExtra(IS_COME_CHANGE_ADDRESS,false) == true){
+            if(binding.defaultCheckBox.isChecked) {
+                val data = Intent().apply {
+                    putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS, true)
+                    putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA, res)
+                }
+                requireActivity().setResult(Activity.RESULT_OK, data)
+                requireActivity().finish()
+            }else {
+                findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+            }
+        }else {
+            findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+        }
     }
 
     private fun handleUpdateAddress(status: Resource<AddAddressRes>){
         when (status){
             is Resource.Loading -> showLoadingView()
-            is Resource.Success -> status.data?.let { updateAddressSuccess() }
+            is Resource.Success -> status.data?.let { updateAddressSuccess(status.data) }
             is Resource.DataError -> {
                 status.errorCode?.let { loginViewModel.showToastMessage(it) }
             }
         }
     }
 
-    private fun updateAddressSuccess(){
-        findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+    private fun updateAddressSuccess(res: AddAddressRes) {
+        if(requireActivity().intent?.getBooleanExtra(IS_COME_CHANGE_ADDRESS,false) == true){
+            if(binding.defaultCheckBox.isChecked) {
+            val data = Intent().apply {
+                putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS, true)
+                putExtra(RESULT_ACTIVITY_DEFAULT_ADDRESS_DATA,res)
+            }
+            requireActivity().setResult(Activity.RESULT_OK, data)
+            requireActivity(). finish()
+            }else {
+                findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+            }
+        }else {
+            findNavController().navigate(R.id.action_navigation_address_add_to_navigation_address_list)
+        }
     }
 }

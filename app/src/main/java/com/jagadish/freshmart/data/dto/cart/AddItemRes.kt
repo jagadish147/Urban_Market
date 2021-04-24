@@ -21,4 +21,6 @@ data class AddItemRes(
     val items : MutableList<ProductsItem>  = ArrayList(),
     @Json(name = "delivery_charge")
     val delivery_charge : Double = 0.0,
+    @Json(name = "discount_price")
+    val discount_price : Double = 0.0,
 ): Parcelable

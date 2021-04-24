@@ -3,7 +3,6 @@ package com.jagadish.freshmart.view.main.ui.cart
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
@@ -19,7 +18,6 @@ import com.jagadish.freshmart.data.dto.order.OrderReq
 import com.jagadish.freshmart.data.dto.order.OrderRes
 import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
-import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
@@ -95,29 +93,37 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
-    fun checkCartItems(recipe: AddItemRes){
+    fun checkCartItems(recipe: AddItemRes, productsItem: ProductsItem){
         checkItemsInCartPrivate.value = SingleEvent(recipe)
     }
 
-    fun addCartItem(categoryId: AddItemReq) {
+    fun checkCartItemsSze(size: Int) {
+        updatePaymentViewPrivate.value = SingleEvent(size)
+    }
+    fun addCartItem(productsItem: ProductsItem,categoryId: AddItemReq) {
         viewModelScope.launch {
 //            recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 dataRepositoryRepository.requestAddItem(categoryId).collect {
+                    removeCartItemPrivate.value = SingleEvent(productsItem)
                     showToastPrivate.value = SingleEvent(it.data!!.message)
-                    checkCartItems(it.data)
+                    checkCartItems(it.data,productsItem)
                 }
             }
         }
     }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val updatePaymentViewPrivate = MutableLiveData<SingleEvent<Int>>()
+    val updatePaymentViewItem: LiveData<SingleEvent<Int>> get() = updatePaymentViewPrivate
 
-    fun removeCartItem(categoryId: AddItemReq) {
+    fun removeCartItem(productsItem: ProductsItem,categoryId: AddItemReq) {
         viewModelScope.launch {
 //            recipesLiveDataPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 dataRepositoryRepository.requestRemoveItem(categoryId).collect {
+                    removeCartItemPrivate.value = SingleEvent(productsItem)
                     showToastPrivate.value = SingleEvent(it.data!!.message)
-                    checkCartItems(it.data)
+                    checkCartItems(it.data, productsItem)
                 }
             }
         }
@@ -192,5 +198,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
             }
         }
     }
-
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val removeCartItemPrivate = MutableLiveData<SingleEvent<ProductsItem>>()
+    val removeCartItem: LiveData<SingleEvent<ProductsItem>> get() = removeCartItemPrivate
 }

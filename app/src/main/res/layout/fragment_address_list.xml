@@ -20,7 +20,8 @@
         android:layout_marginTop="@dimen/space_10x"
         android:textSize="@dimen/font_16x"
         android:textColor="@color/main_color"
-        android:layout_marginEnd="@dimen/space_10x"/>
+        android:layout_marginEnd="@dimen/space_10x"
+        android:visibility="gone"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/address_recycler_view"
         android:layout_width="match_parent"
@@ -35,16 +36,31 @@
         android:id="@+id/tv_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data"
+        android:text="No Address Found "
         android:textColor="@android:color/holo_red_dark"
         android:textSize="@dimen/font_32x"
-        android:textStyle="italic|bold"
+        android:textStyle="italic"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/add_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Address"
+        app:layout_constraintTop_toBottomOf="@+id/tv_no_data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/space_10x"
+        android:textSize="@dimen/font_24x"
+        android:textColor="@color/main_color"
+        android:layout_marginEnd="@dimen/space_10x"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:background="@drawable/bg_rect_shape_pink"/>
     <ProgressBar
         android:id="@+id/pb_loading"
         style="?android:attr/progressBarStyleLarge"

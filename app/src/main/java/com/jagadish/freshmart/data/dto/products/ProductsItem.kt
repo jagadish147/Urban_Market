@@ -17,9 +17,9 @@ data class ProductsItem (
     @Json(name = "name")
     val name: String = "",
     @Json(name = "price")
-    val price : Double = 0.00,
+    var price : Double = 0.00,
     @Json(name = "discount_price")
-    val discount_price : Double = 0.00,
+    var discount_price : Double = 0.00,
     @Json(name = "quantity")
     var quantity : Int = 0,
     @Json(name ="unit")
@@ -29,4 +29,5 @@ data class ProductsItem (
     var isAddCart : Boolean = false,
     @Json(name = "image_url")
     val image_url : String = "",
+    var isLoad : Boolean = false,
 ): Parcelable

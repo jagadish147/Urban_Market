@@ -8,7 +8,6 @@ import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.cart.Cart
-import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
