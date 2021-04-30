@@ -45,7 +45,7 @@ android {
             dimension 'urban_market'
             applicationId 'com.urbanmarket'
             applicationIdSuffix 'user'
-            versionCode 5
+            versionCode 6
             versionName '1.2'
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
