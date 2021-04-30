@@ -45,8 +45,8 @@ android {
             dimension 'urban_market'
             applicationId 'com.urbanmarket'
             applicationIdSuffix 'user'
-            versionCode 3
-            versionName '1.0'
+            versionCode 5
+            versionName '1.2'
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
             buildConfigField 'String', "ApiKey", '"AIzaSyDM9EDhGjnyH7-FIbgQtzCI8mWa3ZA7kf4"'
@@ -56,8 +56,8 @@ android {
             dimension 'urban_market'
             applicationId 'com.urbanmarket'
             applicationIdSuffix 'delivery'
-            versionCode 2
-            versionName '1.0'
+            versionCode 3
+            versionName '1.1'
             targetSdkVersion 30
             buildConfigField "String", "BASE_URL", '"https://urbanmarket.co.in/api/v1/"'
             buildConfigField 'String', "ApiKey", '"AIzaSyDM9EDhGjnyH7-FIbgQtzCI8mWa3ZA7kf4"'

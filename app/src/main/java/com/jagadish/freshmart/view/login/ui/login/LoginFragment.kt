@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
@@ -142,10 +143,13 @@ class LoginFragment : BaseFragment() {
 //                startActivity(Intent(applicationContext, MainActivity::class.java))
 //                finish()
                 Log.d("GFG" , "onVerificationCompleted Success")
+                Toast.makeText(requireContext(), "onVerificationCompleted Success", Toast.LENGTH_LONG).show()
             }
 
             // Called when verification is failed add log statement to see the exception
             override fun onVerificationFailed(e: FirebaseException) {
+                hideLoadingView()
+                Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                 Log.d("GFG" , "onVerificationFailed  $e")
                 if (e is FirebaseAuthInvalidCredentialsException) {
                     // Invalid request

@@ -24,6 +24,7 @@ class ProductsListActivity : BaseActivity() {
         supportActionBar!!.title = shopItem!!.name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.elevation = 0.0F
     }
 
     override fun onSupportNavigateUp(): Boolean {

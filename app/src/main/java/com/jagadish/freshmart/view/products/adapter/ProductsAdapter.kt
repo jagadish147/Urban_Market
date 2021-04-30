@@ -20,6 +20,7 @@ import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
 
 class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewModel, private val recipes: MutableList<ProductsItem>) : RecyclerView.Adapter<ProductsViewHolder>() {
 
+    private var filterProducts  = recipes
     private val onItemClickListener: ProductsRecyclerItemListener = object : ProductsRecyclerItemListener {
 
         override fun onItemSelected(recipe: ProductsItem) {
@@ -27,34 +28,34 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
         }
 
         override fun onItemAddCart(productsItem: ProductsItem) {
-            recipes[recipes.indexOf(productsItem)].isAddCart = true
-            recipes[recipes.indexOf(productsItem)].quantity = 1
-            recipes[recipes.indexOf(productsItem)].isLoad = true
-            notifyItemChanged(recipes.indexOf(productsItem))
+            filterProducts[filterProducts.indexOf(productsItem)].isAddCart = true
+            filterProducts[filterProducts.indexOf(productsItem)].quantity = 1
+            filterProducts[filterProducts.indexOf(productsItem)].isLoad = true
+            notifyItemChanged(filterProducts.indexOf(productsItem))
             recipesListViewModel.addCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemRemoveCart(productsItem: ProductsItem) {
-            recipes[recipes.indexOf(productsItem)].isAddCart = false
-            recipes[recipes.indexOf(productsItem)].quantity = 0
-            recipes[recipes.indexOf(productsItem)].isLoad = true
+            filterProducts[filterProducts.indexOf(productsItem)].isAddCart = false
+            filterProducts[filterProducts.indexOf(productsItem)].quantity = 0
+            filterProducts[filterProducts.indexOf(productsItem)].isLoad = true
 //            recipes.remove(productsItem)
-            notifyItemChanged(recipes.indexOf(productsItem))
+            notifyItemChanged(filterProducts.indexOf(productsItem))
             recipesListViewModel.removeCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityIncrease(productsItem: ProductsItem) {
-            recipes[recipes.indexOf(productsItem)].quantity++
-            recipes[recipes.indexOf(productsItem)].isLoad = true
-            notifyItemChanged(recipes.indexOf(productsItem))
+            filterProducts[filterProducts.indexOf(productsItem)].quantity++
+            filterProducts[filterProducts.indexOf(productsItem)].isLoad = true
+            notifyItemChanged(filterProducts.indexOf(productsItem))
             recipesListViewModel.addCartItem(productsItem,AddItemReq(SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),productsItem.id))
         }
 
         override fun onItemQuantityDecrease(productsItem: ProductsItem) {
-            if (recipes[recipes.indexOf(productsItem)].quantity > 0) {
-                recipes[recipes.indexOf(productsItem)].quantity--
-                recipes[recipes.indexOf(productsItem)].isLoad = true
-                if (recipes[recipes.indexOf(productsItem)].quantity == 0) {
+            if (filterProducts[filterProducts.indexOf(productsItem)].quantity > 0) {
+                filterProducts[filterProducts.indexOf(productsItem)].quantity--
+                filterProducts[filterProducts.indexOf(productsItem)].isLoad = true
+                if (filterProducts[filterProducts.indexOf(productsItem)].quantity == 0) {
                     onItemRemoveCart(productsItem)
                 }else{
                     recipesListViewModel.removeCartItem(
@@ -65,7 +66,7 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
                         )
                     )
                 }
-                notifyItemChanged(recipes.indexOf(productsItem))
+                notifyItemChanged(filterProducts.indexOf(productsItem))
 
             }
         }
@@ -78,15 +79,25 @@ class ProductsAdapter(private val recipesListViewModel: ProductsFragmentViewMode
     }
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
-        holder.bind(recipes[position], onItemClickListener)
+        holder.bind(filterProducts[position], onItemClickListener)
     }
 
     override fun getItemCount(): Int {
-        return recipes.size
+        return filterProducts.size
     }
 
     fun getItems() : List<ProductsItem>{
-        return recipes
+        return filterProducts
+    }
+
+    fun setFitersItems(items : MutableList<ProductsItem>){
+        this.filterProducts = items
+        notifyDataSetChanged()
+    }
+
+    fun showAllItems(){
+        this.filterProducts = recipes
+        notifyDataSetChanged()
     }
 }
 

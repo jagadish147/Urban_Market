@@ -11,6 +11,7 @@ import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
+import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.utils.SingleEvent
 import com.jagadish.freshmart.utils.Singleton
 import com.jagadish.freshmart.utils.wrapEspressoIdlingResource
@@ -34,8 +35,8 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
 
     //TODO check to make them as one Resource
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val recipeSearchFoundPrivate: MutableLiveData<ProductsItem> = MutableLiveData()
-    val recipeSearchFound: LiveData<ProductsItem> get() = recipeSearchFoundPrivate
+    val recipeSearchFoundPrivate: MutableLiveData<MutableList<ProductsItem>> = MutableLiveData()
+    val recipeSearchFound: LiveData<MutableList<ProductsItem>> get() = recipeSearchFoundPrivate
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val noSearchFoundPrivate: MutableLiveData<Unit> = MutableLiveData()
@@ -145,5 +146,24 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         }
     }
 
+
+    fun searchProducts(searchQuarry : String){
+        var searchList = ArrayList<ProductsItem>()
+        if(searchQuarry.isNotEmpty()) {
+            if (recipesLiveData.value?.data?.products?.size!! > 0) {
+                for (item in recipesLiveData.value?.data?.products!!) {
+                    if (item.name.contains(searchQuarry)) {
+                        searchList.add(item)
+                    }
+                }
+                if(searchList.size > 0)
+                    recipeSearchFoundPrivate.value = searchList
+                else
+                    noSearchFoundPrivate.value = Unit
+            }
+        }else{
+            recipeSearchFoundPrivate.value = searchList
+        }
+    }
 
 }

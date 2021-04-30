@@ -53,11 +53,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "531893965512-b0fncf9eahk1i69jkdpjubllrq0j1l5i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urbanmarket.user",
+            "certificate_hash": "cd7748e5c721557bd151ec55e8825e296af84889"
+          }
+        },
+        {
           "client_id": "531893965512-qaufr2tfvp25gt7cat8isr84lqvqrn8m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.urbanmarket.user",
             "certificate_hash": "f1269e8254313c9c6f9d5c1238d2a82b62aa6df0"
+          }
+        },
+        {
+          "client_id": "531893965512-u1bgvvttst8vb6rqqrf11gne1i3i2qr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urbanmarket.user",
+            "certificate_hash": "33ff1e13a2fc1417a3f160dee734e4f6836a1d1e"
           }
         },
         {

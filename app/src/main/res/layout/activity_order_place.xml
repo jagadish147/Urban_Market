@@ -311,6 +311,30 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/estimated_time_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_16x"
+                    android:text="Estimated Delivery :"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/font_18x"
+                    android:textStyle="normal"
+                    app:layout_constraintTop_toBottomOf="@+id/price_details_layout" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/estimated_time_Value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_16x"
+                    android:text="Delivery will be done in 5-8 hours If confirmed before 7 pm.
+After 7 pm confirmed order will be delivered tomorrow before 12 pm."
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_18x"
+                    android:textStyle="normal"
+                    app:layout_constraintTop_toBottomOf="@+id/estimated_time_label" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/payment_mode_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -319,7 +343,7 @@
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/font_18x"
                     android:textStyle="normal"
-                    app:layout_constraintTop_toBottomOf="@+id/price_details_layout" />
+                    app:layout_constraintTop_toBottomOf="@+id/estimated_time_Value" />
 
                 <RadioGroup
                     android:id="@+id/payment_mode"

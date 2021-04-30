@@ -12,6 +12,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text=""
+        android:background="@color/main_color"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/font_16x"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/search_products"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Search"
+        android:paddingStart="@dimen/space_10x"
+        android:paddingEnd="@dimen/space_10x"
+        android:background="@drawable/bg_rect_shape"
+        android:layout_marginStart="@dimen/space_10x"
+        android:layout_marginEnd="@dimen/space_10x"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/space_5x"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recycler_view"
         android:layout_width="0dp"
@@ -19,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/view_cart_layout"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_layout"/>
 
     <FrameLayout
         android:id="@+id/pb_loading"

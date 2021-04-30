@@ -3,6 +3,8 @@ package com.jagadish.freshmart.view.products
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,6 +69,21 @@ class ProductsFragment : BaseFragment() {
         }
             requireActivity().setResult(RESULT_OK, data)
             requireActivity(). finish() }
+
+        binding.searchProducts.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                recipesListViewModel.searchProducts(s.toString())
+            }
+
+        })
     }
 
     override fun onResume() {
@@ -141,7 +158,8 @@ class ProductsFragment : BaseFragment() {
     }
 
     private fun showSearchError() {
-        recipesListViewModel.showToastMessage(SEARCH_ERROR)
+        showDataView(false)
+//        recipesListViewModel.showToastMessage(SEARCH_ERROR)
     }
 
     private fun showDataView(show: Boolean) {
@@ -157,9 +175,15 @@ class ProductsFragment : BaseFragment() {
     }
 
 
-    private fun showSearchResult(recipesItem: ProductsItem) {
-        recipesListViewModel.openRecipeDetails(recipesItem)
-        binding.pbLoading.toGone()
+    private fun showSearchResult(recipesItem: MutableList<ProductsItem>) {
+//        recipesListViewModel.openRecipeDetails(recipesItem)
+//        binding.pbLoading.toGone()
+        if(recipesItem.size >0) {
+            recipesAdapter.setFitersItems(recipesItem)
+        }else{
+            recipesAdapter.showAllItems()
+        }
+        showDataView(true)
     }
 
     private fun noSearchResult(unit: Unit) {
