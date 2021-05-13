@@ -19,6 +19,7 @@ public class SharedPreferencesUtils {
     public static final String PREF_APP_FCM_TOKEN = "app_fcm_token";
     public static final String PREF_DEVICE_CART = "device_cart";
     public static final String PREF_DEVICE_CART_ID= "device_cart_id";
+    public static final String PREF_DELIVERY_IMP_MESSAGE = "delivery_message";
 
     public SharedPreferencesUtils() {
     }

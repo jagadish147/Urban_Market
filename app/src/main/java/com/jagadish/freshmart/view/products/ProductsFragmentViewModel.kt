@@ -152,7 +152,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         if(searchQuarry.isNotEmpty()) {
             if (recipesLiveData.value?.data?.products?.size!! > 0) {
                 for (item in recipesLiveData.value?.data?.products!!) {
-                    if (item.name.contains(searchQuarry)) {
+                    if (item.name.toUpperCase().contains(searchQuarry.toUpperCase())) {
                         searchList.add(item)
                     }
                 }

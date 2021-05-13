@@ -329,8 +329,10 @@
                     android:text="Delivery will be done in 5-8 hours If confirmed before 7 pm.
 After 7 pm confirmed order will be delivered tomorrow before 12 pm."
                     android:textColor="@color/black"
-                    android:textSize="@dimen/font_18x"
+                    android:textSize="@dimen/font_12x"
                     android:textStyle="normal"
+                    android:padding="@dimen/space_5x"
+                    android:background="@drawable/bg_rect_shape"
                     app:layout_constraintTop_toBottomOf="@+id/estimated_time_label" />
 
 

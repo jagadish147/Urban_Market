@@ -13,6 +13,7 @@ import com.jagadish.freshmart.base.BaseActivity
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.cart.Cart
+import com.jagadish.freshmart.data.dto.order.OrderRes
 import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.databinding.ActivityOrderPlaceBinding
@@ -41,29 +42,31 @@ class OrderPlaceActivity : BaseActivity() {
       val paymentDetails =  intent.getParcelableExtra<PaymentDetailsModel>(PAYMENT_DETAILS)
         binding.orderDetails = paymentDetails
 
+        binding.estimatedTimeValue.text = SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_DELIVERY_IMP_MESSAGE)
+
+
         observeViewModel()
 
         binding.placeOrder.setOnClickListener {
-
             when {
                 binding.cashOnDelivery.isChecked -> {
-                    val paymentstatusReq = PaymentStatusReq(paymentDetails!!.orderres.order_id, "Cash", binding.orderDetails!!.orderres!!.order_id)
-                    orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
+                    orderPlaceViewModel.createOrderId(binding.orderDetails!!.orderDeliveryAddress.id)
                 }
                 binding.onlinePayment.isChecked -> {
-                    payNow()
-
+                    orderPlaceViewModel.createOrderId(binding.orderDetails!!.orderDeliveryAddress.id)
                 }
                 else -> {
                     Validator.setError(binding.placeOrder,"Please Select Payment Mode")
                 }
             }
+
         }
     }
 
     private fun observeViewModel() {
         observeSnackBarMessages(orderPlaceViewModel.showSnackBar)
         observeToast(orderPlaceViewModel.showToast)
+        observe(orderPlaceViewModel.orderIdLiveData, ::handleOrderId)
         observe(orderPlaceViewModel.paymentStatusLiveData, ::handlePaymentStatus)
     }
     private fun observeSnackBarMessages(event: LiveData<SingleEvent<Any>>) {
@@ -80,6 +83,31 @@ class OrderPlaceActivity : BaseActivity() {
 
     private fun showDataView(show: Boolean) {
         binding.pbLoading.toGone()
+    }
+
+    private fun handleOrderId(status: Resource<OrderRes>) {
+        when (status) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> status.data?.let {
+                binding.orderDetails!!.orderres = it
+                when {
+                    binding.cashOnDelivery.isChecked -> {
+                        val paymentstatusReq = PaymentStatusReq(it.order_id, "Cash", it.order_id)
+                        orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
+                    }
+                    binding.onlinePayment.isChecked -> {
+                        payNow(it)
+                    }
+                    else -> {
+                        Validator.setError(binding.placeOrder,"Please Select Payment Mode")
+                    }
+                }
+            }
+            is Resource.DataError -> {
+                showDataView(false)
+                status.errorCode?.let { orderPlaceViewModel.showToastMessage(it) }
+            }
+        }
     }
 
     private fun handlePaymentStatus(status: Resource<PaymentStatusRes>) {
@@ -156,7 +184,7 @@ class OrderPlaceActivity : BaseActivity() {
     }
 
     //Payment gateway
-    fun payNow() {
+    fun payNow(orderRes: OrderRes) {
         val newPayIntent= Intent(this, PayActivity:: class.java);
         newPayIntent.putExtra("isLive", true); //true for Live
         newPayIntent.putExtra("txnscamt", "0"); //Fixed. Must be �0�

@@ -86,7 +86,23 @@ class CartFragment : BaseFragment() {
 
                 if (SharedPreferencesUtils.getBooleanPreference(SharedPreferencesUtils.PREF_USER_LOGIN)) {
                     if (binding.address != null) {
-                        recipesListViewModel.createOrderId(binding.address!!.id)
+                        val nextScreenIntent =
+                            Intent(requireActivity(), OrderPlaceActivity::class.java).apply {
+                                putExtra(
+                                    PAYMENT_DETAILS, PaymentDetailsModel(
+                                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_NAME),
+                                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
+                                        binding.cart!!.count,
+                                        binding.address!!,
+                                        binding.cart!!.total_price,
+                                        binding.cart!!.discount_price,
+                                        binding.cart!!.delivery_charge,
+                                        (binding.cart!!.total_price+binding.cart!!.delivery_charge),
+                                        OrderRes()
+                                    )
+                                )
+                            }
+                        startActivity(nextScreenIntent)
                     } else {
                         Validator.setError(
                             binding.orderConfirmBtn,
@@ -130,7 +146,6 @@ class CartFragment : BaseFragment() {
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
         observe(recipesListViewModel.addressLiveData, ::handleAddressList)
-        observe(recipesListViewModel.orderIdLiveData, ::handleOrderId)
         observe(recipesListViewModel.paymentStatusLiveData, ::handlePaymentStatus)
         observe(recipesListViewModel.updatePaymentViewItem, ::updatePaymentViewSuccess)
         observe(recipesListViewModel.removeCartItem, ::removeCarItemSuccess)
@@ -288,38 +303,6 @@ class CartFragment : BaseFragment() {
         }
     }
 
-    private fun handleOrderId(status: Resource<OrderRes>) {
-        when (status) {
-            is Resource.Loading -> showLoadingView()
-            is Resource.Success -> status.data?.let { bindOrderId(orderRes = it) }
-            is Resource.DataError -> {
-                showDataView(false)
-                status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
-            }
-        }
-    }
-
-    private fun bindOrderId(orderRes: OrderRes){
-        binding.pbLoading.toGone()
-        val totalPrice= (binding.cart!!.total_price+binding.cart!!.delivery_charge)
-        val nextScreenIntent =
-            Intent(requireActivity(), OrderPlaceActivity::class.java).apply {
-                putExtra(
-                    PAYMENT_DETAILS, PaymentDetailsModel(
-                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_NAME),
-                        SharedPreferencesUtils.getStringPreference(SharedPreferencesUtils.PREF_USER_MOBILE),
-                        binding.cart!!.count,
-                        binding.address!!,
-                        binding.cart!!.total_price,
-                        binding.cart!!.discount_price,
-                        binding.cart!!.delivery_charge,
-                        (binding.cart!!.total_price+binding.cart!!.delivery_charge),
-                        orderRes,
-                    )
-                )
-            }
-        startActivity(nextScreenIntent)
-    }
 
     private fun handlePaymentStatus(status: Resource<PaymentStatusRes>) {
         when (status) {

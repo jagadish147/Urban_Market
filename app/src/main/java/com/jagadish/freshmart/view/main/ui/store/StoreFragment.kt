@@ -30,6 +30,7 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
@@ -157,30 +158,34 @@ class StoreFragment : BaseFragment() {
 
 
     private fun bindListData(recipes: Shop) {
-        if (!(recipes.shopList.isNullOrEmpty())) {
-            val list = ArrayList<HomeModel>()
-            for (i in 1..2) {
-                when (i) {
-                    1 -> list.add(
-                        HomeModel(
-                            recipes.banners as ArrayList<ShopItem>,
-                            recipes.shopList as ArrayList<ShopItem>
+        if(recipes.success){
+            SharedPreferencesUtils.setStringPreference(SharedPreferencesUtils.PREF_DELIVERY_IMP_MESSAGE,recipes.delivery_message)
+            if (!(recipes.shopList.isNullOrEmpty())) {
+                val list = ArrayList<HomeModel>()
+                for (i in 1..2) {
+                    when (i) {
+                        1 -> list.add(
+                            HomeModel(
+                                recipes.banners as ArrayList<ShopItem>,
+                                recipes.shopList as ArrayList<ShopItem>
+                            )
                         )
-                    )
-                    2 -> list.add(
-                        HomeModel(
-                            recipes.banners as ArrayList<ShopItem>,
-                            recipes.shopList as ArrayList<ShopItem>
+                        2 -> list.add(
+                            HomeModel(
+                                recipes.banners as ArrayList<ShopItem>,
+                                recipes.shopList as ArrayList<ShopItem>
+                            )
                         )
-                    )
+                    }
                 }
+                recipesAdapter = HomeAdapter(requireActivity(), list, recipesListViewModel)
+                binding.storeRecyclerView.adapter = recipesAdapter
+                showDataView(true)
+            } else {
+                showDataView(false)
             }
-            recipesAdapter = HomeAdapter(requireActivity(), list, recipesListViewModel)
-            binding.storeRecyclerView.adapter = recipesAdapter
-            showDataView(true)
-        } else {
-            showDataView(false)
         }
+
     }
 
     private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ShopItem>) {

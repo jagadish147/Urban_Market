@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/order_details_label"
-        android:text="Your Order has been placed successful. we will deliver shortly"
+        android:text="Your Order has been placed successful."
         android:textColor="@color/grey"
         android:textSize="@dimen/font_16x"
         android:textAlignment="center"/>
@@ -256,7 +256,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/divider_line_2"
         android:textColor="@color/black"
-        android:textSize="@dimen/font_12x"
+        android:textSize="@dimen/font_14x"
         android:textStyle="normal"
         android:layout_marginTop="@dimen/space_10x"
         android:layout_marginStart="@dimen/space_10x"

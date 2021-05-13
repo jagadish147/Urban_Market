@@ -56,6 +56,8 @@
         android:layout_marginTop="@dimen/space_10x"
         android:paddingStart="@dimen/space_10x"
         android:paddingEnd="@dimen/space_10x"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         android:background="@drawable/bg_rect_shape"
         android:layout_marginStart="@dimen/space_10x"
         android:layout_marginEnd="@dimen/space_10x"

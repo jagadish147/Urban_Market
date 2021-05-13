@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
+import com.jagadish.freshmart.data.dto.order.OrderReq
+import com.jagadish.freshmart.data.dto.order.OrderRes
 import com.jagadish.freshmart.data.dto.order.PaymentStatusReq
 import com.jagadish.freshmart.data.dto.order.PaymentStatusRes
 import com.jagadish.freshmart.utils.SingleEvent
@@ -67,6 +70,25 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                     updateOrderStatus
                 ).collect {
                     orderStatusLiveDataPrivate.value = it
+                }
+            }
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val orderIdLiveDataPrivate = MutableLiveData<Resource<OrderRes>>()
+    val orderIdLiveData: LiveData<Resource<OrderRes>> get() = orderIdLiveDataPrivate
+
+    fun createOrderId(addressId: Int) {
+        viewModelScope.launch {
+            orderIdLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestOrderId(
+                    OrderReq( SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_DEVICE_CART_ID),
+                        SharedPreferencesUtils.getIntPreference(SharedPreferencesUtils.PREF_USER_ID),
+                        addressId)
+                ).collect {
+                    orderIdLiveDataPrivate.value = it
                 }
             }
         }

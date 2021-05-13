@@ -21,4 +21,6 @@ data class Shop(
     val shopList: List<ShopItem> = ArrayList(),
     @Json(name = "banners")
     val banners: List<ShopItem> = ArrayList(),
+    @Json (name= "delivery_message")
+    val delivery_message: String = "",
     ): Parcelable
