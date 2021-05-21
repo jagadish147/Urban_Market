@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/space_10x">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Available"
+        android:textSize="@dimen/font_16x"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/content_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Available"
+        android:textSize="@dimen/font_16x"
+        android:textStyle="normal"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/space_16x"
+        app:layout_constraintTop_toBottomOf="@+id/header_label"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/yes_btn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector"
+        android:text="Update now"
+        android:textColor="@color/white"
+        android:padding="@dimen/space_10x"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/content_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/space_10x"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/cancel_btn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_gray"
+        android:text="Cancel"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:padding="@dimen/space_10x"
+        app:layout_constraintTop_toBottomOf="@+id/content_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/space_10x"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

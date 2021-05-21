@@ -29,10 +29,12 @@ class OrderStatusActivity : BaseActivity() {
         val paymentDetails =  intent.getParcelableExtra<PaymentDetailsModel>(ORDER_DETAILS)
         val paymentMode = intent.getBooleanExtra(CASH_ON_DELIVERY,false)
         val paymentStatus = intent.getBooleanExtra(PAYMENT_STATUS,false)
+        val deliveryTime = intent.getStringExtra(DELIVERY_TIME)
         binding.orderdetails = paymentDetails
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
         val currentDate = sdf.format(Date())
         binding.orderdate = currentDate
+        binding.orderInfoText.text = deliveryTime
 
         if(!paymentMode) {
             binding.paymentStatusTxt.text =

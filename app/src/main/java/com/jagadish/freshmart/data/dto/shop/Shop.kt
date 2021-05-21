@@ -23,4 +23,9 @@ data class Shop(
     val banners: List<ShopItem> = ArrayList(),
     @Json (name= "delivery_message")
     val delivery_message: String = "",
+    @Json(name = "update_needed")
+    val update_needed : Boolean = false,
+    @Json(name = "is_manditory")
+    val is_Mandatory : Boolean = false,
+
     ): Parcelable

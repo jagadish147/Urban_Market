@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.jagadish.freshmart.base.BaseViewModel
 import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
+import com.jagadish.freshmart.data.dto.globalsearch.GlobalSearch
+import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.utils.SingleEvent
@@ -32,8 +34,8 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
 
     //TODO check to make them as one Resource
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val recipeSearchFoundPrivate: MutableLiveData<List<ShopItem>> = MutableLiveData()
-    val recipeSearchFound: LiveData<List<ShopItem>> get() = recipeSearchFoundPrivate
+    val recipeSearchFoundPrivate: MutableLiveData<Resource<GlobalSearch>> = MutableLiveData()
+    val recipeSearchFound: LiveData<Resource<GlobalSearch>> get() = recipeSearchFoundPrivate
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val noSearchFoundPrivate: MutableLiveData<Unit> = MutableLiveData()
@@ -72,26 +74,67 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
     fun openRecipeDetails(recipe: ShopItem) {
         openRecipeDetailsPrivate.value = SingleEvent(recipe)
     }
-
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val openProductDetailsPrivate = MutableLiveData<SingleEvent<ProductsItem>>()
+    val openProductDetails: LiveData<SingleEvent<ProductsItem>> get() = openProductDetailsPrivate
+    fun openProductDetailsPage(recipesItem: ProductsItem){
+        openProductDetailsPrivate.value = SingleEvent(recipesItem)
+    }
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)
         showToastPrivate.value = SingleEvent(error.description)
     }
 
     fun searchProducts(searchQuarry : String){
-        if(searchQuarry.isNotEmpty()) {
-            var searchList = ArrayList<ShopItem>()
-            if (recipesLiveData.value?.data?.shopList?.size!! > 0) {
-                for (item in recipesLiveData.value?.data?.shopList!!) {
-                    if (item.name.toUpperCase().contains(searchQuarry.toUpperCase())) {
-                        searchList.add(item)
-                    }
+        viewModelScope.launch {
+            recipesLiveDataPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                dataRepositoryRepository.requestGlobalSearch(searchQuarry).collect {
+                    recipeSearchFoundPrivate.value = it
                 }
-                recipeSearchFoundPrivate.value = searchList
             }
-        }else{
-            noSearchFoundPrivate.value = Unit
         }
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val localSearchFoundPrivate: MutableLiveData<GlobalSearch> = MutableLiveData()
+    val localSearchFound: LiveData<GlobalSearch> get() = localSearchFoundPrivate
+
+    fun localGlobalSearch(searchQuarry: String){
+        if (searchQuarry.isNotEmpty()) {
+            if(recipeSearchFoundPrivate.value !=null) {
+                var products = ArrayList<ProductsItem>()
+                if (recipeSearchFoundPrivate.value?.data?.products?.size!! > 0) {
+                    for (item in recipeSearchFoundPrivate.value?.data?.products!!) {
+                        if (item.name.toUpperCase(Locale.getDefault()).contains(
+                                searchQuarry.toUpperCase(
+                                    Locale.getDefault()
+                                )
+                            )
+                        ) {
+                            products.add(item)
+                        }
+                    }
+                }
+                var categories = ArrayList<ShopItem>()
+                if (recipeSearchFoundPrivate.value?.data?.categories?.size!! > 0) {
+                    for (item in recipeSearchFoundPrivate.value?.data?.categories!!) {
+                        if (item.name.toUpperCase(Locale.getDefault()).contains(
+                                searchQuarry.toUpperCase(
+                                    Locale.getDefault()
+                                )
+                            )
+                        ) {
+                            categories.add(item)
+                        }
+                    }
+                }
+                localSearchFoundPrivate.value =
+                    GlobalSearch(200, "success", products, categories, true)
+
+            }
+        } else {
+            noSearchFoundPrivate.value = Unit
+        }
+    }
 }

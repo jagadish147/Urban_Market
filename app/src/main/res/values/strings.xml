@@ -14,11 +14,12 @@
     <string name="title_orders">Orders</string>
     <string name="title_profile">Profile</string>
     <string name="title_categories">Categories</string>
+    <string name="title_products">Products</string>
     <string name="label_next">Next</string>
     <string name="label_get_start">Get Started</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_mobile">Mobile Number</string>
+    <string name="prompt_mobile">(+91) Mobile Number</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
     <string name="action_sign_in">Sign in</string>
@@ -71,7 +72,9 @@
     <string name="label_payment_details">Payment Details</string>
     <string name="label_address_details">Address Details</string>
     <string name="label_place_order">Place Order</string>
+    <string name="label_ok_got_it">Ok, got it.</string>
     <string name="title_activity_address">Delivery Address</string>
+    <string name="title_price_details">Price Details</string>
     <string name="title_address_line_1">Address *</string>
     <string name="title_address_line_2">Land Mark *</string>
     <string name="title_address_city">City *</string>

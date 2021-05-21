@@ -8,6 +8,7 @@ import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
+import com.jagadish.freshmart.data.dto.globalsearch.GlobalSearch
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -58,6 +59,8 @@ interface DataRepositorySource {
     suspend fun requestDeliveryBoyAllOrders(deliveryBoyId: Int, all : Boolean): Flow<Resource<DeliveryBoyOrders>>
 
     suspend fun requestCustomerOrders(phoneNumber: String): Flow<Resource<OrdersRes>>
+
+    suspend fun requestGlobalSearch(keyword: String): Flow<Resource<GlobalSearch>>
 
     suspend fun requestUpdateOrderStatus(updateOrderStatus : UpdateOrderStatus): Flow<Resource<UpdateOrderStatusRes>>
 }

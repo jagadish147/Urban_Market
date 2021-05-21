@@ -2,26 +2,25 @@ package com.jagadish.freshmart.view.main.ui.store
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Pair
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.BuildConfig
@@ -31,18 +30,19 @@ import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.globalsearch.GlobalSearch
+import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.dto.shop.Shop
 import com.jagadish.freshmart.data.dto.shop.ShopItem
-import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentHomeBinding
 import com.jagadish.freshmart.utils.*
+import com.jagadish.freshmart.view.details.ProductDetailsActivity
 import com.jagadish.freshmart.view.main.MainActivity
-import com.jagadish.freshmart.view.main.ui.store.adapter.BannersAdapter
+import com.jagadish.freshmart.view.main.ui.store.adapter.GlobalSearchAdapter
 import com.jagadish.freshmart.view.main.ui.store.adapter.HomeAdapter
-import com.jagadish.freshmart.view.main.ui.store.adapter.StoreAdapter
+import com.jagadish.freshmart.view.main.ui.store.model.GlobalSearchModel
 import com.jagadish.freshmart.view.main.ui.store.model.HomeModel
 import com.jagadish.freshmart.view.main.ui.store.model.SelectedAddress
-import com.jagadish.freshmart.view.products.ProductsListActivity
 import com.oneclickaway.opensource.placeautocomplete.data.api.bean.place_details.PlaceDetails
 import com.oneclickaway.opensource.placeautocomplete.ui.SearchPlaceActivity
 import com.oneclickaway.opensource.placeautocomplete.utils.SearchPlacesStatusCodes
@@ -82,7 +82,7 @@ class StoreFragment : BaseFragment() {
         binding.storeRecyclerView.layoutManager = layoutManager
         binding.storeRecyclerView.setHasFixedSize(true)
 
-        binding.searchRecyclerview.layoutManager =  GridLayoutManager(context, 2)
+        binding.searchRecyclerview.layoutManager =  LinearLayoutManager(context)
         binding.searchRecyclerview.setHasFixedSize(true)
 
         binding.searchHome.addTextChangedListener(object : TextWatcher{
@@ -95,7 +95,13 @@ class StoreFragment : BaseFragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                recipesListViewModel.searchProducts(s.toString())
+                if(s.toString().length == 3) {
+                    recipesListViewModel.searchProducts(s.toString())
+                }else {
+                    if(recipesListViewModel.recipeSearchFoundPrivate.value!=null) {
+                        recipesListViewModel.localGlobalSearch(s.toString())
+                    }
+                }
             }
 
         })
@@ -142,8 +148,10 @@ class StoreFragment : BaseFragment() {
         })
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
         observe(recipesListViewModel.recipeSearchFound, ::showSearchResult)
+        observe(recipesListViewModel.localSearchFound, ::showLocalSearchResult)
         observe(recipesListViewModel.noSearchFound, ::noSearchResult)
         observeEvent(recipesListViewModel.openRecipeDetails, ::navigateToDetailsScreen)
+        observeEvent(recipesListViewModel.openProductDetails, ::navigateToProductDetailsScreen)
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
 
@@ -181,20 +189,47 @@ class StoreFragment : BaseFragment() {
                 recipesAdapter = HomeAdapter(requireActivity(), list, recipesListViewModel)
                 binding.storeRecyclerView.adapter = recipesAdapter
                 showDataView(true)
+//                if(recipes.update_needed){
+//                    showDialog(recipes.is_Mandatory)
+//                }
             } else {
                 showDataView(false)
             }
+//            if(recipes.update_needed){
+//                showDialog(recipes.is_Mandatory)
+//            }
         }
 
     }
 
     private fun navigateToDetailsScreen(navigateEvent: SingleEvent<ShopItem>) {
         navigateEvent.getContentIfNotHandled()?.let {
-            val nextScreenIntent =
-                Intent(requireActivity(), ProductsListActivity::class.java).apply {
-                    putExtra(CATEGORY_KEY, it)
+            val bundle = StoreFragmentDirections.actionNavigationStoreToNavigationProductList(navigateEvent.peekContent())
+            findNavController().navigate(bundle)
+//            val nextScreenIntent =
+//                Intent(requireActivity(), ProductsListActivity::class.java).apply {
+//                    putExtra(CATEGORY_KEY, it)
+//                }
+//            startActivityForResult(nextScreenIntent, REQUEST_CATEGORY_VIEW_CART)
+        }
+    }
+
+    private fun navigateToProductDetailsScreen(navigateEvent: SingleEvent<ProductsItem>) {
+        navigateEvent.getContentIfNotHandled()?.let {
+            it.isAddCart = false
+            it.quantity = 1
+            if(Singleton.getInstance().cart!=null&& Singleton.getInstance().cart.products.size>0){
+                for(item in Singleton.getInstance().cart.products){
+                    if(item.id == it.id){
+                        it.isAddCart = true
+                        it.quantity = item.quantity
+                    }
                 }
-            startActivityForResult(nextScreenIntent, REQUEST_CATEGORY_VIEW_CART)
+            }
+            val nextScreenIntent = Intent(requireActivity(), ProductDetailsActivity::class.java).apply {
+                putExtra(CATEGORY_KEY, it)
+            }
+            startActivity(nextScreenIntent)
         }
     }
 
@@ -218,12 +253,21 @@ class StoreFragment : BaseFragment() {
         binding.searchNoData.visibility = if (show) View.GONE else View.VISIBLE
         binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
         binding.searchHome.visibility = if (show) View.VISIBLE else View.GONE
+        binding.tvNoData.visibility = if (show) View.GONE else View.GONE
+        binding.pbLoading.toGone()
+    }
+    private fun showNoSearchDataView(show: Boolean) {
+        binding.locationNoData.visibility = if (show) View.GONE else View.GONE
+        binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
+        binding.searchHome.visibility = if (show) View.VISIBLE else View.VISIBLE
+        binding.tvNoData.visibility = if (show) View.GONE else View.VISIBLE
         binding.pbLoading.toGone()
     }
     private fun showErrorLocationDataView(show: Boolean) {
         binding.locationNoData.visibility = if (show) View.GONE else View.VISIBLE
         binding.storeRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
         binding.searchHome.visibility = if (show) View.VISIBLE else View.GONE
+        binding.tvNoData.visibility = if (show) View.GONE else View.GONE
         binding.pbLoading.toGone()
     }
     private fun showLoadingView() {
@@ -234,14 +278,79 @@ class StoreFragment : BaseFragment() {
     }
 
 
-    private fun showSearchResult(recipesItem: List<ShopItem>) {
-        binding.storeRecyclerView.toGone()
-        binding.searchRecyclerview.toVisible()
-        binding.searchClear.toVisible()
-        binding.searchRecyclerview.adapter = StoreAdapter(recipesListViewModel, recipesItem)
+    private fun showSearchResult(searchData: Resource<GlobalSearch>) {
+        when (searchData) {
+            is Resource.Loading -> showLoadingView()
+            is Resource.Success -> searchData.data?.let {
+                if(it.success) {
+                    binding.storeRecyclerView.toGone()
+                    binding.searchRecyclerview.toVisible()
+                    binding.searchClear.toVisible()
+                    binding.tvNoData.toGone()
+                    binding.pbLoading.toGone()
+                    val list = ArrayList<GlobalSearchModel>()
+                    for (i in 1..2) {
+                        when (i) {
+                            1 -> list.add(
+                                GlobalSearchModel(
+                                    it.products as ArrayList<ProductsItem>,
+                                    it.categories as ArrayList<ShopItem>
+                                )
+                            )
+                            2 -> list.add(
+                                GlobalSearchModel(
+                                    it.products as ArrayList<ProductsItem>,
+                                    it.categories as ArrayList<ShopItem>
+                                )
+                            )
+                        }
+                    }
+                    binding.searchRecyclerview.adapter = GlobalSearchAdapter(requireActivity(),list,recipesListViewModel)
+                    recipesListViewModel.localGlobalSearch(binding.searchHome.text.toString())
+                }else {
+
+                    showNoSearchDataView(false)
+                }
+            }
+            is Resource.DataError -> {
+                showDataView(false)
+                searchData.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+            }
+        }
+
 
 //        recipesListViewModel.openRecipeDetails(recipesItem)
 //        binding.pbLoading.toGone()
+    }
+
+    private fun showLocalSearchResult(searchData: GlobalSearch) {
+        if(searchData.success) {
+            binding.storeRecyclerView.toGone()
+            binding.searchRecyclerview.toVisible()
+            binding.searchClear.toVisible()
+            binding.tvNoData.toGone()
+            binding.pbLoading.toGone()
+            val list = ArrayList<GlobalSearchModel>()
+            for (i in 1..2) {
+                when (i) {
+                    1 -> list.add(
+                        GlobalSearchModel(
+                            searchData.products as ArrayList<ProductsItem>,
+                            searchData.categories as ArrayList<ShopItem>
+                        )
+                    )
+                    2 -> list.add(
+                        GlobalSearchModel(
+                            searchData.products as ArrayList<ProductsItem>,
+                            searchData.categories as ArrayList<ShopItem>
+                        )
+                    )
+                }
+            }
+            binding.searchRecyclerview.adapter = GlobalSearchAdapter(requireActivity(),list,recipesListViewModel)
+        }else {
+            showNoSearchDataView(false)
+        }
     }
 
     private fun noSearchResult(unit: Unit) {
@@ -312,5 +421,36 @@ class StoreFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).updateCart()
+    }
+
+    private fun showDialog(isMaindate: Boolean) {
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(!isMaindate)
+        dialog.setContentView(R.layout.custom_dialog_app_update)
+        val body = dialog.findViewById(R.id.content_text) as TextView
+        if (isMaindate)
+            body.text =
+                "Your currently using unsupported version of the app. In order to continue the app, please upgrade to the latest version"
+        else
+            body.text = "your using old version,please upgrade to the latest version"
+        val yesBtn = dialog.findViewById(R.id.yes_btn) as TextView
+        val noBtn = dialog.findViewById(R.id.cancel_btn) as TextView
+        if(isMaindate){
+            noBtn.visibility = View.GONE
+        }
+        yesBtn.setOnClickListener {
+            if(!isMaindate) {
+                dialog.dismiss()
+            }
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${requireActivity().packageName}")))
+            } catch (e: ActivityNotFoundException) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${requireActivity().packageName}")))
+            }
+        }
+        noBtn.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+
     }
 }

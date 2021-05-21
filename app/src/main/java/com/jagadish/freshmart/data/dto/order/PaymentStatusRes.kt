@@ -14,4 +14,6 @@ data class PaymentStatusRes(
     val status: Int = 0,
     @Json(name = "message")
     val message : String = "",
+    @Json(name = "delivery_date")
+    val delivery_date : String = "",
 ): Parcelable

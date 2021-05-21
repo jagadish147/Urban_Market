@@ -7,6 +7,7 @@ import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
+import com.jagadish.freshmart.data.dto.globalsearch.GlobalSearch
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -25,13 +26,13 @@ interface RecipesService {
     suspend fun createCart(@Body pinCode: CreateCareReq): Response<CreateCartRes>
 
     @GET("home?")
-    suspend fun fetchRecipes(@Query(  "pincode") pinCode: String): Response<Shop>
+    suspend fun fetchRecipes(@Query(  "pincode") pinCode: String,@Query("client_version") version : String,@Query("os_type") osType : String): Response<Shop>
 
     @GET("products?")
-    suspend fun fetchProducts(@Query("category_id") categoryId: Int): Response<Products>
+    suspend fun fetchProducts(@Query("category_id") categoryId: Int,@Query("client_version") version : String,@Query("os_type") osType : String): Response<Products>
 
     @GET("cart/{id}/cart_info?")
-    suspend fun fetchCart(@Path(  "id") cartId: Int): Response<Cart>
+    suspend fun fetchCart(@Path(  "id") cartId: Int,@Query("client_version") version : String,@Query("os_type") osType : String): Response<Cart>
 
     @POST("cart/add_item")
     suspend fun addItemToCart(@Body requestData: AddItemReq): Response<AddItemRes>
@@ -65,7 +66,7 @@ interface RecipesService {
     suspend fun requestAddress(@Query("customer_id") categoryId: Int, @Query("phone_number") phoneNumber : String): Response<AddressRes>
 
     @POST("orders")
-    suspend fun requestOrderId(@Body orderReq : OrderReq): Response<OrderRes>
+    suspend fun requestOrderId(@Body orderReq : OrderReq,@Query("client_version") version : String,@Query("os_type") osType : String): Response<OrderRes>
 
     @POST("orders/update_payment_status")
     suspend fun requestPaymentStatus(@Body paymentStatusReq : PaymentStatusReq): Response<PaymentStatusRes>
@@ -81,5 +82,8 @@ interface RecipesService {
 
     @GET("customers/orders?")
     suspend fun requestCustomerOrders(@Query("phone_number") phone_number : String): Response<OrdersRes>
+
+    @GET("search?")
+    suspend fun requestGlobalSearch(@Query("keyword") keyword : String): Response<GlobalSearch>
 
 }

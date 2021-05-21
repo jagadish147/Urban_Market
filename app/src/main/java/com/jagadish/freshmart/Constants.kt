@@ -14,6 +14,7 @@ const val ORDER_DETAILS = "order_details"
 const val PAYMENT_STATUS = "payment_status"
 const val CASH_ON_DELIVERY = "cash_on_delivery"
 const val IS_COME_CHANGE_ADDRESS= "change_address"
+const val DELIVERY_TIME = "delivery_time"
 
 
 const val RESULT_ACTIVITY_IS_VIEW_CART = "navigate_cart"

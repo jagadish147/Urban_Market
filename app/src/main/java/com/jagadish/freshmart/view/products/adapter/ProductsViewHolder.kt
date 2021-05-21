@@ -72,6 +72,14 @@ class ProductsViewHolder(private val itemBinding: ViewProductItemBinding) : Recy
             itemBinding.quantityTxt.toVisible()
             itemBinding.quantityProgress.toGone()
         }
+        if(!recipesItem.status){
+            itemBinding.quantityLayout.visibility = View.GONE
+            itemBinding.addBtn.visibility = View.GONE
+            itemBinding.outOfStockBackground.visibility = View.VISIBLE
+            itemBinding.outOfStockLabel.visibility = View.VISIBLE
+            itemBinding.outOfStockBackground.alpha = 0.7f
+            itemBinding.outOfStockBackground.setBackgroundColor(itemBinding.productImage.context.resources.getColor(R.color.white))
+        }
     }
 }
 

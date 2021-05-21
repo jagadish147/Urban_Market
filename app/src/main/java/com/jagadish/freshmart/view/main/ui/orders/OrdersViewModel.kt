@@ -11,6 +11,7 @@ import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
+import com.jagadish.freshmart.data.dto.order.OrderItems
 import com.jagadish.freshmart.data.dto.order.OrdersRes
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
@@ -61,4 +62,11 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val orderItemPrivate = MutableLiveData<SingleEvent<OrderItems>>()
+    val orderItemClick: LiveData<SingleEvent<OrderItems>> get() = orderItemPrivate
+
+    fun onClickOrderItem(orderItems: OrderItems){
+        orderItemPrivate.value = SingleEvent(orderItems)
+    }
 }

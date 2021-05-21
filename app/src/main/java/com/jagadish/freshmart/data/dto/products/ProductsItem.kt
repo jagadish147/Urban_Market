@@ -29,5 +29,13 @@ data class ProductsItem (
     var isAddCart : Boolean = false,
     @Json(name = "image_url")
     val image_url : String = "",
+    @Json(name = "status")
+    val status : Boolean = false,
+    @Json(name = "category_id")
+    val category_id : Int = 0,
+    @Json(name = "category_name")
+    val category_name : String ="",
+    @Json(name = "discoun")
+    val discount : Double = 0.0,
     var isLoad : Boolean = false,
 ): Parcelable

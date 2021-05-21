@@ -1,5 +1,6 @@
 package com.jagadish.freshmart.data.remote
 
+import com.jagadish.freshmart.BuildConfig
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.address.AddAddressRes
@@ -8,6 +9,7 @@ import com.jagadish.freshmart.data.dto.cart.*
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatus
 import com.jagadish.freshmart.data.dto.deliver.orders.UpdateOrderStatusRes
+import com.jagadish.freshmart.data.dto.globalsearch.GlobalSearch
 import com.jagadish.freshmart.data.dto.login.CustomersRequest
 import com.jagadish.freshmart.data.dto.login.CustomersRes
 import com.jagadish.freshmart.data.dto.login.RequestOtpReq
@@ -44,7 +46,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
 
     override suspend fun requestRecipes(pinCode:String): Resource<Shop> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall({ recipesService.fetchRecipes(pinCode) })) {
+        return when (val response = processCall({ recipesService.fetchRecipes(pinCode,BuildConfig.VERSION_NAME,"android") })) {
             is Shop -> {
                 Resource.Success(data = response )
             }
@@ -56,7 +58,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
 
     override suspend fun requestProducts(categoryId: Int): Resource<Products> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall({recipesService.fetchProducts(categoryId)})) {
+        return when (val response = processCall({recipesService.fetchProducts(categoryId,BuildConfig.VERSION_NAME,"android")})) {
             is Products -> {
                 Resource.Success(data = response )
             }
@@ -68,7 +70,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
 
     override suspend fun requestCart(cartId: Int): Resource<Cart> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall({recipesService.fetchCart(cartId)})) {
+        return when (val response = processCall({recipesService.fetchCart(cartId,BuildConfig.VERSION_NAME,"android")})) {
             is Cart -> {
                 Resource.Success(data = response )
             }
@@ -260,7 +262,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
 
     override suspend fun requestOrderId(orderReq: OrderReq): Resource<OrderRes> {
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
-        return when (val response = processCall({recipesService.requestOrderId(orderReq)})) {
+        return when (val response = processCall({recipesService.requestOrderId(orderReq,BuildConfig.VERSION_NAME,"android")})) {
             is OrderRes -> {
                 Resource.Success(data = response )
             }
@@ -274,6 +276,18 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val recipesService = serviceGenerator.createService(RecipesService::class.java)
         return when (val response = processCall({recipesService.requestPaymentStatus(paymentStausReq)})) {
             is PaymentStatusRes -> {
+                Resource.Success(data = response )
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestGlobalSearch(keyword: String): Resource<GlobalSearch> {
+        val recipesService = serviceGenerator.createService(RecipesService::class.java)
+        return when (val response = processCall({recipesService.requestGlobalSearch(keyword)})) {
+            is GlobalSearch -> {
                 Resource.Success(data = response )
             }
             else -> {

@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -20,8 +21,10 @@ import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.SharedPreferencesUtils
+import com.jagadish.freshmart.data.dto.address.AddAddressReq
 import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.deliver.orders.DeliveryBoyOrders
+import com.jagadish.freshmart.data.dto.order.OrderItems
 import com.jagadish.freshmart.data.dto.order.OrdersRes
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
@@ -29,6 +32,7 @@ import com.jagadish.freshmart.databinding.FragmentCartBinding
 import com.jagadish.freshmart.databinding.FragmentOrdersBinding
 import com.jagadish.freshmart.utils.*
 import com.jagadish.freshmart.view.address.AddressActivity
+import com.jagadish.freshmart.view.address.AddressListFragmentDirections
 import com.jagadish.freshmart.view.login.LoginActivity
 import com.jagadish.freshmart.view.main.ui.cart.CartViewModel
 import com.jagadish.freshmart.view.main.ui.cart.adapter.CartItemsAdapter
@@ -76,6 +80,7 @@ class OrdersFragment : BaseFragment() {
 
     private fun observeViewModel() {
         observe(recipesListViewModel.recipesLiveData, ::handleRecipesList)
+        observe(recipesListViewModel.orderItemClick, ::handleOnClickRecipesList)
         observeSnackBarMessages(recipesListViewModel.showSnackBar)
         observeToast(recipesListViewModel.showToast)
 
@@ -122,5 +127,13 @@ class OrdersFragment : BaseFragment() {
         } else {
             showDataView(false)
         }
+    }
+
+    private fun handleOnClickRecipesList(orderItem: SingleEvent<OrderItems>) {
+
+        val bundle = OrdersFragmentDirections.actionNavigationOrdersToNavigationOrderSummary(
+            orderItem.peekContent()
+        )
+        findNavController().navigate(bundle)
     }
 }

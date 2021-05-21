@@ -57,6 +57,7 @@
         android:paddingStart="@dimen/space_10x"
         android:paddingEnd="@dimen/space_10x"
         android:maxLines="1"
+        android:singleLine="true"
         android:imeOptions="actionDone"
         android:background="@drawable/bg_rect_shape"
         android:layout_marginStart="@dimen/space_10x"
@@ -169,6 +170,16 @@
         android:layout_marginTop="@dimen/space_10x"
         android:text="Due to unavoidable circumstances, we are currently un-serviceable. We will back soon!"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/tv_no_data"
+        android:layout_width="@dimen/error_msg_icon"
+        android:layout_height="@dimen/error_msg_icon"
+        android:textStyle="italic|bold"
+        android:visibility="gone"
+        app:srcCompat="@drawable/no_product_found"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -35,6 +35,8 @@ class StoreViewHolder(private val itemBinding: ShopItemBinding) : RecyclerView.V
             .placeholder(R.drawable.placeholder).error(R.drawable.placeholder).transform(CenterCrop(),RoundedCorners(24))
             .diskCacheStrategy(
                 DiskCacheStrategy.DATA).placeholder(shimmerDrawable).into(itemBinding.categoryImage)
+        itemBinding.tvBack.alpha = 0.4f
+        itemBinding.tvBack.setBackground(itemBinding.categoryImage.context.resources.getDrawable(R.drawable.txt_bg))
         itemBinding.root.setOnClickListener { recyclerItemListener.onItemSelected(recipesItem) }
     }
 }

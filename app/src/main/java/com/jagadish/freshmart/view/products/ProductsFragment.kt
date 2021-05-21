@@ -8,15 +8,20 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jagadish.freshmart.CATEGORY_KEY
+import com.jagadish.freshmart.R
 import com.jagadish.freshmart.RESULT_ACTIVITY_IS_VIEW_CART
 import com.jagadish.freshmart.base.BaseFragment
 import com.jagadish.freshmart.data.Resource
@@ -27,7 +32,9 @@ import com.jagadish.freshmart.data.dto.shop.ShopItem
 import com.jagadish.freshmart.data.error.SEARCH_ERROR
 import com.jagadish.freshmart.databinding.FragmentProductsBinding
 import com.jagadish.freshmart.utils.*
+import com.jagadish.freshmart.view.address.AddAddressFragmentArgs
 import com.jagadish.freshmart.view.details.ProductDetailsActivity
+import com.jagadish.freshmart.view.main.MainActivity
 import com.jagadish.freshmart.view.products.adapter.ProductsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -42,11 +49,20 @@ class ProductsFragment : BaseFragment() {
     private lateinit var binding: FragmentProductsBinding
     private val recipesListViewModel: ProductsFragmentViewModel by viewModels()
     private lateinit var recipesAdapter: ProductsAdapter
-
+    private val args: ProductsFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val window = requireActivity()!!.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.decorView.systemUiVisibility =
+            window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        window.statusBarColor = ContextCompat.getColor(
+            requireContext(),
+            com.jagadish.freshmart.R.color.main_color
+        )
         binding = FragmentProductsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -64,11 +80,18 @@ class ProductsFragment : BaseFragment() {
         binding.productsRecyclerView.setHasFixedSize(true)
         val itemDecor = DividerItemDecoration(context, VERTICAL)
         binding.productsRecyclerView.addItemDecoration(itemDecor)
-        binding.viewCart.setOnClickListener { val data = Intent().apply {
-            putExtra(RESULT_ACTIVITY_IS_VIEW_CART, true)
+        binding.viewCart.setOnClickListener {
+//            val data = Intent().apply {
+//            putExtra(RESULT_ACTIVITY_IS_VIEW_CART, true)
+//        }
+//            requireActivity().setResult(RESULT_OK, data)
+//            requireActivity(). finish()
+            findNavController().navigate(R.id.action_navigation_product_list_to_navigation_cart)
         }
-            requireActivity().setResult(RESULT_OK, data)
-            requireActivity(). finish() }
+
+        binding.backArrow.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_product_list_to_navigation_store)
+        }
 
         binding.searchProducts.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -80,6 +103,7 @@ class ProductsFragment : BaseFragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                if(::recipesAdapter.isInitialized)
                 recipesListViewModel.searchProducts(s.toString())
             }
 
@@ -89,8 +113,9 @@ class ProductsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         binding.viewCartLayout.toGone()
-        val category = requireActivity().intent.getParcelableExtra<ShopItem>(CATEGORY_KEY)
+        val category = args.categorie // requireActivity().intent.getParcelableExtra<ShopItem>(CATEGORY_KEY)
         recipesListViewModel.getRecipes(category!!.id)
+        (activity as MainActivity).updateCart()
     }
 
     private fun observeViewModel() {
@@ -181,7 +206,9 @@ class ProductsFragment : BaseFragment() {
         if(recipesItem.size >0) {
             recipesAdapter.setFitersItems(recipesItem)
         }else{
-            recipesAdapter.showAllItems()
+            if(::recipesAdapter.isInitialized) {
+                recipesAdapter.showAllItems()
+            }
         }
         showDataView(true)
     }

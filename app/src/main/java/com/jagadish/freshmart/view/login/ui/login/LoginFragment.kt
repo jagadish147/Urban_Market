@@ -149,11 +149,11 @@ class LoginFragment : BaseFragment() {
             // Called when verification is failed add log statement to see the exception
             override fun onVerificationFailed(e: FirebaseException) {
                 hideLoadingView()
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-                Log.d("GFG" , "onVerificationFailed  $e")
+//                Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+//                Log.d("GFG" , "onVerificationFailed  $e")
                 if (e is FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
-                    Validator.setError(binding.mobileNumber,"Invalid phone number.")
+                    Validator.setError(binding.mobileNumber,"Invalid Mobile number./ Enter country code Ex:+91 ")
                 } else if (e is FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
                     Validator.setError(binding.mobileNumber,"Quota exceeded.")
@@ -186,7 +186,7 @@ class LoginFragment : BaseFragment() {
     }
     private fun sendVerificationCode(number: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber("+91"+number) // Phone number to verify
+            .setPhoneNumber(number) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
             .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks

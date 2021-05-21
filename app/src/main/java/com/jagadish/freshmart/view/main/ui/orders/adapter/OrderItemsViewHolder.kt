@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.jagadish.freshmart.R
 import com.jagadish.freshmart.base.listeners.DeliveryBoyOrderListener
+import com.jagadish.freshmart.base.listeners.OrderInfoListener
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.base.listeners.RecyclerItemListener
 import com.jagadish.freshmart.data.dto.deliver.orders.ScheduleOrders
@@ -27,11 +28,11 @@ import com.squareup.picasso.Picasso
 
 class OrderItemsViewHolder(private val itemBinding: ViewOrderItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
-    fun bind(recipesItem: OrderItems, recyclerItemListener: DeliveryBoyOrderListener) {
+    fun bind(recipesItem: OrderItems, recyclerItemListener: OrderInfoListener) {
         itemBinding.orderNumber.text = "Order Number : "+recipesItem.number
         itemBinding.orderDate.text = "Order Date : "+recipesItem.order_date
         itemBinding.deliveryDate.text = "Delivery Date : "+recipesItem.delivery_date
-        itemBinding.price.text = "Rs : "+recipesItem.price+recipesItem.delivery_charge
+        itemBinding.price.text = "Rs : "+(recipesItem.price.toDouble()+recipesItem.delivery_charge)
         itemBinding.itemsCount.text = recipesItem.item_count.toString()+ " items"
         when(recipesItem.status){
             "Accepted"->{
@@ -57,9 +58,9 @@ class OrderItemsViewHolder(private val itemBinding: ViewOrderItemBinding) : Recy
             itemBinding.orderStatus.text = recipesItem.status
         }
 
-//        itemView.setOnClickListener {
-//            recyclerItemListener.onItemClick(recipesItem)
-//        }
+        itemView.setOnClickListener {
+            recyclerItemListener.onItemClick(recipesItem)
+        }
     }
 }
 

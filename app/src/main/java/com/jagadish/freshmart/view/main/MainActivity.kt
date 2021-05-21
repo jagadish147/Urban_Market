@@ -377,4 +377,27 @@ class MainActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        val navController = findNavController(R.id.nav_host_fragment)
+        when (navController.currentDestination?.id) {
+            R.id.navigation_store ->{
+                finish()
+            }
+            R.id.navigation_cart,  R.id.navigation_profile -> {
+                if (onBackPressedDispatcher.hasEnabledCallbacks())
+                    onBackPressedDispatcher.onBackPressed()
+                else
+                    navController.navigateUp()
+            }
+            R.id.navigation_order_summary ->{
+                navController.navigate(R.id.navigation_orders)
+            }
+            R.id.navigation_orders ->{
+                navController.navigate(R.id.navigation_store)
+            }
+            else -> navController.navigateUp()
+        }
+    }
 }

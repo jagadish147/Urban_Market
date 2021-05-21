@@ -9,6 +9,7 @@ import com.jagadish.freshmart.data.DataRepositorySource
 import com.jagadish.freshmart.data.Resource
 import com.jagadish.freshmart.data.dto.cart.AddItemReq
 import com.jagadish.freshmart.data.dto.cart.AddItemRes
+import com.jagadish.freshmart.data.dto.cart.Cart
 import com.jagadish.freshmart.data.dto.products.Products
 import com.jagadish.freshmart.data.dto.products.ProductsItem
 import com.jagadish.freshmart.utils.SingleEvent
@@ -87,7 +88,7 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
         showToastPrivate.value = SingleEvent(error.description)
     }
 
-    fun checkCartItems(recipe: AddItemRes,productsItem: ProductsItem,){
+    fun checkCartItems(recipe: AddItemRes,productsItem: ProductsItem){
         if(recipe.success && Singleton.getInstance().cart != null ) {
             var isExistingProduct : Boolean = false
             for((index, value) in Singleton.getInstance().cart.products.withIndex()){
@@ -108,6 +109,8 @@ constructor(private val dataRepositoryRepository: DataRepositorySource) : BaseVi
                 Singleton.getInstance().cart.products.add(productsItem)
                 Singleton.getInstance().cart.total_price = recipe.total_price
             }
+        }else{
+            Singleton.getInstance().cart = Cart(recipe.success,recipe.message,recipe.items,recipe.total_price,recipe.delivery_charge,recipe.count,0.0,recipe.discount_price)
         }
         checkItemsInCartPrivate.value = SingleEvent(recipe)
     }

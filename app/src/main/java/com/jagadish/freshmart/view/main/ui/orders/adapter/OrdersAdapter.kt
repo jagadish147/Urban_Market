@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jagadish.freshmart.base.listeners.DeliveryBoyOrderListener
+import com.jagadish.freshmart.base.listeners.OrderInfoListener
 import com.jagadish.freshmart.base.listeners.ProductsRecyclerItemListener
 import com.jagadish.freshmart.base.listeners.RecyclerItemListener
 import com.jagadish.freshmart.data.SharedPreferencesUtils
@@ -29,11 +30,11 @@ import com.jagadish.freshmart.view.products.ProductsFragmentViewModel
 
 class OrdersAdapter(private val recipesListViewModel: OrdersViewModel, private val recipes: List<OrderItems>) : RecyclerView.Adapter<OrderItemsViewHolder>() {
 
-    private val onItemClickListener: DeliveryBoyOrderListener = object : DeliveryBoyOrderListener {
+    private val onItemClickListener: OrderInfoListener = object : OrderInfoListener {
 
 
-        override fun onItemClick(scheduleOrders: ScheduleOrders) {
-//            recipesListViewModel.onClickOrderInfo(scheduleOrders)
+        override fun onItemClick(orderItems: OrderItems) {
+            recipesListViewModel.onClickOrderItem(orderItems)
         }
     }
 

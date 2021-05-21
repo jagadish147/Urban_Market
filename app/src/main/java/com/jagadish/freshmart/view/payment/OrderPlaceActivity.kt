@@ -92,7 +92,8 @@ class OrderPlaceActivity : BaseActivity() {
                 binding.orderDetails!!.orderres = it
                 when {
                     binding.cashOnDelivery.isChecked -> {
-                        val paymentstatusReq = PaymentStatusReq(it.order_id, "Cash", it.order_id)
+                        val paymentstatusReq = PaymentStatusReq(it.order_id, "cash", it.order_id,"Success",SharedPreferencesUtils.getStringPreference(
+                            SharedPreferencesUtils.PREF_DEVICE_CART))
                         orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
                     }
                     binding.onlinePayment.isChecked -> {
@@ -128,6 +129,7 @@ class OrderPlaceActivity : BaseActivity() {
                 putExtra(ORDER_DETAILS, binding.orderDetails)
                 putExtra(PAYMENT_STATUS, paymentStatus)
                 putExtra(CASH_ON_DELIVERY,binding.cashOnDelivery.isChecked)
+                putExtra(DELIVERY_TIME,paymentStatusRes.delivery_date)
             }
             startActivity(nextScreenIntent)
         }
@@ -167,7 +169,8 @@ class OrderPlaceActivity : BaseActivity() {
         for (i in resKey.indices) {
             if (resKey[i].equals("bank_txn")) {
                 paymentStatus = true
-                val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", resValue[i],"Success")
+                val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "online", resValue[i],"Success",SharedPreferencesUtils.getStringPreference(
+                    SharedPreferencesUtils.PREF_DEVICE_CART))
                     orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
             }
         }
@@ -177,7 +180,8 @@ class OrderPlaceActivity : BaseActivity() {
         for (i in resKey.indices) {
             if (resKey[i].equals("bank_txn")) {
                 paymentStatus = false
-                val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "Card", resValue[i],"Failed")
+                val paymentstatusReq = PaymentStatusReq(binding.orderDetails!!.orderres.order_id, "online", resValue[i],"Failed",SharedPreferencesUtils.getStringPreference(
+                    SharedPreferencesUtils.PREF_DEVICE_CART))
                     orderPlaceViewModel.checkPaymentStatus(paymentstatusReq)
             }
         }

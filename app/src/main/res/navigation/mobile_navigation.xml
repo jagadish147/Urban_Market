@@ -34,6 +34,11 @@
             app:destination="@id/navigation_cart"
             app:enterAnim="@animator/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_store_to_navigation_product_list"
+            app:destination="@id/navigation_product_list"
+            app:launchSingleTop="true" />
+
     </fragment>
 
     <fragment
@@ -46,7 +51,15 @@
         android:id="@+id/navigation_orders"
         android:name="com.jagadish.freshmart.view.main.ui.orders.OrdersFragment"
         android:label="@string/title_orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_navigation_orders_to_navigation_order_summary"
+            app:destination="@id/navigation_order_summary"
+            app:launchSingleTop="true" />
+        <argument
+            android:name="orderSummery"
+            app:argType="com.jagadish.freshmart.data.dto.order.OrderItems" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -59,4 +72,44 @@
             app:destination="@id/navigation_store"/>
 
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_order_summary"
+        android:name="com.jagadish.freshmart.view.main.ui.orders.OrderSummaryFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_order_summary" >
+
+        <argument
+            android:name="orderSummery"
+            app:argType="com.jagadish.freshmart.data.dto.order.OrderItems" />
+        <action
+            android:id="@+id/action_navigation_order_summary_to_navigation_orders"
+            app:destination="@id/navigation_orders"
+            app:popUpTo="@id/navigation_orders"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_product_list"
+        android:name="com.jagadish.freshmart.view.products.ProductsFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_products" >
+
+        <argument
+            android:name="categorie"
+            app:argType="com.jagadish.freshmart.data.dto.shop.ShopItem" />
+        <action
+            android:id="@+id/action_navigation_product_list_to_navigation_cart"
+            app:destination="@id/navigation_cart"
+            app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_navigation_product_list_to_navigation_store"
+            app:destination="@id/navigation_store"
+            app:launchSingleTop="true" />
+
+
+    </fragment>
+
 </navigation>
